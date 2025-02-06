@@ -210,6 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBoardPrefab: {fileID: 7984872905386199763, guid: 500548173fc02814fbe41b8c0c519109, type: 3}
   cardPrefab: {fileID: 4947900133005985141, guid: b9086539ec95e654b9fd0f2990ecb293, type: 3}
+  handPrefab: {fileID: 5508881749739418912, guid: c08c74ae91351e845b085ee247ee627c, type: 3}
 --- !u!1 &951284056
 GameObject:
   m_ObjectHideFlags: 0
