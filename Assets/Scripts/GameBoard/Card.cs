@@ -5,9 +5,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace TCGSim {
-    public class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
+    public class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
-        Transform hand = null;
+        private CanvasGroup canvasGroup;
+        private Transform hand = null;
+        private bool draggable = true;
         // Start is called before the first frame update
         void Start()
         {
@@ -20,20 +22,47 @@ namespace TCGSim {
             
         }
 
+        private void Awake()
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+        }
+
         public void OnBeginDrag(PointerEventData pointerEventData) 
         {
-            hand = this.transform.parent;
-            this.transform.SetParent(this.transform.parent.parent);
+            if (draggable)
+            {
+                hand = this.transform.parent;
+                this.transform.SetParent(this.transform.parent.parent);
+                canvasGroup.blocksRaycasts = false;
+                canvasGroup.alpha = .8f;
+                Debug.Log("OnBeginDrag");
+            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            this.transform.SetParent(hand);
+            if(eventData.pointerEnter==null || eventData.pointerEnter.GetComponent<CharacterArea>() == null)
+            {
+                this.transform.SetParent(hand);
+                canvasGroup.blocksRaycasts = true;
+            }
+            canvasGroup.alpha = 1f;
+            draggable = false; 
+            Debug.Log("OnEndDrag");
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            this.transform.position = eventData.position;   
+            if (draggable)
+            {
+                this.transform.position = eventData.position;
+            }
+            Debug.Log("OnDrag");
+        }
+
+        public void OnDrop(PointerEventData eventData)
+        {
+            Debug.Log("OnDrop");
         }
     }
 }

@@ -8,9 +8,6 @@ namespace TCGSim
         [SerializeField]
         private GameObject playerBoardPrefab;
 
-        [SerializeField]
-        private GameObject handPrefab;
-
         List<PlayerBoard> playerBoards = new List<PlayerBoard>();
     // Start is called before the first frame update
         void Start()
@@ -26,13 +23,14 @@ namespace TCGSim
 
         private void CreateBoards()
         {
-            PlayerBoard board1 = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
-            PlayerBoard board2 = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
-            board1.gameObject.transform.Translate(0, -270, 0);
-            board2.gameObject.transform.Translate(0, 270,0);
-            board2.gameObject.transform.Rotate(0, 0, 180);
-            Hand p1Hand = Instantiate(handPrefab, this.gameObject.transform).GetComponent<Hand>();
-            p1Hand.DrawCard();
+            PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
+            PlayerBoard enemyBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
+            playerBoard.Init("Player Board");
+            enemyBoard.Init("Enemy Board");
+            playerBoard.gameObject.transform.Translate(0, -270, 0);
+            enemyBoard.gameObject.transform.Translate(0, 270,0);
+            enemyBoard.gameObject.transform.Rotate(0, 0, 180);
+            playerBoard.CreateHand();
         }
     }
 }
