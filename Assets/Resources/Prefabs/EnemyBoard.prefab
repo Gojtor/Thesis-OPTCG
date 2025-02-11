@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5520121966099160173}
   - component: {fileID: 4296790979733980100}
   m_Layer: 5
-  m_Name: PlayerThrash
+  m_Name: EnemyThrash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5039335711967961294}
   - component: {fileID: 7408049973870202535}
   m_Layer: 5
-  m_Name: PlayerDeck
+  m_Name: EnemyDeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 1850579011084318836}
   - component: {fileID: 3522866324208284948}
   m_Layer: 5
-  m_Name: PlayerDonDeck
+  m_Name: EnemyDonDeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 7424964068005194024}
   - component: {fileID: 4870501709399804564}
   m_Layer: 5
-  m_Name: PlayerLife
+  m_Name: EnemyLife
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 9114558984196475941}
   - component: {fileID: 7009412352398036919}
   m_Layer: 5
-  m_Name: PlayerCostArea
+  m_Name: EnemyCostArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 3205121821392029767}
   - component: {fileID: -176316513783571650}
   m_Layer: 5
-  m_Name: EnemyBoard 1
+  m_Name: EnemyBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -469,6 +469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee8dfc7b72746147a0a69b3e70a0401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardName: 
   handPrefab: {fileID: 5508881749739418912, guid: c08c74ae91351e845b085ee247ee627c, type: 3}
   characterAreaPrefab: {fileID: 7937610380201536275, guid: 80f1c228b22daf941b9f0395d772ef2f, type: 3}
 --- !u!1001 &5110231115351188013
@@ -479,6 +480,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 627766309726062503}
     m_Modifications:
+    - target: {fileID: 338565221873231217, guid: 80f1c228b22daf941b9f0395d772ef2f, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4665106527365195794, guid: 80f1c228b22daf941b9f0395d772ef2f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -561,7 +566,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7937610380201536275, guid: 80f1c228b22daf941b9f0395d772ef2f, type: 3}
       propertyPath: m_Name
-      value: PlayerCharacterArea
+      value: EnemyCharacterArea
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

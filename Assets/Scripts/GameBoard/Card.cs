@@ -41,13 +41,18 @@ namespace TCGSim {
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if(eventData.pointerEnter==null || eventData.pointerEnter.GetComponent<CharacterArea>() == null)
+            GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
+            Transform playerHandParent = this.transform.parent.parent;
+            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null || objectAtDragEnd.transform.parent != playerHandParent)
             {
                 this.transform.SetParent(hand);
                 canvasGroup.blocksRaycasts = true;
             }
+            else
+            {
+                draggable = false;
+            }
             canvasGroup.alpha = 1f;
-            draggable = false; 
             Debug.Log("OnEndDrag");
         }
 
