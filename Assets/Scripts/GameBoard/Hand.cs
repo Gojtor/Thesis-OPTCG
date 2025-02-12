@@ -12,7 +12,7 @@ namespace TCGSim
         // Start is called before the first frame update
         void Start()
         {
-            CreateStartingHand();
+
         }
 
         // Update is called once per frame
@@ -21,12 +21,13 @@ namespace TCGSim
 
         }
 
-        public void CreateStartingHand()
+        public void CreateStartingHand(List<string> cards)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < cards.Count; i++)
             {
-                Card testCard = Instantiate(cardPrefab, this.gameObject.transform).GetComponent<Card>();
-                hand.Add(testCard);
+                Card card = Instantiate(cardPrefab, this.gameObject.transform).GetComponent<Card>();
+                card.changeSpriteImgTo(cards[i]);
+                hand.Add(card);
             }      
         }
     }

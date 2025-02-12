@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace TCGSim {
     public class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
@@ -10,6 +11,8 @@ namespace TCGSim {
         private CanvasGroup canvasGroup;
         private Transform hand = null;
         private bool draggable = true;
+        private SpriteRenderer spriteRenderer;
+        private Image image;
         // Start is called before the first frame update
         void Start()
         {
@@ -26,6 +29,7 @@ namespace TCGSim {
         {
             canvasGroup = GetComponent<CanvasGroup>();
             hand = this.GetComponentInParent<Hand>().transform;
+            image = this.gameObject.GetComponent<Image>();
         }
 
         public void OnBeginDrag(PointerEventData pointerEventData) 
@@ -67,6 +71,11 @@ namespace TCGSim {
         public void OnDrop(PointerEventData eventData)
         {
             Debug.Log("OnDrop");
+        }
+
+        public void changeSpriteImgTo(string cardNumber)
+        {
+            image.sprite = Resources.Load<Sprite>("Cards/" + cardNumber.Split('-')[0]+"/"+cardNumber);
         }
     }
 }
