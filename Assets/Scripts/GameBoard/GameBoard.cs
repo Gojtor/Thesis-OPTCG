@@ -12,6 +12,8 @@ namespace TCGSim
         private GameObject enemyBoardPrefab;
 
         List<PlayerBoard> playerBoards = new List<PlayerBoard>();
+
+        List<string> deck = new List<string>();
     // Start is called before the first frame update
         void Start()
         {
@@ -26,14 +28,16 @@ namespace TCGSim
 
         private void CreateBoards()
         {
-            PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
             PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
+            PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
             playerBoard.Init("Player Board");
             enemyBoard.Init("Enemy Board");
-            playerBoard.gameObject.transform.Translate(0, -270, 0);
-            enemyBoard.gameObject.transform.Translate(0, 270,0);
+            playerBoard.gameObject.transform.Translate(0, -235, 0);
+            enemyBoard.gameObject.transform.Translate(0, 235, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
             playerBoard.CreateHand();
+            playerBoard.CreateDeck();
+            enemyBoard.CreateHand();
         }
     }
 }

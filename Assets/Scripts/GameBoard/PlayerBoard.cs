@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.XR;
 
 namespace TCGSim
 { 
@@ -15,11 +16,15 @@ namespace TCGSim
         [SerializeField]
         private GameObject characterAreaPrefab;
 
+        [SerializeField]
+        private GameObject deckPrefab;
+
+        private Transform playerHand;
 
         // Start is called before the first frame update
         void Start()
         {
-
+            
         }
 
         // Update is called once per frame
@@ -27,19 +32,27 @@ namespace TCGSim
         {
         
         }
+        private void Awake()
+        {
+            playerHand = handPrefab.transform;
+        }
         public void CreateHand() 
         {
             Hand p1Hand = Instantiate(handPrefab, this.gameObject.transform).GetComponent<Hand>();
-            p1Hand.DrawCard();
-            p1Hand.DrawCard();
-            p1Hand.DrawCard();
-            p1Hand.DrawCard();
-            p1Hand.DrawCard();
         }
 
+        public void CreateDeck()
+        {
+            Instantiate(deckPrefab, this.gameObject.transform);
+        }
         public void Init(string boardName)
         {
             this.name = boardName;
+        }
+
+        public Transform getPlayerHand()
+        {
+            return playerHand;
         }
     }
 }

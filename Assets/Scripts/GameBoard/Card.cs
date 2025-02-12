@@ -25,13 +25,13 @@ namespace TCGSim {
         private void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
+            hand = this.GetComponentInParent<Hand>().transform;
         }
 
         public void OnBeginDrag(PointerEventData pointerEventData) 
         {
             if (draggable)
             {
-                hand = this.transform.parent;
                 this.transform.SetParent(this.transform.parent.parent);
                 canvasGroup.blocksRaycasts = false;
                 canvasGroup.alpha = .8f;
@@ -42,8 +42,7 @@ namespace TCGSim {
         public void OnEndDrag(PointerEventData eventData)
         {
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
-            Transform playerHandParent = this.transform.parent.parent;
-            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null || objectAtDragEnd.transform.parent != playerHandParent)
+            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null || objectAtDragEnd.transform.parent != hand.parent)
             {
                 this.transform.SetParent(hand);
                 canvasGroup.blocksRaycasts = true;
