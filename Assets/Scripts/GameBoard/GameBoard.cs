@@ -9,14 +9,15 @@ namespace TCGSim
         private GameObject playerBoardPrefab;
 
         [SerializeField]
-        private GameObject cardPrefab;
+        private GameObject enemyBoardPrefab;
 
         List<PlayerBoard> playerBoards = new List<PlayerBoard>();
-        Card testCard;
+
+        List<string> deck = new List<string>();
     // Start is called before the first frame update
         void Start()
         {
-            CreateBoard();
+            CreateBoards();
         }
 
         // Update is called once per frame
@@ -25,14 +26,18 @@ namespace TCGSim
 
         }
 
-        private void CreateBoard()
+        private void CreateBoards()
         {
-            PlayerBoard board1 = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
-            PlayerBoard board2 = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
-            board1.gameObject.transform.Translate(0, -270, 0);
-            board2.gameObject.transform.Translate(0, 270,0);
-            board2.gameObject.transform.Rotate(0, 0, 180);
-            cardPrefab = Instantiate(cardPrefab, this.gameObject.transform);
+            PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
+            PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
+            playerBoard.Init("Player Board");
+            enemyBoard.Init("Enemy Board");
+            playerBoard.gameObject.transform.Translate(0, -235, 0);
+            enemyBoard.gameObject.transform.Translate(0, 235, 0);
+            enemyBoard.gameObject.transform.Rotate(0, 0, 180);
+            playerBoard.CreateHand();
+            playerBoard.CreateDeck();
+            enemyBoard.CreateHand();
         }
     }
 }
