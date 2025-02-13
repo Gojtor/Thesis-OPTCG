@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace TCGSim {
+namespace TCGSim
+{
     public class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
         private CanvasGroup canvasGroup;
-        private Transform hand = null;
-        private bool draggable = true;
-        private SpriteRenderer spriteRenderer;
         private Image image;
+        private bool isImgLoaded = false;
+        //Init variables
+        private string cardNumber;
+        private Hand hand = null;
+        private PlayerBoard playerBoard;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -22,38 +23,40 @@ namespace TCGSim {
         // Update is called once per frame
         void Update()
         {
-            
+
         }
 
         private void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
-            hand = this.GetComponentInParent<Hand>().transform;
+            hand = this.GetComponentInParent<Hand>();
             image = this.gameObject.GetComponent<Image>();
         }
 
-        public void OnBeginDrag(PointerEventData pointerEventData) 
+        public void OnBeginDrag(PointerEventData pointerEventData)
         {
-            if (draggable)
+            if (!isImgLoaded)
             {
-                this.transform.SetParent(this.transform.parent.parent);
-                canvasGroup.blocksRaycasts = false;
-                canvasGroup.alpha = .8f;
-                Debug.Log("OnBeginDrag");
+                loadCardImg();
             }
+            this.transform.SetParent(this.transform.parent.parent);
+            playerBoard.enableRaycastOnTopCard();
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.alpha = .8f;
+            Debug.Log("OnBeginDrag");
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
-            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null || objectAtDragEnd.transform.parent != hand.parent)
+            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null || objectAtDragEnd.transform.parent != hand.transform.parent)
             {
-                this.transform.SetParent(hand);
+                this.transform.SetParent(hand.transform);
                 canvasGroup.blocksRaycasts = true;
             }
             else
             {
-                draggable = false;
+                image.raycastTarget = false;
             }
             canvasGroup.alpha = 1f;
             Debug.Log("OnEndDrag");
@@ -61,10 +64,7 @@ namespace TCGSim {
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (draggable)
-            {
-                this.transform.position = eventData.position;
-            }
+            this.transform.position = eventData.position;
             Debug.Log("OnDrag");
         }
 
@@ -73,9 +73,21 @@ namespace TCGSim {
             Debug.Log("OnDrop");
         }
 
-        public void changeSpriteImgTo(string cardNumber)
+        public void loadCardImg()
         {
-            image.sprite = Resources.Load<Sprite>("Cards/" + cardNumber.Split('-')[0]+"/"+cardNumber);
+            image.sprite = Resources.Load<Sprite>("Cards/" + cardNumber.Split('-')[0] + "/" + cardNumber);
+            isImgLoaded = true;
+        }
+        public void raycastTargetChange(bool on)
+        {
+            image.raycastTarget = on;
+        }
+
+        public void Init(PlayerBoard playerBoard,Hand hand, string cardNumber)
+        {
+            this.playerBoard = playerBoard;
+            this.hand = hand;
+            this.cardNumber = cardNumber;
         }
     }
 }

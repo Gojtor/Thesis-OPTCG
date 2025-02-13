@@ -35,8 +35,9 @@ namespace TCGSim
             playerBoard.gameObject.transform.Translate(0, -235, 0);
             enemyBoard.gameObject.transform.Translate(0, 235, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
-            playerBoard.CreateHand();
             playerBoard.CreateDeck();
+            playerBoard.CreateHand();
+            enemyBoard.CreateDeck();
             enemyBoard.CreateHand();
         }
     }

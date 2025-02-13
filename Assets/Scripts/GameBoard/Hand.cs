@@ -21,14 +21,12 @@ namespace TCGSim
 
         }
 
-        public void CreateStartingHand(List<string> cards)
+        public void AddCardToHand(Card card)
         {
-            for (int i = 0; i < cards.Count; i++)
-            {
-                Card card = Instantiate(cardPrefab, this.gameObject.transform).GetComponent<Card>();
-                card.changeSpriteImgTo(cards[i]);
-                hand.Add(card);
-            }      
+            card.transform.SetParent(this.transform);
+            card.loadCardImg();
+            card.raycastTargetChange(true);
+            hand.Add(card);      
         }
     }
 }

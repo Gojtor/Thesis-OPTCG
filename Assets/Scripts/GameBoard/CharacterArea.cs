@@ -21,7 +21,7 @@ namespace TCGSim
         public void OnDrop(PointerEventData eventData)
         {
             Debug.Log("OnEndDrag");
-            eventData.pointerDrag.transform.parent = this.transform;
+            eventData.pointerDrag.transform.SetParent(this.transform);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

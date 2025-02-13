@@ -739,3 +739,5 @@ MonoBehaviour:
   boardName: 
   handPrefab: {fileID: 5508881749739418912, guid: c08c74ae91351e845b085ee247ee627c, type: 3}
   characterAreaPrefab: {fileID: 7937610380201536275, guid: 80f1c228b22daf941b9f0395d772ef2f, type: 3}
+  deckPrefab: {fileID: 4586796782769669121, guid: bdaabc4dc5e0ccc4681aed62db9f6c23, type: 3}
+  cardPrefab: {fileID: 4947900133005985141, guid: b9086539ec95e654b9fd0f2990ecb293, type: 3}

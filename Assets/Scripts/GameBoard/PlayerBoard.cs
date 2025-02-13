@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.XR;
@@ -19,16 +20,22 @@ namespace TCGSim
         [SerializeField]
         private GameObject deckPrefab;
 
+        [SerializeField]
+        private GameObject cardPrefab;
+
         private Transform playerHand;
 
         private Hand handObject;
+        private GameObject deckObject;
 
-        private List<string> deck;
+
+        private List<string> deckString;
+        private List<Card> deckCards = new List<Card>();
 
         // Start is called before the first frame update
         void Start()
         {
-            deck = new List<string>
+            deckString = new List<string>
             {"ST01-002", "ST01-002", "ST01-002", "ST01-002",
             "ST01-003", "ST01-003", "ST01-003", "ST01-003",
             "ST01-004", "ST01-004", "ST01-004", "ST01-004",
@@ -45,8 +52,13 @@ namespace TCGSim
             "ST01-015","ST01-015",
             "ST01-016","ST01-016",
             "ST01-017","ST01-017"};
-
-            handObject.CreateStartingHand(new List<string> { deck[5], deck[10], deck[15], deck[20], deck[25] });
+            CreateCardsFromDeck();
+            enableRaycastOnTopCard();
+            handObject.AddCardToHand(deckCards[5]);
+            handObject.AddCardToHand(deckCards[10]);
+            handObject.AddCardToHand(deckCards[15]);
+            handObject.AddCardToHand(deckCards[20]);
+            handObject.AddCardToHand(deckCards[25]);
         }
 
         // Update is called once per frame
@@ -65,7 +77,7 @@ namespace TCGSim
 
         public void CreateDeck()
         {
-            Instantiate(deckPrefab, this.gameObject.transform);
+            deckObject = Instantiate(deckPrefab, this.gameObject.transform);
         }
         public void Init(string boardName)
         {
@@ -75,6 +87,22 @@ namespace TCGSim
         public Transform getPlayerHand()
         {
             return playerHand;
+        }
+
+        public void CreateCardsFromDeck() 
+        {
+            foreach (string cardNumber in deckString)
+            {
+                Card card = Instantiate(cardPrefab, deckObject.transform).GetComponent<Card>();
+                card.Init(this,handObject,cardNumber);
+                card.raycastTargetChange(false);
+                deckCards.Add(card);
+            }
+        }
+
+        public void enableRaycastOnTopCard()
+        {
+            deckCards.First().raycastTargetChange(true);
         }
     }
 }
