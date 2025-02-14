@@ -102,7 +102,7 @@ namespace TCGSim
 
         public void enableRaycastOnTopCard()
         {
-            deckCards.First().raycastTargetChange(true);
+            deckObject.transform.GetChild(0).GetComponent<Card>().raycastTargetChange(true);
         }
     }
 }
