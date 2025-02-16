@@ -49,10 +49,12 @@ namespace TCGSim
         public void OnEndDrag(PointerEventData eventData)
         {
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
-            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null || objectAtDragEnd.transform.parent != hand.transform.parent)
+            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null 
+                || objectAtDragEnd.transform.parent != hand.transform.parent || objectAtDragEnd.transform.childCount==6)
             {
                 this.transform.SetParent(hand.transform);
                 canvasGroup.blocksRaycasts = true;
+                Debug.Log("Cannot play the card!");
             }
             else
             {

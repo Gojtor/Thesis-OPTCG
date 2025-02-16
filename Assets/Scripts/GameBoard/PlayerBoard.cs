@@ -23,11 +23,13 @@ namespace TCGSim
         [SerializeField]
         private GameObject cardPrefab;
 
-        private Transform playerHand;
+        [SerializeField]
+        private GameObject lifePrefab;
 
+        private Transform playerHand;
         private Hand handObject;
         private GameObject deckObject;
-
+        private GameObject lifeObject;
 
         private List<string> deckString;
         private List<Card> deckCards = new List<Card>();
@@ -35,6 +37,7 @@ namespace TCGSim
         // Start is called before the first frame update
         void Start()
         {
+            playerHand = handPrefab.transform;
             deckString = new List<string>
             {"ST01-002", "ST01-002", "ST01-002", "ST01-002",
             "ST01-003", "ST01-003", "ST01-003", "ST01-003",
@@ -68,7 +71,7 @@ namespace TCGSim
         }
         private void Awake()
         {
-            playerHand = handPrefab.transform;
+            
         }
         public void CreateHand() 
         {
@@ -79,6 +82,12 @@ namespace TCGSim
         {
             deckObject = Instantiate(deckPrefab, this.gameObject.transform);
         }
+
+        public void CreateLife()
+        {
+            lifeObject = Instantiate(lifePrefab, this.gameObject.transform);
+        }
+
         public void Init(string boardName)
         {
             this.name = boardName;

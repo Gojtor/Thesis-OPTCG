@@ -37,8 +37,10 @@ namespace TCGSim
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
             playerBoard.CreateDeck();
             playerBoard.CreateHand();
+            playerBoard.CreateLife();
             enemyBoard.CreateDeck();
             enemyBoard.CreateHand();
+            enemyBoard.CreateLife();
         }
     }
 }
