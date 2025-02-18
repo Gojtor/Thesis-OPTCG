@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7751545345201296630}
   - component: {fileID: 6125752076583189155}
   - component: {fileID: 8512634647315764426}
+  - component: {fileID: -7948517954237309261}
   m_Layer: 5
-  m_Name: PlayerDeck
+  m_Name: Deck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,3 +76,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-7948517954237309261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4586796782769669121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87c613d2ade30eb44a3b64882f0e5af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
