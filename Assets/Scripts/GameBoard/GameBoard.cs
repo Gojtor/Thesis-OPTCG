@@ -14,10 +14,14 @@ namespace TCGSim
         List<PlayerBoard> playerBoards = new List<PlayerBoard>();
 
         List<string> deck = new List<string>();
+
+        ServerCon serverCon;
     // Start is called before the first frame update
         void Start()
         {
             CreateBoards();
+            serverCon = new ServerCon();
+            StartCoroutine(serverCon.GetRequest(serverCon.serverApiUrl+"GetCardByCardID/OP02-058"));
         }
 
         // Update is called once per frame
