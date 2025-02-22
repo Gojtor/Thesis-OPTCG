@@ -1,3 +1,5 @@
+using TCGSim.CardResources;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,11 +8,25 @@ namespace TCGSim
 {
     public class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
+        //Card Data
+        public string cardID { get; set; }
+        public string cardName { get; set; }
+        public string effect { get; set; }
+        public double cost { get; set; }
+        public double power { get; set; }
+        public double counter { get; set; }
+        public string trigger { get; set; }
+        public CardType cardType { get; set; }
+        public CharacterType characterType { get; set; }
+        public Attributes attribute { get; set; }
+        public Colors color { get; set; }
+
+        //Variables for unity handling
         private CanvasGroup canvasGroup;
         private Image image;
         private bool isImgLoaded = false;
+       
         //Init variables
-        private string cardNumber;
         private Hand hand = null;
         private PlayerBoard playerBoard;
 
@@ -77,7 +93,7 @@ namespace TCGSim
 
         public void loadCardImg()
         {
-            image.sprite = Resources.Load<Sprite>("Cards/" + cardNumber.Split('-')[0] + "/" + cardNumber);
+            image.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
             isImgLoaded = true;
         }
         public void raycastTargetChange(bool on)
@@ -85,11 +101,25 @@ namespace TCGSim
             image.raycastTarget = on;
         }
 
-        public void Init(PlayerBoard playerBoard,Hand hand, string cardNumber)
+        public void Init(PlayerBoard playerBoard,Hand hand)
         {
             this.playerBoard = playerBoard;
             this.hand = hand;
-            this.cardNumber = cardNumber;
         }
+
+        public void LoadDataFromCardData(CardData cardData)
+        {
+            this.cardID = cardData.cardID;
+            this.cardName = cardData.cardName;
+            this.effect = cardData.effect;
+            this.cost = cardData.cost;
+            this.power = cardData.power;
+            this.counter = cardData.counter;
+            this.trigger = cardData.trigger;
+            this.cardType = cardData.cardType;
+            this.characterType = cardData.characterType;
+            this.attribute = cardData.attribute;
+            this.color = cardData.color;
+    }
     }
 }

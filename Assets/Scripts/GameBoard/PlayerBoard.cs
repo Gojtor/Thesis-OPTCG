@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
+using TCGSim.CardResources;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.XR;
@@ -34,8 +37,10 @@ namespace TCGSim
         private List<string> deckString;
         private List<Card> deckCards = new List<Card>();
 
+        private ServerCon serverCon;
+
         // Start is called before the first frame update
-        void Start()
+        private async void Start()
         {
             playerHand = handPrefab.transform;
             deckString = new List<string>
@@ -55,7 +60,7 @@ namespace TCGSim
             "ST01-015","ST01-015",
             "ST01-016","ST01-016",
             "ST01-017","ST01-017"};
-            CreateCardsFromDeck();
+            deckCards = await CreateCardsFromDeck();
             enableRaycastOnTopCard();
             handObject.AddCardToHand(deckCards[5]);
             handObject.AddCardToHand(deckCards[10]);
@@ -88,9 +93,14 @@ namespace TCGSim
             lifeObject = Instantiate(lifePrefab, this.gameObject.transform);
         }
 
-        public void Init(string boardName)
+        public void Init(string boardName, ServerCon serverCon)
         {
             this.name = boardName;
+            this.serverCon = serverCon;
+            if (serverCon == null)
+            {
+                Debug.LogError("ServerCon prefab NULL after Init!", this);
+            }
         }
 
         public Transform getPlayerHand()
@@ -98,15 +108,20 @@ namespace TCGSim
             return playerHand;
         }
 
-        public void CreateCardsFromDeck() 
+        public async Task<List<Card>> CreateCardsFromDeck() 
         {
+            List<Card> deck = new List<Card>();
             foreach (string cardNumber in deckString)
             {
                 Card card = Instantiate(cardPrefab, deckObject.transform).GetComponent<Card>();
-                card.Init(this,handObject,cardNumber);
+                card.Init(this,handObject);
+                CardData cardData = await serverCon.GetCardByCardID(cardNumber);
+                Debug.Log(cardData.cardID);
+                card.LoadDataFromCardData(cardData);
                 card.raycastTargetChange(false);
-                deckCards.Add(card);
+                deck.Add(card);
             }
+            return deck;
         }
 
         public void enableRaycastOnTopCard()
