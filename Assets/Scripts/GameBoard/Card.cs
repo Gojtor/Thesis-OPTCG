@@ -1,3 +1,4 @@
+using System;
 using TCGSim.CardResources;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -23,12 +24,13 @@ namespace TCGSim
 
         //Variables for unity handling
         private CanvasGroup canvasGroup;
-        private Image image;
+        private Image cardImage;
         private bool isImgLoaded = false;
        
         //Init variables
         private Hand hand = null;
         private PlayerBoard playerBoard;
+        public CardVisibility cardVisibility { get; private set; } = CardVisibility.NONE;
 
         // Start is called before the first frame update
         void Start()
@@ -39,14 +41,18 @@ namespace TCGSim
         // Update is called once per frame
         void Update()
         {
-
+            //Debug.Log(Enum.GetName(visibility.GetType(), visibility) + " " + cardName);
+            if (cardVisibility == CardVisibility.PLAYERBOARD)
+            {
+                loadCardImg();
+            }
         }
 
         private void Awake()
         {
             canvasGroup = GetComponent<CanvasGroup>();
             hand = this.GetComponentInParent<Hand>();
-            image = this.gameObject.GetComponent<Image>();
+            cardImage = this.gameObject.GetComponent<Image>();
         }
 
         public void OnBeginDrag(PointerEventData pointerEventData)
@@ -74,7 +80,7 @@ namespace TCGSim
             }
             else
             {
-                image.raycastTarget = false;
+                cardImage.raycastTarget = false;
             }
             canvasGroup.alpha = 1f;
             Debug.Log("OnEndDrag");
@@ -93,12 +99,12 @@ namespace TCGSim
 
         public void loadCardImg()
         {
-            image.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
+            cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
             isImgLoaded = true;
         }
         public void raycastTargetChange(bool on)
         {
-            image.raycastTarget = on;
+            cardImage.raycastTarget = on;
         }
 
         public void Init(PlayerBoard playerBoard,Hand hand)
@@ -120,6 +126,10 @@ namespace TCGSim
             this.characterType = cardData.characterType;
             this.attribute = cardData.attribute;
             this.color = cardData.color;
-    }
+        }
+        public void SetCardVisibility(CardVisibility visibility)
+        {
+            this.cardVisibility = visibility;
+        }
     }
 }

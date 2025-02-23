@@ -23,11 +23,6 @@ namespace TCGSim
     // Start is called before the first frame update
         void Start()
         {
-            if (serverConPrefab == null)
-            {
-                Debug.LogError("Prefab NINCS BEÁLLÍTVA!", this);
-                return;
-            }
             serverCon = Instantiate(serverConPrefab, this.gameObject.transform).GetComponent<ServerCon>();
             CreateBoards();
         }
@@ -40,23 +35,13 @@ namespace TCGSim
 
         private void CreateBoards()
         {
-            PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
             PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
-            if (serverCon == null)
-            {
-                Debug.LogError("ServerCon NULL before Init!", this);
-            }
-            playerBoard.Init("Player Board",serverCon);
-            enemyBoard.Init("Enemy Board",serverCon);
+            playerBoard.Init("PLAYERBOARD", serverCon);
+            PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
+            enemyBoard.Init("ENEMYBOARD",serverCon);
             playerBoard.gameObject.transform.Translate(0, -235, 0);
             enemyBoard.gameObject.transform.Translate(0, 235, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
-            playerBoard.CreateDeck();
-            playerBoard.CreateHand();
-            playerBoard.CreateLife();
-            enemyBoard.CreateDeck();
-            enemyBoard.CreateHand();
-            enemyBoard.CreateLife();
         }
     }
 }

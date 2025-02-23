@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 using TCGSim.CardResources;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
-using UnityEditor.PackageManager;
 using Newtonsoft.Json;
 using System.Net;
 using Unity.VisualScripting;
@@ -32,7 +31,6 @@ namespace TCGSim
         {
             using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
             {
-                // Request and wait for the desired page.
                 yield return webRequest.SendWebRequest();
 
                 string[] pages = uri.Split('/');
@@ -49,7 +47,7 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = webRequest.downloadHandler.text;
-                        Debug.Log(pages[page] + ":\nReceived: " + jsonResponse);
+                        //Debug.Log(pages[page] + ":\nReceived: " + jsonResponse);
                         CardData card = JsonUtility.FromJson<CardData>(jsonResponse);
                         break;
                 }
@@ -76,7 +74,7 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
-                        Debug.Log("Received: " + jsonResponse);
+                        //Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<CardData>(jsonResponse);
                 }
                 return null;

@@ -42,6 +42,9 @@ namespace TCGSim
         // Start is called before the first frame update
         private async void Start()
         {
+            CreateHand();
+            CreateDeck();
+            CreateLife();     
             playerHand = handPrefab.transform;
             deckString = new List<string>
             {"ST01-002", "ST01-002", "ST01-002", "ST01-002",
@@ -60,13 +63,14 @@ namespace TCGSim
             "ST01-015","ST01-015",
             "ST01-016","ST01-016",
             "ST01-017","ST01-017"};
+            handObject.Init(this);
             deckCards = await CreateCardsFromDeck();
             enableRaycastOnTopCard();
-            handObject.AddCardToHand(deckCards[5]);
-            handObject.AddCardToHand(deckCards[10]);
-            handObject.AddCardToHand(deckCards[15]);
-            handObject.AddCardToHand(deckCards[20]);
-            handObject.AddCardToHand(deckCards[25]);
+            AddCardToHand(deckCards[5]);
+            AddCardToHand(deckCards[10]);
+            AddCardToHand(deckCards[15]);
+            AddCardToHand(deckCards[20]);
+            AddCardToHand(deckCards[25]);
         }
 
         // Update is called once per frame
@@ -80,7 +84,7 @@ namespace TCGSim
         }
         public void CreateHand() 
         {
-            handObject = Instantiate(handPrefab, this.gameObject.transform).GetComponent<Hand>();
+            handObject = Instantiate(handPrefab, this.gameObject.transform).GetComponent<Hand>();    
         }
 
         public void CreateDeck()
@@ -95,7 +99,7 @@ namespace TCGSim
 
         public void Init(string boardName, ServerCon serverCon)
         {
-            this.name = boardName;
+            this.boardName = boardName;
             this.serverCon = serverCon;
             if (serverCon == null)
             {
@@ -116,7 +120,6 @@ namespace TCGSim
                 Card card = Instantiate(cardPrefab, deckObject.transform).GetComponent<Card>();
                 card.Init(this,handObject);
                 CardData cardData = await serverCon.GetCardByCardID(cardNumber);
-                Debug.Log(cardData.cardID);
                 card.LoadDataFromCardData(cardData);
                 card.raycastTargetChange(false);
                 deck.Add(card);
@@ -127,6 +130,18 @@ namespace TCGSim
         public void enableRaycastOnTopCard()
         {
             deckObject.transform.GetChild(0).GetComponent<Card>().raycastTargetChange(true);
+        }
+
+        public void AddCardToHand(Card card)
+        {
+            this.handObject.AddCardToHand(card);
+            deckCards.Remove(card);
+        }
+
+        public void PutCardBackToDeck(Card card)
+        {
+            card.transform.SetParent(this.deckObject.transform);
+            deckCards.Add(card);
         }
     }
 }
