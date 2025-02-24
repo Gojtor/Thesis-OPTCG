@@ -590,3 +590,5 @@ MonoBehaviour:
   deckPrefab: {fileID: 4586796782769669121, guid: bdaabc4dc5e0ccc4681aed62db9f6c23, type: 3}
   cardPrefab: {fileID: 4947900133005985141, guid: b9086539ec95e654b9fd0f2990ecb293, type: 3}
   lifePrefab: {fileID: 8743403551607725840, guid: 24e93ac1ae5085b41976e916befb0083, type: 3}
+  keepBtnPrefab: {fileID: 8968290511196942242, guid: 8e2cd715418e26644a50b34121595252, type: 3}
+  mulliganBtnPrefab: {fileID: 6787231950402081636, guid: 80f0748181aac2f4985bdb2f85823d7b, type: 3}

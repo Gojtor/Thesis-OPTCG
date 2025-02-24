@@ -35,17 +35,13 @@ namespace TCGSim
         // Start is called before the first frame update
         void Start()
         {
-
+            
         }
 
         // Update is called once per frame
         void Update()
         {
-            //Debug.Log(Enum.GetName(visibility.GetType(), visibility) + " " + cardName);
-            if (cardVisibility == CardVisibility.PLAYERBOARD)
-            {
-                loadCardImg();
-            }
+            CheckCardVisibility();
         }
 
         private void Awake()
@@ -59,7 +55,7 @@ namespace TCGSim
         {
             if (!isImgLoaded)
             {
-                loadCardImg();
+                FlipCard();
             }
             this.transform.SetParent(this.transform.parent.parent);
             playerBoard.enableRaycastOnTopCard();
@@ -97,11 +93,21 @@ namespace TCGSim
             Debug.Log("OnDrop");
         }
 
-        public void loadCardImg()
+        public void FlipCard()
         {
-            cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
-            isImgLoaded = true;
+            if (!isImgLoaded)
+            {
+                cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
+                isImgLoaded = !isImgLoaded;
+            }
+            else
+            {
+                cardImage.sprite = Resources.Load<Sprite>("Cards/cardback");
+                isImgLoaded = !isImgLoaded;
+                cardVisibility = CardVisibility.NONE;
+            }
         }
+
         public void raycastTargetChange(bool on)
         {
             cardImage.raycastTarget = on;
@@ -130,6 +136,14 @@ namespace TCGSim
         public void SetCardVisibility(CardVisibility visibility)
         {
             this.cardVisibility = visibility;
+        }
+
+        public void CheckCardVisibility()
+        {
+            if (cardVisibility == CardVisibility.PLAYERBOARD && !isImgLoaded)
+            {
+                FlipCard();
+            }
         }
     }
 }

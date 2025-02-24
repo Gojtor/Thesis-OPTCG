@@ -7,34 +7,18 @@ namespace TCGSim
 {
     public class Hand : MonoBehaviour
     {
+
         [SerializeField]
         private GameObject cardPrefab;
 
-        [SerializeField]
-        private GameObject keepBtnPrefab;
-
-        [SerializeField]
-        private GameObject mulliganBtnPrefab;
-
         PlayerBoard playerBoard;
-        Button keepBtn;
-        Button mulliganBtn;
 
-        List<Card> hand = new List<Card>();
+
+        public List<Card> hand { get; private set; } =  new List<Card>();
         // Start is called before the first frame update
         void Start()
         {
-            
-            keepBtn = Instantiate(keepBtnPrefab, this.transform.parent).GetComponent<Button>();
-            mulliganBtn = Instantiate(mulliganBtnPrefab, this.transform.parent).GetComponent<Button>();
-            if (keepBtn != null)
-            {
-                keepBtn.onClick.AddListener(ScaleHandBackFromStartingHand);
-            }
-            if (mulliganBtn != null)
-            {
-                mulliganBtn.onClick.AddListener(ScaleHandForStartingHand);
-            }
+
         }
 
         // Update is called once per frame
@@ -51,7 +35,6 @@ namespace TCGSim
         public void AddCardToHand(Card card)
         {
             card.transform.SetParent(this.transform);
-            card.raycastTargetChange(true);
             switch (playerBoard.boardName)
             {
                 case ("PLAYERBOARD"):
@@ -69,20 +52,14 @@ namespace TCGSim
 
         public void ScaleHandForStartingHand()
         {
-            Debug.Log("Click");
             RectTransform rectTransform = this.transform.GetComponent<RectTransform>();
-            Debug.Log($"Eredeti pozíció: {rectTransform.anchoredPosition}");
-            Debug.Log($"Eredeti méret: {this.transform.localScale}");
-
             rectTransform.anchoredPosition = new Vector2(0, 150);
-            this.transform.localScale = new Vector3(3, 3, 3);
-
-            Debug.Log($"Új pozíció: {rectTransform.anchoredPosition}");
-            Debug.Log($"Új méret: {this.transform.localScale}");
-
+            this.transform.localScale = new Vector3(3.2f, 3f, 3f);
+            HorizontalLayoutGroup horizontalLayoutGroup = this.transform.GetComponent<HorizontalLayoutGroup>();
+            horizontalLayoutGroup.spacing = 0; 
             foreach (Card card in hand)
             {
-                card.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+                card.transform.localScale = new Vector3(0.95f, 0.95f, 0.95f);
             }
             Canvas.ForceUpdateCanvases();
         }
@@ -92,6 +69,8 @@ namespace TCGSim
             RectTransform rectTransform = this.transform.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = new Vector2(0, -105);
             this.transform.localScale = new Vector3(1, 1, 1);
+            HorizontalLayoutGroup horizontalLayoutGroup = this.transform.GetComponent<HorizontalLayoutGroup>();
+            horizontalLayoutGroup.spacing = 5;
             foreach (Card card in hand)
             {
                 card.transform.localScale = new Vector3(1, 1, 1);

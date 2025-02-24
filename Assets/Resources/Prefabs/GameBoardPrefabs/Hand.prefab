@@ -90,8 +90,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardPrefab: {fileID: 4947900133005985141, guid: b9086539ec95e654b9fd0f2990ecb293, type: 3}
-  keepBtnPrefab: {fileID: 8968290511196942242, guid: 8e2cd715418e26644a50b34121595252, type: 3}
-  mulliganBtnPrefab: {fileID: 6787231950402081636, guid: 80f0748181aac2f4985bdb2f85823d7b, type: 3}
 --- !u!114 &-5678530666952003506
 MonoBehaviour:
   m_ObjectHideFlags: 0

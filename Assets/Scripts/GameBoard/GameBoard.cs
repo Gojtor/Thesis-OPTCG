@@ -35,9 +35,10 @@ namespace TCGSim
 
         private void CreateBoards()
         {
+            
+            PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
             PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
             playerBoard.Init("PLAYERBOARD", serverCon);
-            PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
             enemyBoard.Init("ENEMYBOARD",serverCon);
             playerBoard.gameObject.transform.Translate(0, -235, 0);
             enemyBoard.gameObject.transform.Translate(0, 235, 0);
