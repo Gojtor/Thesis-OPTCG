@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3090537913879029368}
   - component: {fileID: 2253014154497532257}
   - component: {fileID: 8379254632193900134}
-  - component: {fileID: 7586627361283605604}
+  - component: {fileID: 7222198077147669584}
   m_Layer: 5
   m_Name: GameBoard
   m_TagString: Untagged
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &7586627361283605604
+--- !u!114 &7222198077147669584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,6 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBoardPrefab: {fileID: 7984872905386199763, guid: 500548173fc02814fbe41b8c0c519109, type: 3}
   enemyBoardPrefab: {fileID: 7984872905386199763, guid: 70b115310d5848b43bb2d95573d68bc1, type: 3}
+  serverConPrefab: {fileID: 7153841188973620447, guid: 3641ed60aeb54d3449f155596520498e, type: 3}
 --- !u!1 &7425409318985540678
 GameObject:
   m_ObjectHideFlags: 0
