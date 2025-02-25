@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 2193431391174706802}
   - component: {fileID: 5771044102467428725}
   - component: {fileID: 8397915933056123593}
+  - component: {fileID: -9000213091665940003}
   m_Layer: 5
   m_Name: Life
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &2193431391174706802
 RectTransform:
@@ -75,3 +76,15 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-9000213091665940003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8743403551607725840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 178f64ff70ab08048862951389bd7dbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

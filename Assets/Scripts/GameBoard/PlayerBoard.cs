@@ -41,7 +41,7 @@ namespace TCGSim
         private Transform playerHand;
         private Hand handObject;
         private GameObject deckObject;
-        private GameObject lifeObject;
+        private Life lifeObject;
         Button keepBtn;
         Button mulliganBtn;
 
@@ -59,7 +59,7 @@ namespace TCGSim
         // Update is called once per frame
         void Update()
         {
-
+            Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
         }
         private void Awake()
         {
@@ -85,8 +85,7 @@ namespace TCGSim
             {
                 handObject.ScaleHandForStartingHand();
                 LoadMulliganKeepButtons();
-                enableRaycastOnTopCard();
-            }    
+            }
         }
         public void CreateHand()
         {
@@ -102,7 +101,8 @@ namespace TCGSim
 
         public void CreateLife()
         {
-            lifeObject = Instantiate(lifePrefab, this.gameObject.transform);
+            lifeObject = Instantiate(lifePrefab, this.gameObject.transform).GetComponent<Life>();
+            lifeObject.Init(this);
         }
 
         public void LoadMulliganKeepButtons()
@@ -202,6 +202,8 @@ namespace TCGSim
             }
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
+            CreateStartingLife();
+            enableRaycastOnTopCard();
         }
 
         public void KeepHand()
@@ -213,6 +215,8 @@ namespace TCGSim
             handObject.ScaleHandBackFromStartingHand();
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
+            CreateStartingLife();
+            enableRaycastOnTopCard();
         }
 
         public void Shuffle<T>(IList<T> list)
@@ -226,6 +230,20 @@ namespace TCGSim
                     int j = random.Next(0, listSize);
                     (list[i], list[j]) = (list[j], list[i]);
                 }
+            }
+        }
+
+        public void AddCardToLife(Card card)
+        {
+            this.lifeObject.AddCardToLife(card);
+            deckCards.Remove(card);
+        }
+
+        public void CreateStartingLife()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                AddCardToLife(deckCards[i]);
             }
         }
     }
