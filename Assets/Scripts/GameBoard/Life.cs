@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TCGSim.CardResources;
+using TCGSim.CardScripts;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -10,7 +12,7 @@ namespace TCGSim
         public PlayerBoard playerBoard { get; private set; }
         public List<Card> lifeCards { get; private set; } = new List<Card>();
 
-        private int bottomLifePos = 0;
+        //private int bottomLifePos = 0;
         private int currentTopLifePos = -45;
         // Start is called before the first frame update
         void Start()

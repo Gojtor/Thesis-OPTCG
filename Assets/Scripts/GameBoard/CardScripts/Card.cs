@@ -5,21 +5,16 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace TCGSim
+namespace TCGSim.CardScripts
 {
-    public class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
+    public abstract class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
         //Card Data
         public string cardID { get; set; }
         public string cardName { get; set; }
         public string effect { get; set; }
         public double cost { get; set; }
-        public double power { get; set; }
-        public double counter { get; set; }
-        public string trigger { get; set; }
         public CardType cardType { get; set; }
-        public CharacterType characterType { get; set; }
-        public Attributes attribute { get; set; }
         public Colors color { get; set; }
 
         //Variables for unity handling
@@ -66,6 +61,15 @@ namespace TCGSim
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (playerBoard == null)
+                Debug.LogError("playerBoard is NULL in OnEndDrag!");
+
+            if (canvasGroup == null)
+                Debug.LogError("canvasGroup is NULL in OnEndDrag!");
+
+            if (hand == null)
+                Debug.LogError("hand is NULL in OnEndDrag!");
+            Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
             if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null 
                 || objectAtDragEnd.transform.parent != hand.transform.parent || objectAtDragEnd.transform.childCount==6)
@@ -95,6 +99,7 @@ namespace TCGSim
 
         public void FlipCard()
         {
+            Debug.Log("FlipCard called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
             if (!isImgLoaded)
             {
                 cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
@@ -119,18 +124,12 @@ namespace TCGSim
             this.hand = hand;
         }
 
-        public void LoadDataFromCardData(CardData cardData)
+        public virtual void LoadDataFromCardData(CardData cardData)
         {
             this.cardID = cardData.cardID;
             this.cardName = cardData.cardName;
             this.effect = cardData.effect;
             this.cost = cardData.cost;
-            this.power = cardData.power;
-            this.counter = cardData.counter;
-            this.trigger = cardData.trigger;
-            this.cardType = cardData.cardType;
-            this.characterType = cardData.characterType;
-            this.attribute = cardData.attribute;
             this.color = cardData.color;
         }
         public void SetCardVisibility(CardVisibility visibility)

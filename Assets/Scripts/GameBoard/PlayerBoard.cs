@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TCGSim.CardResources;
+using TCGSim.CardScripts;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -150,9 +151,33 @@ namespace TCGSim
             List<Card> deck = new List<Card>();
             foreach (string cardNumber in deckString)
             {
-                Card card = Instantiate(cardPrefab, deckObject.transform).GetComponent<Card>();
-                card.Init(this, handObject);
                 CardData cardData = await serverCon.GetCardByCardID(cardNumber);
+                GameObject cardObj;
+                Card card;
+                switch (cardData.cardType)
+                {
+                    case CardType.CHARACTER:
+                        cardObj = Instantiate(cardPrefab, deckObject.transform);
+                        cardObj.AddComponent<CharacterCard>();
+                        card = cardObj.GetComponent<CharacterCard>();
+                        break;
+                    case CardType.STAGE:
+                        cardObj = Instantiate(cardPrefab, deckObject.transform);
+                        cardObj.AddComponent<StageCard>();
+                        card = cardObj.GetComponent<StageCard>();
+                        break;
+                    case CardType.EVENT:
+                        cardObj = Instantiate(cardPrefab, deckObject.transform);
+                        cardObj.AddComponent<EventCard>();
+                        card = cardObj.GetComponent<EventCard>();
+                        break;
+                    default:
+                        cardObj = Instantiate(cardPrefab, deckObject.transform);
+                        cardObj.AddComponent<Card>();
+                        card = cardObj.GetComponent<Card>();
+                        break;
+                }
+                card.Init(this, handObject);
                 card.LoadDataFromCardData(cardData);
                 card.raycastTargetChange(false);
                 deck.Add(card);

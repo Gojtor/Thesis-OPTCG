@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace TCGSim
+namespace TCGSim.CardResources
 {
     public enum CardVisibility
     {

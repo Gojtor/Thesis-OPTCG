@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TCGSim.CardResources;
+using TCGSim.CardScripts;
 using UnityEngine;
 using UnityEngine.UI;
 namespace TCGSim
