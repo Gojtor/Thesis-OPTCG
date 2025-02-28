@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using System.Net;
 using Unity.VisualScripting;
+using TCGSim.CardScripts;
 
 namespace TCGSim
 {
@@ -54,6 +55,35 @@ namespace TCGSim
             }
         }
         public async Task<CardData> GetCardByCardID(string cardID)
+        {
+            string url = "http://localhost:5000/api/TCG/GetCardByCardID/";
+            using (UnityWebRequest request = UnityWebRequest.Get(url + cardID))
+            {
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                    await Task.Yield();
+
+                switch (request.result)
+                {
+                    case UnityWebRequest.Result.ConnectionError:
+                    case UnityWebRequest.Result.DataProcessingError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.Success:
+                        string jsonResponse = request.downloadHandler.text;
+                        //Debug.Log("Received: " + jsonResponse);
+                        return JsonConvert.DeserializeObject<CardData>(jsonResponse);
+                }
+                return null;
+            }
+
+        }
+
+        public async Task<CardData> AddCardToInGameStateDB(Card card)
         {
             string url = "http://localhost:5000/api/TCG/GetCardByCardID/";
             using (UnityWebRequest request = UnityWebRequest.Get(url + cardID))

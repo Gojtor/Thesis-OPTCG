@@ -60,7 +60,7 @@ namespace TCGSim
         // Update is called once per frame
         void Update()
         {
-            Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
+            //Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
         }
         private void Awake()
         {
@@ -78,6 +78,7 @@ namespace TCGSim
             CreateLife();
             CreateHand();
             CreateADeck();
+            Shuffle<string>(deckString);
             deckCards = await CreateCardsFromDeck();
             Shuffle<Card>(deckCards);
             Debug.Log(boardName);
@@ -123,22 +124,21 @@ namespace TCGSim
         public void CreateADeck()
         {
             deckString = new List<string>
-            {"ST01-002", "ST01-002", "ST01-002", "ST01-002",
-            "ST01-003", "ST01-003", "ST01-003", "ST01-003",
-            "ST01-004", "ST01-004", "ST01-004", "ST01-004",
-            "ST01-005","ST01-005","ST01-005","ST01-005",
-            "ST01-006","ST01-006","ST01-006","ST01-006",
-            "ST01-007","ST01-007","ST01-007","ST01-007",
-            "ST01-008","ST01-008","ST01-008","ST01-008",
-            "ST01-009","ST01-009","ST01-009","ST01-009",
-            "ST01-010","ST01-010","ST01-010","ST01-010",
-            "ST01-011","ST01-011",
-            "ST01-012","ST01-012",
-            "ST01-013","ST01-013",
-            "ST01-014","ST01-014",
-            "ST01-015","ST01-015",
-            "ST01-016","ST01-016",
-            "ST01-017","ST01-017"};
+            {
+            "4xST01-002",
+            "4xST01-003",
+            "4xST01-004",
+            "4xST01-005",
+            "4xST01-006",
+            "4xST01-007",
+            "4xST01-008",
+            "4xST01-009",
+            "4xST01-010",
+            "2xST01-011",
+            "2xST01-012",
+            "2xST01-013",
+            "2xST01-014",
+            "2xST01-015"};
         }
 
         public Transform getPlayerHand()
@@ -149,45 +149,54 @@ namespace TCGSim
         public async Task<List<Card>> CreateCardsFromDeck()
         {
             List<Card> deck = new List<Card>();
-            foreach (string cardNumber in deckString)
+            foreach (string sameCards in deckString)
             {
+                string cardNumber = sameCards.Split("x")[1];
+                int count = Convert.ToInt32(sameCards.Split("x")[0]);
                 CardData cardData = await serverCon.GetCardByCardID(cardNumber);
                 GameObject cardObj;
                 Card card;
-                switch (cardData.cardType)
+                for (int i = 0; i < count; i++)
                 {
-                    case CardType.CHARACTER:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
-                        cardObj.AddComponent<CharacterCard>();
-                        card = cardObj.GetComponent<CharacterCard>();
-                        break;
-                    case CardType.STAGE:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
-                        cardObj.AddComponent<StageCard>();
-                        card = cardObj.GetComponent<StageCard>();
-                        break;
-                    case CardType.EVENT:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
-                        cardObj.AddComponent<EventCard>();
-                        card = cardObj.GetComponent<EventCard>();
-                        break;
-                    default:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
-                        cardObj.AddComponent<Card>();
-                        card = cardObj.GetComponent<Card>();
-                        break;
+                    switch (cardData.cardType)
+                    {
+                        case CardType.CHARACTER:
+                            cardObj = Instantiate(cardPrefab, deckObject.transform);
+                            cardObj.AddComponent<CharacterCard>();
+                            card = cardObj.GetComponent<CharacterCard>();
+                            break;
+                        case CardType.STAGE:
+                            cardObj = Instantiate(cardPrefab, deckObject.transform);
+                            cardObj.AddComponent<StageCard>();
+                            card = cardObj.GetComponent<StageCard>();
+                            break;
+                        case CardType.EVENT:
+                            cardObj = Instantiate(cardPrefab, deckObject.transform);
+                            cardObj.AddComponent<EventCard>();
+                            card = cardObj.GetComponent<EventCard>();
+                            break;
+                        default:
+                            cardObj = Instantiate(cardPrefab, deckObject.transform);
+                            cardObj.AddComponent<Card>();
+                            card = cardObj.GetComponent<Card>();
+                            break;
+                    }
+                    card.Init(this, handObject, cardNumber + "-" + i);
+                    card.LoadDataFromCardData(cardData);
+                    card.raycastTargetChange(false);
+                    deck.Add(card);
                 }
-                card.Init(this, handObject);
-                card.LoadDataFromCardData(cardData);
-                card.raycastTargetChange(false);
-                deck.Add(card);
+                
             }
             return deck;
         }
 
         public void enableRaycastOnTopCard()
         {
-            deckObject.transform.GetChild(0).GetComponent<Card>().raycastTargetChange(true);
+            if (deckObject.transform.childCount > 0)
+            {
+                deckObject.transform.GetChild(0).GetComponent<Card>().raycastTargetChange(true);
+            }
         }
 
         public void AddCardToHand(Card card)

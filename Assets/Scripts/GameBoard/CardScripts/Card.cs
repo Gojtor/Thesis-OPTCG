@@ -16,6 +16,7 @@ namespace TCGSim.CardScripts
         public double cost { get; set; }
         public CardType cardType { get; set; }
         public Colors color { get; set; }
+        public string customCardID { get; set; } //This is needed when there is more than 1 from the same card in the deck
 
         //Variables for unity handling
         private CanvasGroup canvasGroup;
@@ -99,7 +100,7 @@ namespace TCGSim.CardScripts
 
         public void FlipCard()
         {
-            Debug.Log("FlipCard called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
+            //Debug.Log("FlipCard called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
             if (!isImgLoaded)
             {
                 cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
@@ -118,10 +119,12 @@ namespace TCGSim.CardScripts
             cardImage.raycastTarget = on;
         }
 
-        public void Init(PlayerBoard playerBoard,Hand hand)
+        public void Init(PlayerBoard playerBoard,Hand hand, string customCardID)
         {
             this.playerBoard = playerBoard;
             this.hand = hand;
+            this.customCardID = customCardID;
+            this.gameObject.name = this.customCardID;
         }
 
         public virtual void LoadDataFromCardData(CardData cardData)
