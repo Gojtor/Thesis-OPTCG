@@ -82,11 +82,11 @@ namespace TCGSim
             }
 
         }
-
+        /*
         public async Task<CardData> AddCardToInGameStateDB(Card card)
         {
             string url = "http://localhost:5000/api/TCG/GetCardByCardID/";
-            using (UnityWebRequest request = UnityWebRequest.Get(url + cardID))
+            using (UnityWebRequest request = UnityWebRequest.Post)
             {
                 var operation = request.SendWebRequest();
 
@@ -111,5 +111,6 @@ namespace TCGSim
             }
 
         }
+        */
     }
 }
