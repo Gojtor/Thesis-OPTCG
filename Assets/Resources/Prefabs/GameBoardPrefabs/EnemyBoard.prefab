@@ -592,3 +592,4 @@ MonoBehaviour:
   lifePrefab: {fileID: 8743403551607725840, guid: 24e93ac1ae5085b41976e916befb0083, type: 3}
   keepBtnPrefab: {fileID: 8968290511196942242, guid: 8e2cd715418e26644a50b34121595252, type: 3}
   mulliganBtnPrefab: {fileID: 6787231950402081636, guid: 80f0748181aac2f4985bdb2f85823d7b, type: 3}
+  testSetCardPrefab: {fileID: 1569683807125857284, guid: 118b5b48a43d53441b1621162774addd, type: 3}

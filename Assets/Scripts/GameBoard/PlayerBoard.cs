@@ -16,7 +16,8 @@ namespace TCGSim
 {
     public class PlayerBoard : MonoBehaviour
     {
-        public string boardName;
+        public string boardName { get; private set; }
+        public string gameCustomID { get; private set; }
 
         [SerializeField]
         private GameObject handPrefab;
@@ -39,12 +40,16 @@ namespace TCGSim
         [SerializeField]
         private GameObject mulliganBtnPrefab;
 
+        [SerializeField]
+        private GameObject testSetCardPrefab;
+
         private Transform playerHand;
         private Hand handObject;
         private GameObject deckObject;
         private Life lifeObject;
         Button keepBtn;
         Button mulliganBtn;
+        Button testBtn;
 
         private List<string> deckString;
         private List<Card> deckCards = new List<Card>();
@@ -54,22 +59,24 @@ namespace TCGSim
         // Start is called before the first frame update
         private void Start()
         {
-            
+            testBtn =  Instantiate(testSetCardPrefab, this.transform).GetComponent<Button>();
+            testBtn.onClick.AddListener(SendCardToDB);
         }
 
         // Update is called once per frame
         void Update()
         {
-            //Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
+            Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
         }
         private void Awake()
         {
 
         }
-        public async void Init(string boardName, ServerCon serverCon)
+        public async void Init(string boardName, ServerCon serverCon, string gameCustomID)
         {
             this.boardName = boardName;
             this.serverCon = serverCon;
+            this.gameCustomID = gameCustomID;
             if (serverCon == null)
             {
                 Debug.LogError("ServerCon prefab NULL after Init!", this);
@@ -138,7 +145,9 @@ namespace TCGSim
             "2xST01-012",
             "2xST01-013",
             "2xST01-014",
-            "2xST01-015"};
+            "2xST01-015",
+            "2xST01-016",
+            "2xST01-017"};
         }
 
         public Transform getPlayerHand()
@@ -238,6 +247,7 @@ namespace TCGSim
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
             enableRaycastOnTopCard();
+            SendAllCardToDB();
         }
 
         public void KeepHand()
@@ -251,6 +261,7 @@ namespace TCGSim
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
             enableRaycastOnTopCard();
+            SendAllCardToDB();
         }
 
         public void Shuffle<T>(IList<T> list)
@@ -278,6 +289,31 @@ namespace TCGSim
             for (int i = 0; i < 5; i++)
             {
                 AddCardToLife(deckCards[i]);
+            }
+        }
+
+        public void SendCardToDB()
+        {
+            Debug.Log("SendCardToDB clicked");
+            StartCoroutine(serverCon.AddCardToInGameStateDB(handObject.transform.GetChild(0).GetComponent<Card>()));
+        }
+
+        public void SendAllCardToDB()
+        {
+            foreach  (Card card in deckCards)
+            {
+                card.UpdateParent();
+                StartCoroutine(serverCon.AddCardToInGameStateDB(card));
+            }
+            foreach (Card card in handObject.hand)
+            {
+                card.UpdateParent();
+                StartCoroutine(serverCon.AddCardToInGameStateDB(card));
+            }
+            foreach (Card card in lifeObject.lifeCards)
+            {
+                card.UpdateParent();
+                StartCoroutine(serverCon.AddCardToInGameStateDB(card));
             }
         }
     }

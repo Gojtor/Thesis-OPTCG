@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 namespace TCGSim
 {
@@ -16,11 +17,9 @@ namespace TCGSim
 
         private ServerCon serverCon;
 
-        List<PlayerBoard> playerBoards = new List<PlayerBoard>();
+        public string gameCustomID { get; private set; } = System.Guid.NewGuid().ToString();
 
-        List<string> deck = new List<string>();
-
-    // Start is called before the first frame update
+        // Start is called before the first frame update
         void Start()
         {
             serverCon = Instantiate(serverConPrefab, this.gameObject.transform).GetComponent<ServerCon>();
@@ -38,8 +37,8 @@ namespace TCGSim
             
             PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
             PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
-            playerBoard.Init("PLAYERBOARD", serverCon);
-            enemyBoard.Init("ENEMYBOARD",serverCon);
+            playerBoard.Init("PLAYERBOARD", serverCon, gameCustomID);
+            enemyBoard.Init("ENEMYBOARD",serverCon, gameCustomID);
             playerBoard.gameObject.transform.Translate(0, -235, 0);
             enemyBoard.gameObject.transform.Translate(0, 235, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);

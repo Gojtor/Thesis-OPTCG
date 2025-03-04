@@ -9,11 +9,13 @@ using Newtonsoft.Json;
 using System.Net;
 using Unity.VisualScripting;
 using TCGSim.CardScripts;
+using System.Text;
 
 namespace TCGSim
 {
     public class ServerCon : MonoBehaviour
     {
+        public string url { get; private set; }
         public string serverApiUrl { get; } = "http://localhost:5000/api/TCG/";
         // Start is called before the first frame update
         void Start()
@@ -27,6 +29,10 @@ namespace TCGSim
 
         }
 
+        public void Init(string urlToServer)
+        {
+            
+        }
 
         public IEnumerator GetRequest(string uri)
         {
@@ -82,35 +88,34 @@ namespace TCGSim
             }
 
         }
-        /*
-        public async Task<CardData> AddCardToInGameStateDB(Card card)
+        
+        public IEnumerator AddCardToInGameStateDB(Card card)
         {
-            string url = "http://localhost:5000/api/TCG/GetCardByCardID/";
-            using (UnityWebRequest request = UnityWebRequest.Post)
+            CardData cardData = card.TurnCardToCardData();
+            string url = "http://localhost:5000/api/TCG/SetCardToGameDB";
+            string json = JsonConvert.SerializeObject(cardData);
+            //Debug.Log("Sent JSON: " + json);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
             {
-                var operation = request.SendWebRequest();
+                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
 
-                while (!operation.isDone)
-                    await Task.Yield();
+                yield return request.SendWebRequest();
 
-                switch (request.result)
+                if (request.result == UnityWebRequest.Result.Success)
                 {
-                    case UnityWebRequest.Result.ConnectionError:
-                    case UnityWebRequest.Result.DataProcessingError:
-                        Debug.LogError(request.error);
-                        break;
-                    case UnityWebRequest.Result.ProtocolError:
-                        Debug.LogError(request.error);
-                        break;
-                    case UnityWebRequest.Result.Success:
-                        string jsonResponse = request.downloadHandler.text;
-                        //Debug.Log("Received: " + jsonResponse);
-                        return JsonConvert.DeserializeObject<CardData>(jsonResponse);
+                    //Debug.Log("Json sent successfully! Reply: " + request.downloadHandler.text);
                 }
-                return null;
+                else
+                {
+                    Debug.LogError("Error: " + request.error);
+                }
             }
 
         }
-        */
+        
     }
 }

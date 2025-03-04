@@ -5,6 +5,9 @@ namespace TCGSim.CardResources
 
     public enum CharacterType
     {
+        [EnumMember(Value = "NONE")]
+        NONE,
+
         [EnumMember(Value = "The Four EmperorsBig Mom Pirates")]
         TheFourEmperorsBigMomPirates,
 

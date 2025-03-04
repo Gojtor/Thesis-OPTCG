@@ -10,13 +10,15 @@ namespace TCGSim.CardScripts
     public abstract class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
         //Card Data
-        public string cardID { get; set; }
-        public string cardName { get; set; }
-        public string effect { get; set; }
-        public double cost { get; set; }
-        public CardType cardType { get; set; }
-        public Colors color { get; set; }
-        public string customCardID { get; set; } //This is needed when there is more than 1 from the same card in the deck
+        public string cardID { get; set; } = "#";
+        public string cardName { get; set; } = "#";
+        public string effect { get; set; } = "#";
+        public int cost { get; set; } = 0;
+        public CardType cardType { get; set; } = CardType.DON;
+        public Colors color { get; set; } = Colors.Red;
+        public string customCardID { get; set; } = "#"; //This is needed when there is more than 1 from the same card in the deck
+        public string playerName { get; set; } = "#";
+        public string currentParent { get; set; } = "#";
 
         //Variables for unity handling
         private CanvasGroup canvasGroup;
@@ -37,7 +39,7 @@ namespace TCGSim.CardScripts
         // Update is called once per frame
         void Update()
         {
-            CheckCardVisibility();
+            
         }
 
         private void Awake()
@@ -125,6 +127,8 @@ namespace TCGSim.CardScripts
             this.hand = hand;
             this.customCardID = customCardID;
             this.gameObject.name = this.customCardID;
+            this.playerName = playerBoard.boardName;
+            UpdateParent();
         }
 
         public virtual void LoadDataFromCardData(CardData cardData)
@@ -146,6 +150,28 @@ namespace TCGSim.CardScripts
             {
                 FlipCard();
             }
+        }
+
+        public virtual CardData TurnCardToCardData()
+        {
+            CardData cardData = new CardData();
+            cardData.cardID = this.cardID;
+            cardData.cardName = this.cardName;
+            cardData.effect = this.effect;
+            cardData.cost = this.cost;
+            cardData.color = this.color;
+            cardData.active = false;
+            cardData.customCardID = this.customCardID;
+            cardData.playerName = this.playerBoard.boardName;
+            cardData.gameCustomID = this.customCardID;
+            cardData.gameID = 1;
+            cardData.currentParent = this.currentParent;
+            return cardData;
+        }
+
+        public void UpdateParent()
+        {
+            this.currentParent = this.transform.parent.name;
         }
     }
 }
