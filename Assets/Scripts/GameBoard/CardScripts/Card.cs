@@ -10,15 +10,17 @@ namespace TCGSim.CardScripts
     public abstract class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
         //Card Data
-        public string cardID { get; set; } = "#";
-        public string cardName { get; set; } = "#";
-        public string effect { get; set; } = "#";
-        public int cost { get; set; } = 0;
-        public CardType cardType { get; set; } = CardType.DON;
-        public Colors color { get; set; } = Colors.Red;
-        public string customCardID { get; set; } = "#"; //This is needed when there is more than 1 from the same card in the deck
-        public string playerName { get; set; } = "#";
-        public string currentParent { get; set; } = "#";
+        public string cardID { get; protected set; } = "#";
+        public string cardName { get; protected set; } = "#";
+        public string effect { get; protected set; } = "#";
+        public int cost { get; protected set; } = 0;
+        public CardType cardType { get; protected set; } = CardType.DON;
+        public Colors color { get; protected set; } = Colors.Red;
+        public string customCardID { get; protected set; } = "#"; //This is needed when there is more than 1 from the same card in the deck
+        public string playerName { get; protected set; } = "#";
+        public string currentParent { get; protected set; } = "#";
+        public bool active { get; protected set; }
+
 
         //Variables for unity handling
         private CanvasGroup canvasGroup;
@@ -64,29 +66,70 @@ namespace TCGSim.CardScripts
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (playerBoard == null)
-                Debug.LogError("playerBoard is NULL in OnEndDrag!");
-
-            if (canvasGroup == null)
-                Debug.LogError("canvasGroup is NULL in OnEndDrag!");
-
-            if (hand == null)
-                Debug.LogError("hand is NULL in OnEndDrag!");
-            Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
-            if (eventData.pointerEnter == null || objectAtDragEnd.GetComponent<CharacterArea>() == null 
-                || objectAtDragEnd.transform.parent != hand.transform.parent || objectAtDragEnd.transform.childCount==6)
+            switch (this.cardType)
             {
-                this.transform.SetParent(hand.transform);
-                canvasGroup.blocksRaycasts = true;
-                Debug.Log("Cannot play the card!");
+                case CardType.CHARACTER:
+                    if (playerBoard == null)
+                        Debug.LogError("playerBoard is NULL in OnEndDrag!");
+
+                    if (canvasGroup == null)
+                        Debug.LogError("canvasGroup is NULL in OnEndDrag!");
+
+                    if (hand == null)
+                        Debug.LogError("hand is NULL in OnEndDrag!");
+                    Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
+                    if (objectAtDragEnd.GetComponent<CharacterArea>() != this.playerBoard.gameObject.GetComponentInChildren<CharacterArea>() || objectAtDragEnd.transform.childCount == 6
+                        || this.cost > playerBoard.activeDon)
+                    {
+                        SnapCardBackToParentPos(hand.transform);
+                        Debug.Log("Cannot play the card!");
+                    }
+                    else
+                    {
+                        cardImage.raycastTarget = false;
+                        this.playerBoard.RestDons(this.cost);
+                    }
+                    canvasGroup.alpha = 1f;
+                    Debug.Log("OnEndDrag");
+                    break;
+                case CardType.DON:
+                    Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
+                    if (objectAtDragEnd.GetComponent<CostArea>() != this.playerBoard.gameObject.GetComponentInChildren<CostArea>())
+                    {
+                        SnapCardBackToParentPos(playerBoard.donDeckObject.transform);
+                        FlipCard();
+                    }
+                    else
+                    {
+                        cardImage.raycastTarget = false;
+                    }
+                    canvasGroup.alpha = 1f;
+                    Debug.Log("OnEndDrag");
+                    break;
+                case CardType.STAGE:
+                    Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
+                    if (objectAtDragEnd.transform != this.playerBoard.stageObject.transform || this.cost > playerBoard.activeDon)
+                    {
+                        SnapCardBackToParentPos(hand.transform);
+                        Debug.Log("Cannot play the card!");
+                    }
+                    else
+                    {
+                        SnapCardBackToParentPos(objectAtDragEnd.transform);
+                        cardImage.raycastTarget = false;
+                        this.playerBoard.RestDons(this.cost);
+                    }
+                    canvasGroup.alpha = 1f;
+                    Debug.Log("OnEndDrag");
+                    break;
+                default:
+                    SnapCardBackToParentPos(hand.transform);
+                    canvasGroup.alpha = 1f;
+                    Debug.Log("OnEndDrag");
+                    break;
             }
-            else
-            {
-                cardImage.raycastTarget = false;
-            }
-            canvasGroup.alpha = 1f;
-            Debug.Log("OnEndDrag");
+
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -105,14 +148,30 @@ namespace TCGSim.CardScripts
             //Debug.Log("FlipCard called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
             if (!isImgLoaded)
             {
-                cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
-                isImgLoaded = !isImgLoaded;
+                if (cardType == CardType.DON)
+                {
+                    cardImage.sprite = Resources.Load<Sprite>("Cards/doncard");
+                    isImgLoaded = !isImgLoaded;
+                }
+                else
+                {
+                    cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
+                    isImgLoaded = !isImgLoaded;
+                }                  
             }
             else
             {
-                cardImage.sprite = Resources.Load<Sprite>("Cards/cardback");
-                isImgLoaded = !isImgLoaded;
-                cardVisibility = CardVisibility.NONE;
+                if (cardType == CardType.DON)
+                {
+                    cardImage.sprite = Resources.Load<Sprite>("Cards/donback");
+                    isImgLoaded = !isImgLoaded;
+                }
+                else
+                {
+                    cardImage.sprite = Resources.Load<Sprite>("Cards/cardback");
+                    isImgLoaded = !isImgLoaded;
+                    cardVisibility = CardVisibility.NONE;
+                }   
             }
         }
 
@@ -135,6 +194,7 @@ namespace TCGSim.CardScripts
         {
             this.cardID = cardData.cardID;
             this.cardName = cardData.cardName;
+            this.cardType = cardData.cardType;
             this.effect = cardData.effect;
             this.cost = cardData.cost;
             this.color = cardData.color;
@@ -172,6 +232,23 @@ namespace TCGSim.CardScripts
         public void UpdateParent()
         {
             this.currentParent = this.transform.parent.name;
+        }
+        
+        public void SetCardActive()
+        {
+            this.active = true;
+        }
+
+        public void SetCardNotActive()
+        {
+            this.active = false;
+        }
+
+        public void SnapCardBackToParentPos(Transform newParent)
+        {
+            this.transform.SetParent(newParent);
+            this.transform.position = this.transform.parent.position;
+            canvasGroup.blocksRaycasts = true;
         }
     }
 }

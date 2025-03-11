@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace TCGSim.CardScripts
 {
 
     public class DonCard : Card
     {
+       
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -18,5 +22,24 @@ namespace TCGSim.CardScripts
         {
 
         }
+
+        public void RestDon()
+        {
+            if (this.active)
+            {
+                this.active = false;
+                this.transform.Rotate(0, 0, 90);
+            }           
+        }
+
+        public void RestandDon()
+        {
+            if (!this.active)
+            {
+                this.active = true;
+                this.transform.Rotate(0, 0, -90);
+            }          
+        }
+
     }
 }

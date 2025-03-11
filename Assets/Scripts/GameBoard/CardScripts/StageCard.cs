@@ -24,7 +24,7 @@ public class StageCard : Card
         cardData.power = 0;
         cardData.counter = 0;
         cardData.trigger = "#";
-        cardData.cardType = this.cardType;
+        cardData.cardType = CardType.STAGE;
         cardData.characterType = CharacterType.NONE;
         cardData.attribute = Attributes.NONE;
         return cardData;

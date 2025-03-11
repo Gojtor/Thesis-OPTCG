@@ -52,6 +52,12 @@ namespace TCGSim
             hand.Add(card);      
         }
 
+        public void RemoveCardFromHand(Card card, GameObject gameObject)
+        {
+            card.transform.SetParent(gameObject.transform);
+            hand.Remove(card);
+        }
+
         public void ScaleHandForStartingHand()
         {
             RectTransform rectTransform = this.transform.GetComponent<RectTransform>();

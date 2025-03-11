@@ -19,6 +19,11 @@ namespace TCGSim
         public string boardName { get; private set; }
         public string gameCustomID { get; private set; }
 
+
+        /// <summary>
+        ///  Prefabs for the player board
+        /// </summary>
+        #region Prefabs
         [SerializeField]
         private GameObject handPrefab;
 
@@ -26,7 +31,19 @@ namespace TCGSim
         private GameObject characterAreaPrefab;
 
         [SerializeField]
+        private GameObject costAreaPrefab;
+
+        [SerializeField]
+        private GameObject stageAreaPrefab;
+
+        [SerializeField]
         private GameObject deckPrefab;
+
+        [SerializeField]
+        private GameObject leaderPrefab;
+
+        [SerializeField]
+        private GameObject trashPrefab;
 
         [SerializeField]
         private GameObject cardPrefab;
@@ -41,32 +58,57 @@ namespace TCGSim
         private GameObject mulliganBtnPrefab;
 
         [SerializeField]
-        private GameObject testSetCardPrefab;
+        private GameObject donDeckPrefab;
 
+        [SerializeField]
+        private GameObject donPrefab;
+        #endregion
+
+        /// <summary>
+        ///  Objects of the player board
+        /// </summary>
+        #region Objects
         private Transform playerHand;
         private Hand handObject;
         private GameObject deckObject;
+        public GameObject stageObject { get; private set; }
+        private GameObject leaderObject;
+        private GameObject trashObject;
+        private CostArea costAreaObject;
+        public GameObject donDeckObject { get; private set; }
         private Life lifeObject;
         Button keepBtn;
         Button mulliganBtn;
         Button testBtn;
+        #endregion
 
+        /// <summary>
+        ///  Cards of the player board (which doesn't stored in another object)
+        /// </summary>
+        #region Cards
         private List<string> deckString;
         private List<Card> deckCards = new List<Card>();
+        private List<Card> donCards = new List<Card>();
+        #endregion
 
         private ServerCon serverCon;
+        public int activeDon { get; private set; } = 0;
 
         // Start is called before the first frame update
         private void Start()
         {
-            testBtn =  Instantiate(testSetCardPrefab, this.transform).GetComponent<Button>();
-            testBtn.onClick.AddListener(SendCardToDB);
+
         }
 
         // Update is called once per frame
         void Update()
         {
             Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
+            Debug.Log("Active dons: " + activeDon);
+            if (costAreaObject != null)
+            {
+                activeDon = costAreaObject.GetActiveDonCount();
+            }    
         }
         private void Awake()
         {
@@ -81,10 +123,7 @@ namespace TCGSim
             {
                 Debug.LogError("ServerCon prefab NULL after Init!", this);
             }
-            CreateDeck();
-            CreateLife();
-            CreateHand();
-            CreateADeck();
+            LoadBoardElements();
             Shuffle<string>(deckString);
             deckCards = await CreateCardsFromDeck();
             Shuffle<Card>(deckCards);
@@ -96,6 +135,20 @@ namespace TCGSim
                 LoadMulliganKeepButtons();
             }
         }
+
+        public void LoadBoardElements()
+        {
+            CreateLeaderArea();
+            CreateStageArea();
+            CreateTrashArea();
+            CreateCostArea();
+            CreateDons();
+            CreateDeck();
+            CreateLife();
+            CreateHand();
+            CreateADeck();       
+        }
+
         public void CreateHand()
         {
             handObject = Instantiate(handPrefab, this.gameObject.transform).GetComponent<Hand>();
@@ -113,6 +166,37 @@ namespace TCGSim
             lifeObject = Instantiate(lifePrefab, this.gameObject.transform).GetComponent<Life>();
             lifeObject.Init(this);
         }
+
+        public void CreateDons()
+        {
+            donDeckObject = Instantiate(donDeckPrefab, this.gameObject.transform);
+            for (int i = 0; i < 10; i++)
+            {
+                DonCard donCard = Instantiate(donPrefab, this.donDeckObject.transform).GetComponent<DonCard>();
+                donCard.Init(this, handObject, "DONCARD"+i);
+                donCards.Add(donCard);
+            }
+        }
+        public void CreateCostArea()
+        {
+            costAreaObject = Instantiate(costAreaPrefab, this.gameObject.transform).GetComponent<CostArea>();
+        }
+
+        public void CreateStageArea()
+        {
+            stageObject = Instantiate(stageAreaPrefab, this.gameObject.transform);
+        }
+
+        public void CreateLeaderArea()
+        {
+            leaderObject = Instantiate(leaderPrefab, this.gameObject.transform);
+        }
+
+        public void CreateTrashArea()
+        {
+            trashObject = Instantiate(trashPrefab, this.gameObject.transform);
+        }
+
 
         public void LoadMulliganKeepButtons()
         {
@@ -213,10 +297,11 @@ namespace TCGSim
             this.handObject.AddCardToHand(card);
             deckCards.Remove(card);
         }
+        
 
         public void PutCardBackToDeck(Card card)
         {
-            card.transform.SetParent(this.deckObject.transform);
+            handObject.RemoveCardFromHand(card, this.deckObject);
             card.transform.position = this.deckObject.transform.position;
             card.FlipCard();
             deckCards.Add(card);
@@ -233,7 +318,8 @@ namespace TCGSim
         public void Mulligan()
         {
             handObject.ScaleHandBackFromStartingHand();
-            foreach (Card card in handObject.hand)
+            List<Card> cardsInHandCurrently = handObject.hand.ToList();
+            foreach (Card card in cardsInHandCurrently)
             {
                 PutCardBackToDeck(card);
             }
@@ -292,10 +378,9 @@ namespace TCGSim
             }
         }
 
-        public void SendCardToDB()
+        public void SendCardToDB(Card card)
         {
-            Debug.Log("SendCardToDB clicked");
-            StartCoroutine(serverCon.AddCardToInGameStateDB(handObject.transform.GetChild(0).GetComponent<Card>()));
+            StartCoroutine(serverCon.AddCardToInGameStateDB(card));
         }
 
         public void SendAllCardToDB()
@@ -315,6 +400,11 @@ namespace TCGSim
                 card.UpdateParent();
                 StartCoroutine(serverCon.AddCardToInGameStateDB(card));
             }
+        }
+
+        public void RestDons(int donCountToRest)
+        {
+            costAreaObject.RestDons(donCountToRest);
         }
     }
 }

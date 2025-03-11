@@ -113,6 +113,7 @@
     <Compile Include="Assets\Scripts\GameBoard\CardData\Attributes.cs" />
     <Compile Include="Assets\Scripts\GameBoard\Deck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\CostArea.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

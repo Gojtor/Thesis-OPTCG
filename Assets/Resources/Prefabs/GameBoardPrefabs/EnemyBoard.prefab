@@ -584,12 +584,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dee8dfc7b72746147a0a69b3e70a0401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardName: 
   handPrefab: {fileID: 5508881749739418912, guid: c08c74ae91351e845b085ee247ee627c, type: 3}
   characterAreaPrefab: {fileID: 7937610380201536275, guid: 80f1c228b22daf941b9f0395d772ef2f, type: 3}
+  costAreaPrefab: {fileID: 1764002961645323186, guid: dc2f74180ef03cb409ad9a8f5cd85df5, type: 3}
+  stageAreaPrefab: {fileID: 2642037041779862817, guid: 2616c79f9162e7d4f9df3aaa07b6242a, type: 3}
   deckPrefab: {fileID: 4586796782769669121, guid: bdaabc4dc5e0ccc4681aed62db9f6c23, type: 3}
+  leaderPrefab: {fileID: 1066554976586399952, guid: 13522b0d54d2ed442ad52b5f8ea55291, type: 3}
+  trashPrefab: {fileID: 6516324358082533196, guid: 2f0af6eabb4f4d3459f00e81c921b2ed, type: 3}
   cardPrefab: {fileID: 4947900133005985141, guid: b9086539ec95e654b9fd0f2990ecb293, type: 3}
   lifePrefab: {fileID: 8743403551607725840, guid: 24e93ac1ae5085b41976e916befb0083, type: 3}
   keepBtnPrefab: {fileID: 8968290511196942242, guid: 8e2cd715418e26644a50b34121595252, type: 3}
   mulliganBtnPrefab: {fileID: 6787231950402081636, guid: 80f0748181aac2f4985bdb2f85823d7b, type: 3}
-  testSetCardPrefab: {fileID: 1569683807125857284, guid: 118b5b48a43d53441b1621162774addd, type: 3}
+  donDeckPrefab: {fileID: 6784264972249257697, guid: 3ca26c00972629e448ca1123152fa5b6, type: 3}
+  donPrefab: {fileID: 4947900133005985141, guid: 1e3016a665ae4634a8870b8d5616d18b, type: 3}
