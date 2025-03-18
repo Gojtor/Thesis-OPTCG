@@ -16,6 +16,8 @@ namespace TCGSim
         private GameObject serverConPrefab;
 
         private ServerCon serverCon;
+        private string playerName;
+        private string enemyName;
 
         public string gameCustomID { get; private set; } = System.Guid.NewGuid().ToString();
 
@@ -23,6 +25,8 @@ namespace TCGSim
         void Start()
         {
             serverCon = Instantiate(serverConPrefab, this.gameObject.transform).GetComponent<ServerCon>();
+            playerName = GameOptions.playerName;
+            Debug.Log(playerName);
             CreateBoards();
         }
 
