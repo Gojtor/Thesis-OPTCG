@@ -14,86 +14,8 @@ using UnityEngine.XR;
 
 namespace TCGSim
 {
-    public class PlayerBoard : MonoBehaviour
+    public class PlayerBoard : Board
     {
-        public string boardName { get; private set; }
-        public string gameCustomID { get; private set; }
-
-
-        /// <summary>
-        ///  Prefabs for the player board
-        /// </summary>
-        #region Prefabs
-        [SerializeField]
-        private GameObject handPrefab;
-
-        [SerializeField]
-        private GameObject characterAreaPrefab;
-
-        [SerializeField]
-        private GameObject costAreaPrefab;
-
-        [SerializeField]
-        private GameObject stageAreaPrefab;
-
-        [SerializeField]
-        private GameObject deckPrefab;
-
-        [SerializeField]
-        private GameObject leaderPrefab;
-
-        [SerializeField]
-        private GameObject trashPrefab;
-
-        [SerializeField]
-        private GameObject cardPrefab;
-
-        [SerializeField]
-        private GameObject lifePrefab;
-
-        [SerializeField]
-        private GameObject keepBtnPrefab;
-
-        [SerializeField]
-        private GameObject mulliganBtnPrefab;
-
-        [SerializeField]
-        private GameObject donDeckPrefab;
-
-        [SerializeField]
-        private GameObject donPrefab;
-        #endregion
-
-        /// <summary>
-        ///  Objects of the player board
-        /// </summary>
-        #region Objects
-        private Transform playerHand;
-        private Hand handObject;
-        private GameObject deckObject;
-        public GameObject stageObject { get; private set; }
-        private GameObject leaderObject;
-        private GameObject trashObject;
-        private CostArea costAreaObject;
-        public GameObject donDeckObject { get; private set; }
-        private Life lifeObject;
-        Button keepBtn;
-        Button mulliganBtn;
-        Button testBtn;
-        #endregion
-
-        /// <summary>
-        ///  Cards of the player board (which doesn't stored in another object)
-        /// </summary>
-        #region Cards
-        private List<string> deckString;
-        private List<Card> deckCards = new List<Card>();
-        private List<Card> donCards = new List<Card>();
-        #endregion
-
-        private ServerCon serverCon;
-        public int activeDon { get; private set; } = 0;
-
         // Start is called before the first frame update
         private void Start()
         {
@@ -114,16 +36,13 @@ namespace TCGSim
         {
 
         }
-        public async void Init(string boardName, ServerCon serverCon, string gameCustomID)
+        public override async void Init(string boardName, ServerCon serverCon, string gameCustomID)
         {
-            this.boardName = boardName;
-            this.serverCon = serverCon;
-            this.gameCustomID = gameCustomID;
+            base.Init(boardName, serverCon, gameCustomID);
             if (serverCon == null)
             {
                 Debug.LogError("ServerCon prefab NULL after Init!", this);
             }
-            LoadBoardElements();
             Shuffle<string>(deckString);
             deckCards = await CreateCardsFromDeck();
             Shuffle<Card>(deckCards);
@@ -136,65 +55,10 @@ namespace TCGSim
             }
         }
 
-        public void LoadBoardElements()
+        public override void LoadBoardElements()
         {
-            CreateLeaderArea();
-            CreateStageArea();
-            CreateTrashArea();
-            CreateCostArea();
-            CreateDons();
-            CreateDeck();
-            CreateLife();
-            CreateHand();
-            CreateADeck();       
-        }
-
-        public void CreateHand()
-        {
-            handObject = Instantiate(handPrefab, this.gameObject.transform).GetComponent<Hand>();
-            playerHand = handPrefab.transform;
-            handObject.Init(this);
-        }
-
-        public void CreateDeck()
-        {
-            deckObject = Instantiate(deckPrefab, this.gameObject.transform);
-        }
-
-        public void CreateLife()
-        {
-            lifeObject = Instantiate(lifePrefab, this.gameObject.transform).GetComponent<Life>();
-            lifeObject.Init(this);
-        }
-
-        public void CreateDons()
-        {
-            donDeckObject = Instantiate(donDeckPrefab, this.gameObject.transform);
-            for (int i = 0; i < 10; i++)
-            {
-                DonCard donCard = Instantiate(donPrefab, this.donDeckObject.transform).GetComponent<DonCard>();
-                donCard.Init(this, handObject, "DONCARD"+i);
-                donCards.Add(donCard);
-            }
-        }
-        public void CreateCostArea()
-        {
-            costAreaObject = Instantiate(costAreaPrefab, this.gameObject.transform).GetComponent<CostArea>();
-        }
-
-        public void CreateStageArea()
-        {
-            stageObject = Instantiate(stageAreaPrefab, this.gameObject.transform);
-        }
-
-        public void CreateLeaderArea()
-        {
-            leaderObject = Instantiate(leaderPrefab, this.gameObject.transform);
-        }
-
-        public void CreateTrashArea()
-        {
-            trashObject = Instantiate(trashPrefab, this.gameObject.transform);
+            base.LoadBoardElements();
+            CreateADeck();
         }
 
 
@@ -274,8 +138,8 @@ namespace TCGSim
                             card = cardObj.GetComponent<Card>();
                             break;
                     }
-                    card.Init(this, handObject, cardNumber + "-" + i);
                     card.LoadDataFromCardData(cardData);
+                    card.Init(this, handObject, cardNumber + "-" + i);
                     card.raycastTargetChange(false);
                     deck.Add(card);
                 }

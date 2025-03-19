@@ -10,17 +10,7 @@ namespace TCGSim.CardScripts
     public abstract class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
     {
         //Card Data
-        public string cardID { get; protected set; } = "#";
-        public string cardName { get; protected set; } = "#";
-        public string effect { get; protected set; } = "#";
-        public int cost { get; protected set; } = 0;
-        public CardType cardType { get; protected set; } = CardType.DON;
-        public Colors color { get; protected set; } = Colors.Red;
-        public string customCardID { get; protected set; } = "#"; //This is needed when there is more than 1 from the same card in the deck
-        public string playerName { get; protected set; } = "#";
-        public string currentParent { get; protected set; } = "#";
-        public bool active { get; protected set; }
-
+        public CardData cardData { get; protected set; } = new CardData();
 
         //Variables for unity handling
         private CanvasGroup canvasGroup;
@@ -29,7 +19,7 @@ namespace TCGSim.CardScripts
        
         //Init variables
         private Hand hand = null;
-        private PlayerBoard playerBoard;
+        private Board playerBoard;
         public CardVisibility cardVisibility { get; private set; } = CardVisibility.NONE;
 
         // Start is called before the first frame update
@@ -58,7 +48,7 @@ namespace TCGSim.CardScripts
                 FlipCard();
             }
             this.transform.SetParent(this.transform.parent.parent);
-            playerBoard.enableRaycastOnTopCard();
+            playerBoard.ConvertTo<PlayerBoard>().enableRaycastOnTopCard();
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = .8f;
             Debug.Log("OnBeginDrag");
@@ -67,7 +57,7 @@ namespace TCGSim.CardScripts
         public void OnEndDrag(PointerEventData eventData)
         {
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
-            switch (this.cardType)
+            switch (this.cardData.cardType)
             {
                 case CardType.CHARACTER:
                     if (playerBoard == null)
@@ -80,7 +70,7 @@ namespace TCGSim.CardScripts
                         Debug.LogError("hand is NULL in OnEndDrag!");
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
                     if (objectAtDragEnd.GetComponent<CharacterArea>() != this.playerBoard.gameObject.GetComponentInChildren<CharacterArea>() || objectAtDragEnd.transform.childCount == 6
-                        || this.cost > playerBoard.activeDon)
+                        || this.cardData.cost > playerBoard.activeDon)
                     {
                         SnapCardBackToParentPos(hand.transform);
                         Debug.Log("Cannot play the card!");
@@ -88,7 +78,7 @@ namespace TCGSim.CardScripts
                     else
                     {
                         cardImage.raycastTarget = false;
-                        this.playerBoard.RestDons(this.cost);
+                        this.playerBoard.ConvertTo<PlayerBoard>().RestDons(this.cardData.cost);
                     }
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
@@ -109,7 +99,7 @@ namespace TCGSim.CardScripts
                     break;
                 case CardType.STAGE:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
-                    if (objectAtDragEnd.transform != this.playerBoard.stageObject.transform || this.cost > playerBoard.activeDon)
+                    if (objectAtDragEnd.transform != this.playerBoard.stageObject.transform || this.cardData.cost > playerBoard.activeDon)
                     {
                         SnapCardBackToParentPos(hand.transform);
                         Debug.Log("Cannot play the card!");
@@ -118,7 +108,7 @@ namespace TCGSim.CardScripts
                     {
                         SnapCardBackToParentPos(objectAtDragEnd.transform);
                         cardImage.raycastTarget = false;
-                        this.playerBoard.RestDons(this.cost);
+                        this.playerBoard.ConvertTo<PlayerBoard>().RestDons(this.cardData.cost);
                     }
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
@@ -148,20 +138,20 @@ namespace TCGSim.CardScripts
             //Debug.Log("FlipCard called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
             if (!isImgLoaded)
             {
-                if (cardType == CardType.DON)
+                if (cardData.cardType == CardType.DON)
                 {
                     cardImage.sprite = Resources.Load<Sprite>("Cards/doncard");
                     isImgLoaded = !isImgLoaded;
                 }
                 else
                 {
-                    cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardID.Split('-')[0] + "/" + cardID);
+                    cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardData.cardID.Split('-')[0] + "/" + cardData.cardID);
                     isImgLoaded = !isImgLoaded;
                 }                  
             }
             else
             {
-                if (cardType == CardType.DON)
+                if (cardData.cardType == CardType.DON)
                 {
                     cardImage.sprite = Resources.Load<Sprite>("Cards/donback");
                     isImgLoaded = !isImgLoaded;
@@ -180,24 +170,19 @@ namespace TCGSim.CardScripts
             cardImage.raycastTarget = on;
         }
 
-        public void Init(PlayerBoard playerBoard,Hand hand, string customCardID)
+        public void Init(Board playerBoard,Hand hand, string customCardID)
         {
             this.playerBoard = playerBoard;
             this.hand = hand;
-            this.customCardID = customCardID;
-            this.gameObject.name = this.customCardID;
-            this.playerName = playerBoard.boardName;
+            this.cardData.customCardID = customCardID;
+            this.gameObject.name = this.cardData.customCardID;
+            this.cardData.playerName = playerBoard.boardName;
             UpdateParent();
         }
 
         public virtual void LoadDataFromCardData(CardData cardData)
         {
-            this.cardID = cardData.cardID;
-            this.cardName = cardData.cardName;
-            this.cardType = cardData.cardType;
-            this.effect = cardData.effect;
-            this.cost = cardData.cost;
-            this.color = cardData.color;
+            this.cardData = cardData;
         }
         public void SetCardVisibility(CardVisibility visibility)
         {
@@ -212,36 +197,19 @@ namespace TCGSim.CardScripts
             }
         }
 
-        public virtual CardData TurnCardToCardData()
-        {
-            CardData cardData = new CardData();
-            cardData.cardID = this.cardID;
-            cardData.cardName = this.cardName;
-            cardData.effect = this.effect;
-            cardData.cost = this.cost;
-            cardData.color = this.color;
-            cardData.active = false;
-            cardData.customCardID = this.customCardID;
-            cardData.playerName = this.playerBoard.boardName;
-            cardData.gameCustomID = this.customCardID;
-            cardData.gameID = 1;
-            cardData.currentParent = this.currentParent;
-            return cardData;
-        }
-
         public void UpdateParent()
         {
-            this.currentParent = this.transform.parent.name;
+            this.cardData.currentParent = this.transform.parent.name;
         }
         
         public void SetCardActive()
         {
-            this.active = true;
+            this.cardData.active = true;
         }
 
         public void SetCardNotActive()
         {
-            this.active = false;
+            this.cardData.active = false;
         }
 
         public void SnapCardBackToParentPos(Transform newParent)

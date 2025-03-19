@@ -13,7 +13,7 @@ namespace TCGSim
         [SerializeField]
         private GameObject cardPrefab;
 
-        PlayerBoard playerBoard;
+        Board board;
 
 
         public List<Card> hand { get; private set; } =  new List<Card>();
@@ -29,15 +29,15 @@ namespace TCGSim
             
         }
 
-        public void Init(PlayerBoard playerBoard)
+        public void Init(Board board)
         {
-            this.playerBoard = playerBoard;
+            this.board = board;
         }
 
         public void AddCardToHand(Card card)
         {
             card.transform.SetParent(this.transform);
-            switch (playerBoard.boardName)
+            switch (board.boardName)
             {
                 case ("PLAYERBOARD"):
                     card.SetCardVisibility(CardVisibility.PLAYERBOARD);

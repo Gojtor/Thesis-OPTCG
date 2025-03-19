@@ -57,7 +57,7 @@ namespace TCGSim
             int activeDonCount = 0;
             for (int i = 0; i < this.transform.childCount; i++)
             {
-                if (this.transform.GetChild(i).GetComponent<DonCard>().active)
+                if (this.transform.GetChild(i).GetComponent<DonCard>().cardData.active)
                 {
                     activeDonCount++;
                 }
@@ -71,7 +71,7 @@ namespace TCGSim
             for (int i = 0; i < this.transform.childCount; i++)
             {
                 DonCard currentCard = this.transform.GetChild(i).GetComponent<DonCard>();
-                if (currentCard.active)
+                if (currentCard.cardData.active)
                 {
                     activeDons.Add(currentCard);
                 }

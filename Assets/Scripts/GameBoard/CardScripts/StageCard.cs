@@ -18,15 +18,4 @@ public class StageCard : Card
         CheckCardVisibility();
     }
 
-    public override CardData TurnCardToCardData()
-    {
-        CardData cardData = base.TurnCardToCardData();
-        cardData.power = 0;
-        cardData.counter = 0;
-        cardData.trigger = "#";
-        cardData.cardType = CardType.STAGE;
-        cardData.characterType = CharacterType.NONE;
-        cardData.attribute = Attributes.NONE;
-        return cardData;
-    }
 }

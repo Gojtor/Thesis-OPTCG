@@ -1,19 +1,64 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 namespace TCGSim
 {
     public class GameBoard : MonoBehaviour
     {
         [SerializeField]
-        private GameObject playerBoardPrefab;
+        private GameObject boardPrefab;
 
         [SerializeField]
         private GameObject enemyBoardPrefab;
 
         [SerializeField]
         private GameObject serverConPrefab;
+
+        /// <summary>
+        ///  Prefabs for the player board
+        /// </summary>
+        #region Prefabs
+        [SerializeField]
+        public GameObject handPrefab;
+
+        [SerializeField]
+        public GameObject characterAreaPrefab;
+
+        [SerializeField]
+        public GameObject costAreaPrefab;
+
+        [SerializeField]
+        public GameObject stageAreaPrefab;
+
+        [SerializeField]
+        public GameObject deckPrefab;
+
+        [SerializeField]
+        public GameObject leaderPrefab;
+
+        [SerializeField]
+        public GameObject trashPrefab;
+
+        [SerializeField]
+        public GameObject cardPrefab;
+
+        [SerializeField]
+        public GameObject lifePrefab;
+
+        [SerializeField]
+        public GameObject keepBtnPrefab;
+
+        [SerializeField]
+        public GameObject mulliganBtnPrefab;
+
+        [SerializeField]
+        public GameObject donDeckPrefab;
+
+        [SerializeField]
+        public GameObject donPrefab;
+        #endregion
 
         private ServerCon serverCon;
         private string playerName;
@@ -38,9 +83,16 @@ namespace TCGSim
 
         private void CreateBoards()
         {
-            
-            PlayerBoard enemyBoard = Instantiate(enemyBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
-            PlayerBoard playerBoard = Instantiate(playerBoardPrefab, this.gameObject.transform).GetComponent<PlayerBoard>();
+            GameObject enemyBoardObj = Instantiate(boardPrefab, this.gameObject.transform);
+            enemyBoardObj.AddComponent<EnemyBoard>();
+            GameObject playerBoardObj = Instantiate(boardPrefab, this.gameObject.transform);
+            playerBoardObj.AddComponent<PlayerBoard>();
+            EnemyBoard enemyBoard = enemyBoardObj.GetComponent<EnemyBoard>();
+            PlayerBoard playerBoard = playerBoardObj.GetComponent<PlayerBoard>();
+            playerBoard.InitPrefabs(handPrefab,characterAreaPrefab,costAreaPrefab,stageAreaPrefab,deckPrefab,leaderPrefab,trashPrefab,
+                cardPrefab,lifePrefab,keepBtnPrefab,mulliganBtnPrefab,donDeckPrefab,donPrefab);
+            enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
+                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab);
             playerBoard.Init("PLAYERBOARD", serverCon, gameCustomID);
             enemyBoard.Init("ENEMYBOARD",serverCon, gameCustomID);
             playerBoard.gameObject.transform.Translate(0, -235, 0);

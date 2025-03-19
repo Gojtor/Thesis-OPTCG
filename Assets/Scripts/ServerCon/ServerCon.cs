@@ -91,7 +91,7 @@ namespace TCGSim
         
         public IEnumerator AddCardToInGameStateDB(Card card)
         {
-            CardData cardData = card.TurnCardToCardData();
+            CardData cardData = card.cardData;
             string url = "http://localhost:5000/api/TCG/SetCardToGameDB";
             string json = JsonConvert.SerializeObject(cardData);
             //Debug.Log("Sent JSON: " + json);

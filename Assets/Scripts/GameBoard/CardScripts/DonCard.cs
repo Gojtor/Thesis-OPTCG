@@ -25,18 +25,18 @@ namespace TCGSim.CardScripts
 
         public void RestDon()
         {
-            if (this.active)
+            if (this.cardData.active)
             {
-                this.active = false;
+                this.cardData.active = false;
                 this.transform.Rotate(0, 0, 90);
             }           
         }
 
         public void RestandDon()
         {
-            if (!this.active)
+            if (!this.cardData.active)
             {
-                this.active = true;
+                this.cardData.active = true;
                 this.transform.Rotate(0, 0, -90);
             }          
         }

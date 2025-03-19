@@ -9,7 +9,7 @@ namespace TCGSim
 {
     public class Life : MonoBehaviour
     {
-        public PlayerBoard playerBoard { get; private set; }
+        public Board board { get; private set; }
         public List<Card> lifeCards { get; private set; } = new List<Card>();
 
         //private int bottomLifePos = 0;
@@ -26,9 +26,9 @@ namespace TCGSim
 
         }
 
-        public void Init(PlayerBoard playerBoard)
+        public void Init(Board board)
         {
-            this.playerBoard = playerBoard;
+            this.board = board;
         }
 
         public void AddCardToLife(Card card)
