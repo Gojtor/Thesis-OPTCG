@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TCGSim.CardScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -22,6 +23,7 @@ namespace TCGSim
         {
             Debug.Log("OnEndDrag");
             eventData.pointerDrag.transform.SetParent(this.transform);
+            eventData.pointerDrag.GetComponent<Card>().playerBoard.serverCon.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

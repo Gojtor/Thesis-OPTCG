@@ -8,8 +8,8 @@ using UnityEngine.UI;
 public abstract class Board : MonoBehaviour
 {
     public string boardName { get; protected set; }
-    public string playerName { get; protected set; }
-    public string gameCustomID { get; protected set; }
+    public string playerName { get; protected set; } = "Default";
+    public string gameCustomID { get; protected set; } = "TEST";
 
     /// <summary>
     ///  Prefabs for the player board
@@ -72,6 +72,8 @@ public abstract class Board : MonoBehaviour
     public Button keepBtn { get; protected set; }
     public Button mulliganBtn { get; protected set; }
     public Button testBtn { get; protected set; }
+
+    public CharacterArea characterAreaObject { get; protected set; }
     #endregion
 
     /// <summary>
@@ -101,12 +103,14 @@ public abstract class Board : MonoBehaviour
     {
         this.boardName = boardName;
         this.serverCon = serverCon;
+        this.serverCon.Init(gameCustomID, playerName);
         this.gameCustomID = gameCustomID;
         if (serverCon == null)
         {
             Debug.LogError("ServerCon prefab NULL after Init!", this);
         }
         LoadBoardElements();
+        
     }
 
     public virtual void InitPrefabs(GameObject handPrefab, GameObject characterAreaPrefab, GameObject costAreaPrefab, GameObject stageAreaPrefab,
@@ -130,6 +134,7 @@ public abstract class Board : MonoBehaviour
 
     public virtual void LoadBoardElements()
     {
+        CreateCharacterArea();
         CreateLeaderArea();
         CreateStageArea();
         CreateTrashArea();
@@ -191,4 +196,49 @@ public abstract class Board : MonoBehaviour
     {
         trashObject = Instantiate(trashPrefab, this.gameObject.transform);
     }
+
+    public void CreateCharacterArea()
+    {
+        characterAreaObject = Instantiate(characterAreaPrefab, this.gameObject.transform).GetComponent<CharacterArea>();
+    }
+
+    public GameObject GetParentByNameString(string parentName)
+    {
+        switch (parentName.Replace("(Clone)", ""))
+        {
+            case "Deck":
+                return deckObject.gameObject;
+            case "Hand":
+                return handObject.gameObject;
+            case "Life":
+                return lifeObject.gameObject;
+            default:
+                return this.gameObject;
+
+        }   
+    }
+
+    public void SetCardParentByNameString(string parentName, Card card)
+    {
+        switch (parentName.Replace("(Clone)", ""))
+        {
+            case "Deck":
+                card.transform.SetParent(this.deckObject.transform);
+                break;
+            case "Hand":
+                card.transform.SetParent(this.handObject.transform);
+                break;
+            case "Life":
+                lifeObject.AddCardToLife(card);
+                break;
+            case "CharacterArea":
+                card.transform.SetParent(this.characterAreaObject.transform);
+                card.FlipCard();
+                break;
+            default:
+                break;
+
+        }
+    }
+
 }

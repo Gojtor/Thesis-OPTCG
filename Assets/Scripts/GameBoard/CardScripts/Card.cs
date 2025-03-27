@@ -19,7 +19,7 @@ namespace TCGSim.CardScripts
        
         //Init variables
         private Hand hand = null;
-        private Board playerBoard;
+        public Board playerBoard { get; protected set; }
         public CardVisibility cardVisibility { get; private set; } = CardVisibility.NONE;
 
         // Start is called before the first frame update
@@ -178,6 +178,12 @@ namespace TCGSim.CardScripts
             this.gameObject.name = this.cardData.customCardID;
             this.cardData.playerName = playerBoard.boardName;
             UpdateParent();
+        }
+
+        public void Init(Board board)
+        {
+            this.playerBoard = board;
+            this.gameObject.name = this.cardData.customCardID;
         }
 
         public virtual void LoadDataFromCardData(CardData cardData)

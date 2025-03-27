@@ -10,17 +10,25 @@ using System.Net;
 using Unity.VisualScripting;
 using TCGSim.CardScripts;
 using System.Text;
+using Microsoft.AspNetCore.SignalR.Client;
+using System;
+using UnityEditor.MemoryProfiler;
 
 namespace TCGSim
 {
     public class ServerCon : MonoBehaviour
     {
         public string url { get; private set; }
-        public string serverApiUrl { get; } = "http://localhost:5000/api/TCG/";
+        public string serverUrl { get; } = "http://localhost:5000";
+        public string gameID { get; private set; }
+        public string playerName { get; private set; }
+
+        private HubConnection connection;
+
         // Start is called before the first frame update
         void Start()
         {
-
+           
         }
 
         // Update is called once per frame
@@ -29,9 +37,47 @@ namespace TCGSim
 
         }
 
-        public void Init(string urlToServer)
+        async void Awake()
         {
+            connection = new HubConnectionBuilder()
+           .WithUrl(serverUrl + "/websocket")
+           .Build();
+
+            connection.On<string>("ReceiveMessage", (message) =>
+            {
+                Debug.Log("Message received: " + message);
+            });
+
+            connection.On<string>("AddedToClient", (message) =>
+            {
+                Debug.Log("Message received: " + message);
+            });
+
+            await connection.StartAsync();
+            Debug.Log("WebSocket connection is succesfull!");
+            AddPlayerToGroupInSocket(this.gameID, this.playerName);
+        }
+
+        public void Init(string gameID,string playerName)
+        {
+            this.gameID = "TEST";
+            this.playerName = playerName;
             
+        }
+
+        public async void SendMessageToServer(string message)
+        {
+            await connection.InvokeAsync<string>("ReceiveMessageFromClient", gameID,message);
+        }
+
+        public async void AddPlayerToGroupInSocket(string gameID,string playerName)
+        {
+            await connection.InvokeAsync<string>("AddClientToGroupByGameID",gameID,playerName);
+        }
+
+        private async void OnApplicationQuit()
+        {
+            await connection.StopAsync();
         }
 
         public IEnumerator GetRequest(string uri)
@@ -116,6 +162,37 @@ namespace TCGSim
             }
 
         }
-        
+
+        public async Task<List<CardData>> GetAllCardByGameID(string gameID)
+        {
+            string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameID?gameCustomID=";
+            Debug.Log(url + gameID);
+            using (UnityWebRequest request = UnityWebRequest.Get(url + gameID))
+            {
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                    await Task.Yield();
+
+                switch (request.result)
+                {
+                    case UnityWebRequest.Result.ConnectionError:
+                    case UnityWebRequest.Result.DataProcessingError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.Success:
+                        string jsonResponse = request.downloadHandler.text;
+                        //Debug.Log("Received: " + jsonResponse);
+                        return JsonConvert.DeserializeObject<List<CardData>>(jsonResponse);
+
+                }
+                return null;
+            }
+
+        }
+
     }
 }

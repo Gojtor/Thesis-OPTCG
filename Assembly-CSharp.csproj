@@ -56,6 +56,34 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\fr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\pt-BR\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hant\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\Microsoft.Extensions.Logging.Generators.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\tr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\System.Text.Json.SourceGeneration.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\es\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\cs\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\ru\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\ja\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\it\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\tr\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\pl\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\de\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\de\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\it\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\pt-BR\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\pl\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hant\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\cs\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\ja\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\es\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\ru\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\ko\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\ko\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\fr\System.Text.Json.SourceGeneration.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hans\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <Analyzer Include="F:\Thesis\Thesis-OPTCG\Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hans\System.Text.Json.SourceGeneration.resources.dll" />
     <Analyzer Include="C:\Program Files\Unity 2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity 2022.3.16f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
@@ -119,29 +147,234 @@
     <Compile Include="Assets\Scripts\GameBoard\CostArea.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\ko\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\System.Text.Json.SourceGeneration.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Client.Core.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.SignalR.Client.Core.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\it\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Connections.Abstractions.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.Connections.Abstractions.xml" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Http.Connections.Client.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.Http.Connections.Client.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hans\Microsoft.Extensions.Logging.Generators.resources.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hant\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Primitives.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Primitives.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\zh-Hant\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\de\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\ko\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Runtime.CompilerServices.Unsafe.6.0.0\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\fr\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\it\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\es\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\tr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Threading.Channels.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\it\Microsoft.Extensions.Logging.Generators.resources.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.xml" />
+    <None Include="Assets\Packages\System.IO.Pipelines.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\pt-BR\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\pl\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Bcl.TimeProvider.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\pt-BR\System.Text.Json.SourceGeneration.resources.dll" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\de\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\cs\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Common.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.IO.Pipelines.9.0.3\lib\netstandard2.0\System.IO.Pipelines.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\it\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\zh-Hant\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\ja\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\de\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Protocols.Json.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll" />
+    <None Include="Assets\Packages\System.Text.Encodings.Web.9.0.3\lib\netstandard2.0\System.Text.Encodings.Web.xml" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\pl\System.Text.Json.SourceGeneration.resources.dll" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\es\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\fr\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\lib\netstandard2.0\System.Text.Json.xml" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Protocols.Json.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\lib\netstandard2.1\Microsoft.Extensions.Options.xml" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\cs\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\ko\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.ComponentModel.Annotations.5.0.0\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\zh-Hant\Microsoft.Extensions.Logging.Generators.resources.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\zh-Hans\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Connections.Abstractions.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.Connections.Abstractions.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\tr\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\cs\Microsoft.Extensions.Logging.Generators.resources.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\es\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\zh-Hant\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\tr\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Features.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Features.dll" />
+    <None Include="Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\Sources\ILLink.Descriptors.LibraryBuild.xml" />
+    <None Include="Assets\Packages\System.Threading.Channels.9.0.3\lib\netstandard2.1\System.Threading.Channels.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\ja\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\System.Text.Json.SourceGeneration.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\it\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.9.0.3\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Encodings.Web.9.0.3\lib\netstandard2.0\System.Text.Encodings.Web.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\cs\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hans\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\cs\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Bcl.TimeProvider.9.0.3\lib\netstandard2.0\Microsoft.Bcl.TimeProvider.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\lib\netstandard2.0\System.Text.Json.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Primitives.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\it\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\lib\netstandard2.0\System.Diagnostics.DiagnosticSource.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\de\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\pt-BR\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Common.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Common.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\pl\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\pl\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Runtime.CompilerServices.Unsafe.6.0.0\LICENSE.TXT" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Http.Connections.Common.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.Http.Connections.Common.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\ru\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.xml" />
+    <None Include="Assets\Packages\Microsoft.Bcl.TimeProvider.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\Microsoft.Extensions.Options.SourceGeneration.dll" />
+    <None Include="Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\lib\netstandard2.0\System.Diagnostics.DiagnosticSource.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\content\ILLink\ILLink.Descriptors.LibraryBuild.xml" />
+    <None Include="Assets\Packages\System.IO.Pipelines.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\es\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Bcl.TimeProvider.9.0.3\lib\netstandard2.0\Microsoft.Bcl.TimeProvider.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\pl\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\LICENSE.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\ja\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\pt-BR\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\ja\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Protocols.Json.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Protocols.Json.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Common.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Common.xml" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\ru\Microsoft.Extensions.Logging.Generators.resources.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\zh-Hans\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Primitives.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Primitives.xml" />
+    <None Include="Assets\Packages\System.Net.ServerSentEvents.9.0.3\THIRD-PARTY-NOTICES.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+    <None Include="Assets\Packages\System.ComponentModel.Annotations.5.0.0\lib\netstandard2.1\System.ComponentModel.Annotations.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Http.Connections.Common.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Connections.Abstractions.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Client.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Client.dll" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+    <None Include="Assets\Packages\System.Net.ServerSentEvents.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.xml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\Microsoft.Extensions.Logging.Generators.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\de\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Features.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Features.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.9.0.3\lib\netstandard2.1\Microsoft.Extensions.Logging.xml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Primitives.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\ko\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\fr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\tr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Runtime.CompilerServices.Unsafe.6.0.0\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Threading.Channels.9.0.3\lib\netstandard2.1\System.Threading.Channels.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\System.Text.Json.SourceGeneration.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.9.0.3\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.xml" />
+    <None Include="Assets\Packages\System.Net.ServerSentEvents.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\fr\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\es\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Client.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\ko\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Net.ServerSentEvents.9.0.3\lib\netstandard2.0\System.Net.ServerSentEvents.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\tr\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\fr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\pt-BR\Microsoft.Extensions.Logging.Generators.resources.dll" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\cs\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\de\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.IO.Pipelines.9.0.3\lib\netstandard2.0\System.IO.Pipelines.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\zh-Hant\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Bcl.TimeProvider.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\fr\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\zh-Hant\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\cs\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\lib\netstandard2.1\Microsoft.Extensions.Options.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\es\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.Abstractions.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\zh-Hans\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Http.Connections.Client.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\tr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.ComponentModel.Annotations.5.0.0\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\pt-BR\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\de\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Encodings.Web.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\pl\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\fr\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\ru\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Text.Encodings.Web.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.9.0.3\lib\netstandard2.1\Microsoft.Extensions.Logging.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Client.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Client.xml" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\Packages\System.ComponentModel.Annotations.5.0.0\version.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\pt-BR\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Client.Core.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.SignalR.Client.Core.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\ko\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\System.IO.Pipelines.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\tr\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\zh-Hans\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\ru\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.ComponentModel.Annotations.5.0.0\LICENSE.TXT" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Features.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Text.Encodings.Web.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Net.ServerSentEvents.9.0.3\lib\netstandard2.0\System.Net.ServerSentEvents.xml" />
+    <None Include="Assets\Packages\System.Threading.Channels.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.0\cs\ja\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn3.11\cs\ja\Microsoft.Extensions.Logging.Generators.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Http.Connections.Client.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.Http.Connections.Client.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\ru\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.ComponentModel.Annotations.5.0.0\lib\netstandard2.1\System.ComponentModel.Annotations.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\Microsoft.Extensions.Logging.Generators.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.SignalR.Client.Core.9.0.3\THIRD-PARTY-NOTICES.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\pl\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Threading.Channels.9.0.3\LICENSE.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\zh-Hans\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\ja\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.4\cs\ru\Microsoft.Extensions.Logging.Generators.resources.dll" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.9.0.3\LICENSE.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\it\System.Text.Json.SourceGeneration.resources.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\Packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\THIRD-PARTY-NOTICES.TXT" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn4.4\cs\ru\System.Text.Json.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.AspNetCore.Http.Connections.Common.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.Http.Connections.Common.xml" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\analyzers\dotnet\roslyn4.4\cs\ko\Microsoft.Extensions.Options.SourceGeneration.resources.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Options.9.0.3\useSharedDesignerContext.txt" />
+    <None Include="Assets\Packages\System.Text.Json.9.0.3\analyzers\dotnet\roslyn3.11\cs\es\System.Text.Json.SourceGeneration.resources.dll" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\analyzers\dotnet\roslyn4.0\cs\Microsoft.Extensions.Logging.Generators.dll" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Bangers - OFL.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -477,16 +710,112 @@
       <HintPath>C:\Program Files\Unity 2022.3.16f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Client.Core">
+      <HintPath>Assets\Packages\Microsoft.AspNetCore.SignalR.Client.Core.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.SignalR.Client.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Connections.Client">
+      <HintPath>Assets\Packages\Microsoft.AspNetCore.Http.Connections.Client.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.Http.Connections.Client.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives">
+      <HintPath>Assets\Packages\Microsoft.Extensions.Primitives.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>Assets\Packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
       <HintPath>Library\PackageCache\com.unity.collections@1.2.4\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Protocols.Json">
+      <HintPath>Assets\Packages\Microsoft.AspNetCore.SignalR.Protocols.Json.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Connections.Abstractions">
+      <HintPath>Assets\Packages\Microsoft.AspNetCore.Connections.Abstractions.9.0.3\lib\netstandard2.1\Microsoft.AspNetCore.Connections.Abstractions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Features">
+      <HintPath>Assets\Packages\Microsoft.Extensions.Features.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Features.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection">
+      <HintPath>Assets\Packages\Microsoft.Extensions.DependencyInjection.9.0.3\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Text.Encodings.Web">
+      <HintPath>Assets\Packages\System.Text.Encodings.Web.9.0.3\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.TimeProvider">
+      <HintPath>Assets\Packages\Microsoft.Bcl.TimeProvider.9.0.3\lib\netstandard2.0\Microsoft.Bcl.TimeProvider.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Text.Json">
+      <HintPath>Assets\Packages\System.Text.Json.9.0.3\lib\netstandard2.0\System.Text.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource">
+      <HintPath>Assets\Packages\System.Diagnostics.DiagnosticSource.9.0.3\lib\netstandard2.0\System.Diagnostics.DiagnosticSource.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Common">
+      <HintPath>Assets\Packages\Microsoft.AspNetCore.SignalR.Common.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Http.Connections.Common">
+      <HintPath>Assets\Packages\Microsoft.AspNetCore.Http.Connections.Common.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.Http.Connections.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>Assets\Packages\Microsoft.Extensions.Logging.Abstractions.9.0.3\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.SignalR.Client">
+      <HintPath>Assets\Packages\Microsoft.AspNetCore.SignalR.Client.9.0.3\lib\netstandard2.0\Microsoft.AspNetCore.SignalR.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.9.1\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Threading.Channels">
+      <HintPath>Assets\Packages\System.Threading.Channels.9.0.3\lib\netstandard2.1\System.Threading.Channels.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net.ServerSentEvents">
+      <HintPath>Assets\Packages\System.Net.ServerSentEvents.9.0.3\lib\netstandard2.0\System.Net.ServerSentEvents.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.IO.Pipelines">
+      <HintPath>Assets\Packages\System.IO.Pipelines.9.0.3\lib\netstandard2.0\System.IO.Pipelines.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options">
+      <HintPath>Assets\Packages\Microsoft.Extensions.Options.9.0.3\lib\netstandard2.1\Microsoft.Extensions.Options.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging">
+      <HintPath>Assets\Packages\Microsoft.Extensions.Logging.9.0.3\lib\netstandard2.1\Microsoft.Extensions.Logging.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+      <HintPath>Assets\Packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\netstandard2.1\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations">
+      <HintPath>Assets\Packages\System.ComponentModel.Annotations.5.0.0\lib\netstandard2.1\System.ComponentModel.Annotations.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <HintPath>Assets\Packages\Microsoft.Extensions.DependencyInjection.Abstractions.9.0.3\lib\netstandard2.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="netstandard">
@@ -1063,6 +1392,10 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="NuGetForUnity">
+      <HintPath>Library\ScriptAssemblies\NuGetForUnity.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
