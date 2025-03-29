@@ -67,7 +67,6 @@ public class EnemyBoard : Board
             card.LoadDataFromCardData(cardData);
             card.Init(this);
             this.SetCardParentByNameString(cardData.currentParent,card);
-            card.raycastTargetChange(false);
             deck.Add(card);
         }
         return deck;

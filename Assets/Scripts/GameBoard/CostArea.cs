@@ -21,19 +21,21 @@ namespace TCGSim
         }
         public void OnDrop(PointerEventData eventData)
         {
+            Card card = eventData.pointerDrag.GetComponent<Card>();
+            if (!card.draggable) { return; }
             Debug.Log("OnEndDrag");
-            eventData.pointerDrag.transform.SetParent(this.transform);
-            eventData.pointerDrag.GetComponent<Card>().SetCardActive();
+            card.transform.SetParent(this.transform);
+            card.playerBoard.GetComponent<Board>().enableDraggingOnTopDonCard();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            Debug.Log("OnPointerEnter");
+            //Debug.Log("OnPointerEnter");
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            Debug.Log("OnPointerExit");
+            //Debug.Log("OnPointerExit");
         }
 
         public void RestDons(int donCountToRest)

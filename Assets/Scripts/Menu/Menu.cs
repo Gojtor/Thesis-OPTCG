@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -47,17 +46,40 @@ namespace TCGSim
         private string gameID="Default";
 
 
+        private LineRenderer lineRenderer;
+        private Vector2 mousePos;
+        private Vector2 startMousePos;
+
         // Start is called before the first frame update
         void Start()
         {
             defaultPaneObject = Instantiate(defaultPanelPrefab, this.gameObject.transform);
             createGameBtn = Instantiate(createGameBtnPrefab, defaultPaneObject.transform).GetComponent<Button>();
             createGameBtn.onClick.AddListener(CreateGame);
+
+            lineRenderer = this.gameObject.AddComponent<LineRenderer>();
+            lineRenderer.startWidth = 0.1f;
+            lineRenderer.endWidth = 0.1f;
+            lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // Basic material
+            lineRenderer.positionCount = 2;
+            lineRenderer.useWorldSpace = true;
+            lineRenderer.sortingLayerName = "Default";
+            lineRenderer.sortingOrder = 100;
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetMouseButtonDown(0))
+            {
+                startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            }
+            if (Input.GetMouseButton(0))
+            {
+                mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                lineRenderer.SetPosition(0, new Vector3(startMousePos.x, startMousePos.y, 1f));
+                lineRenderer.SetPosition(1, new Vector3(mousePos.x, mousePos.y, 1f));
+            }
             Debug.Log(defaultPaneObject.name);
         }
 

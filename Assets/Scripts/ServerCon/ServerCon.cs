@@ -12,7 +12,6 @@ using TCGSim.CardScripts;
 using System.Text;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
-using UnityEditor.MemoryProfiler;
 
 namespace TCGSim
 {

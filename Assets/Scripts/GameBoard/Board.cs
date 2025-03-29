@@ -170,12 +170,10 @@ public abstract class Board : MonoBehaviour
         {
             DonCard donCard = Instantiate(donPrefab, this.donDeckObject.transform).GetComponent<DonCard>();
             donCard.Init(this, handObject, "DONCARD" + i);
-            if (this.boardName == "ENEMYBOARD")
-            {
-                donCard.transform.GetComponent<Card>().raycastTargetChange(false);
-            }
+            donCard.transform.SetAsFirstSibling();
             donCards.Add(donCard);
         }
+        donDeckObject.transform.GetChild(donDeckObject.transform.childCount-1).GetComponent<Card>().ChangeDraggable(true);
     }
     public void CreateCostArea()
     {
@@ -238,6 +236,13 @@ public abstract class Board : MonoBehaviour
             default:
                 break;
 
+        }
+    }
+    public void enableDraggingOnTopDonCard()
+    {
+        if (donDeckObject.transform.childCount > 0)
+        {
+            donDeckObject.transform.GetChild(donDeckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
         }
     }
 

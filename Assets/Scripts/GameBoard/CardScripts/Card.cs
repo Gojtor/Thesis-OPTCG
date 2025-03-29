@@ -16,6 +16,7 @@ namespace TCGSim.CardScripts
         private CanvasGroup canvasGroup;
         private Image cardImage;
         private bool isImgLoaded = false;
+        public bool draggable { get; protected set; } = false;
        
         //Init variables
         private Hand hand = null;
@@ -43,12 +44,13 @@ namespace TCGSim.CardScripts
 
         public void OnBeginDrag(PointerEventData pointerEventData)
         {
+            if (!draggable) { return; }
             if (!isImgLoaded)
             {
                 FlipCard();
             }
             this.transform.SetParent(this.transform.parent.parent);
-            playerBoard.ConvertTo<PlayerBoard>().enableRaycastOnTopCard();
+            this.playerBoard.GetComponent<PlayerBoard>().enableDraggingOnTopDeckCard();
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = .8f;
             Debug.Log("OnBeginDrag");
@@ -56,7 +58,15 @@ namespace TCGSim.CardScripts
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            if (!draggable) { return; }
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
+            if (objectAtDragEnd == null)
+            {
+                Debug.Log("objectAtDragEnd is NULL - Dropped outside the scene!");
+                SnapCardBackToParentPos(hand.transform);
+                canvasGroup.alpha = 1f;
+                return;
+            }
             switch (this.cardData.cardType)
             {
                 case CardType.CHARACTER:
@@ -77,11 +87,12 @@ namespace TCGSim.CardScripts
                     }
                     else
                     {
-                        cardImage.raycastTarget = false;
+                        this.SetCardActive();
                         this.playerBoard.ConvertTo<PlayerBoard>().RestDons(this.cardData.cost);
                     }
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
+                    this.draggable = false;
                     break;
                 case CardType.DON:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
@@ -93,6 +104,7 @@ namespace TCGSim.CardScripts
                     else
                     {
                         cardImage.raycastTarget = false;
+                        this.SetCardActive();
                     }
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
@@ -124,12 +136,14 @@ namespace TCGSim.CardScripts
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (!draggable) { return; }
             this.transform.position = eventData.position;
             Debug.Log("OnDrag");
         }
 
         public void OnDrop(PointerEventData eventData)
         {
+            if (!draggable) { return; }
             Debug.Log("OnDrop");
         }
 
@@ -163,6 +177,11 @@ namespace TCGSim.CardScripts
                     cardVisibility = CardVisibility.NONE;
                 }   
             }
+        }
+
+        public void ChangeDraggable(bool isDraggable)
+        {
+            this.draggable = isDraggable;
         }
 
         public void raycastTargetChange(bool on)
@@ -223,6 +242,11 @@ namespace TCGSim.CardScripts
             this.transform.SetParent(newParent);
             this.transform.position = this.transform.parent.position;
             canvasGroup.blocksRaycasts = true;
+        }
+
+        public void SetDraggable(bool isDraggable)
+        {
+            this.draggable = isDraggable;
         }
     }
 }

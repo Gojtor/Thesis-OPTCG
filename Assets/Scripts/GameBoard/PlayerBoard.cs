@@ -46,6 +46,7 @@ namespace TCGSim
             Shuffle<string>(deckString);
             deckCards = await CreateCardsFromDeck();
             Shuffle<Card>(deckCards);
+            ReassingOrderAfterShuffle();
             Debug.Log(boardName);
             CreateStartingHand();
             if (boardName == "PLAYERBOARD")
@@ -110,11 +111,11 @@ namespace TCGSim
             {
                 string cardNumber = sameCards.Split("x")[1];
                 int count = Convert.ToInt32(sameCards.Split("x")[0]);
-                CardData cardData = await serverCon.GetCardByCardID(cardNumber);
-                GameObject cardObj;
-                Card card;
                 for (int i = 0; i < count; i++)
                 {
+                    CardData cardData = await serverCon.GetCardByCardID(cardNumber);
+                    GameObject cardObj = null;
+                    Card card = null;
                     switch (cardData.cardType)
                     {
                         case CardType.CHARACTER:
@@ -139,11 +140,10 @@ namespace TCGSim
                             break;
                     }
                     card.LoadDataFromCardData(cardData);
+                    card.SetCardNotActive();
                     card.Init(this, handObject, cardNumber + "-" + i);
-                    card.raycastTargetChange(false);
                     deck.Add(card);
-                }
-                
+                } 
             }
             return deck;
         }
@@ -153,6 +153,14 @@ namespace TCGSim
             if (deckObject.transform.childCount > 0)
             {
                 deckObject.transform.GetChild(0).GetComponent<Card>().raycastTargetChange(true);
+            }
+        }
+
+        public void enableDraggingOnTopDeckCard()
+        {
+            if (deckObject.transform.childCount > 0)
+            {
+                deckObject.transform.GetChild(deckObject.transform.childCount-1).GetComponent<Card>().ChangeDraggable(true);
             }
         }
 
@@ -188,15 +196,16 @@ namespace TCGSim
                 PutCardBackToDeck(card);
             }
             Shuffle<Card>(deckCards);
+            ReassingOrderAfterShuffle();
             CreateStartingHand();
             foreach (Card card in handObject.hand)
             {
-                card.raycastTargetChange(true);
+                card.ChangeDraggable(true);
             }
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
-            enableRaycastOnTopCard();
+            enableDraggingOnTopDeckCard();
             SendAllCardToDB();
         }
 
@@ -204,13 +213,13 @@ namespace TCGSim
         {
             foreach (Card card in handObject.hand)
             {
-                card.raycastTargetChange(true);
+                card.ChangeDraggable(true);
             }
             handObject.ScaleHandBackFromStartingHand();
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
-            enableRaycastOnTopCard();
+            enableDraggingOnTopDeckCard();
             SendAllCardToDB();
         }
 
@@ -218,13 +227,21 @@ namespace TCGSim
         {
             int listSize = list.Count;
             System.Random random = new System.Random();
-            for (int x = 0; x < 5; x++)
+            for (int x = 0; x < 1000; x++)
             {
                 for (int i = listSize - 1; i >= 1; i--)
                 {
                     int j = random.Next(0, listSize);
                     (list[i], list[j]) = (list[j], list[i]);
                 }
+            }
+        }
+
+        public void ReassingOrderAfterShuffle()
+        {
+            for (int i = 0; i < deckCards.Count; i++)
+            {
+                deckCards[i].transform.SetSiblingIndex(i);
             }
         }
 
