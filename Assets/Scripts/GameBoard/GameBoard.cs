@@ -10,12 +10,6 @@ namespace TCGSim
         [SerializeField]
         private GameObject boardPrefab;
 
-        [SerializeField]
-        private GameObject enemyBoardPrefab;
-
-        [SerializeField]
-        private GameObject serverConPrefab;
-
         /// <summary>
         ///  Prefabs for the player board
         /// </summary>
@@ -60,18 +54,31 @@ namespace TCGSim
         public GameObject donPrefab;
         #endregion
 
-        private ServerCon serverCon;
         private string playerName;
         private string enemyName;
 
         public string gameCustomID { get; private set; } = System.Guid.NewGuid().ToString();
 
         // Start is called before the first frame update
-        void Start()
+        async void Start()
         {
-            serverCon = Instantiate(serverConPrefab, this.gameObject.transform).GetComponent<ServerCon>();
             playerName = GameOptions.playerName;
-            Debug.Log(playerName);
+            gameCustomID = GameOptions.gameID;
+            Debug.Log(playerName+" "+gameCustomID);
+            ServerCon.Instance.Init(gameCustomID, playerName);
+            switch (GameManager.Instance.currentState)
+            {
+                case GameState.CONNECTING:
+                    Debug.Log("Connecting!");
+                    await ServerCon.Instance.WaitForConnection();
+                    break;
+                case GameState.WAITINGFOROPPONENT:
+                    Debug.Log("Waiting For Opponent!");
+                    await ServerCon.Instance.WaitForEnemyToConnect();
+                    break;
+                default:
+                    break;
+            }
             CreateBoards();
         }
 
@@ -93,8 +100,8 @@ namespace TCGSim
                 cardPrefab,lifePrefab,keepBtnPrefab,mulliganBtnPrefab,donDeckPrefab,donPrefab);
             enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
                 cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab);
-            playerBoard.Init("PLAYERBOARD", serverCon, gameCustomID);
-            enemyBoard.Init("ENEMYBOARD",serverCon, gameCustomID);
+            playerBoard.Init("PLAYERBOARD", gameCustomID);
+            enemyBoard.Init("ENEMYBOARD", gameCustomID);
             playerBoard.gameObject.transform.Translate(0, -235, 0);
             enemyBoard.gameObject.transform.Translate(0, 235, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);

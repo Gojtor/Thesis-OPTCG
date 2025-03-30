@@ -36,13 +36,9 @@ namespace TCGSim
         {
 
         }
-        public override async void Init(string boardName, ServerCon serverCon, string gameCustomID)
+        public override async void Init(string boardName, string gameCustomID)
         {
-            base.Init(boardName, serverCon, gameCustomID);
-            if (serverCon == null)
-            {
-                Debug.LogError("ServerCon prefab NULL after Init!", this);
-            }
+            base.Init(boardName, gameCustomID);
             Shuffle<string>(deckString);
             deckCards = await CreateCardsFromDeck();
             Shuffle<Card>(deckCards);
@@ -113,7 +109,7 @@ namespace TCGSim
                 int count = Convert.ToInt32(sameCards.Split("x")[0]);
                 for (int i = 0; i < count; i++)
                 {
-                    CardData cardData = await serverCon.GetCardByCardID(cardNumber);
+                    CardData cardData = await ServerCon.Instance.GetCardByCardID(cardNumber);
                     GameObject cardObj = null;
                     Card card = null;
                     switch (cardData.cardType)
@@ -261,7 +257,7 @@ namespace TCGSim
 
         public void SendCardToDB(Card card)
         {
-            StartCoroutine(serverCon.AddCardToInGameStateDB(card));
+            StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
         }
 
         public void SendAllCardToDB()
@@ -269,17 +265,17 @@ namespace TCGSim
             foreach  (Card card in deckCards)
             {
                 card.UpdateParent();
-                StartCoroutine(serverCon.AddCardToInGameStateDB(card));
+                StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
             }
             foreach (Card card in handObject.hand)
             {
                 card.UpdateParent();
-                StartCoroutine(serverCon.AddCardToInGameStateDB(card));
+                StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
             }
             foreach (Card card in lifeObject.lifeCards)
             {
                 card.UpdateParent();
-                StartCoroutine(serverCon.AddCardToInGameStateDB(card));
+                StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
             }
         }
 

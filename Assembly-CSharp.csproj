@@ -107,6 +107,7 @@
     <Compile Include="Assets\Scripts\Menu\GameOptions.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\CharacterCard.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\EventCard.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\GameManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CharacterArea.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Assets\Scripts\GameBoard\CardData\CardType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\Card.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\GameState.cs" />
     <Compile Include="Assets\Scripts\GameBoard\PlayerBoard.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />

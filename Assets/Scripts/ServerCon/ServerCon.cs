@@ -17,12 +17,15 @@ namespace TCGSim
 {
     public class ServerCon : MonoBehaviour
     {
+        public static ServerCon Instance { get; private set; }
         public string url { get; private set; }
         public string serverUrl { get; } = "http://localhost:5000";
         public string gameID { get; private set; }
         public string playerName { get; private set; }
 
         private HubConnection connection;
+        private TaskCompletionSource<bool> ConnectionTask;
+        private TaskCompletionSource<bool> EnemyConnectionTask;
 
         // Start is called before the first frame update
         void Start()
@@ -36,11 +39,42 @@ namespace TCGSim
 
         }
 
-        async void Awake()
+        private async void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(this);
+            }
+            else
+            {
+                Instance = this;
+            }
+            await ConnectToServer();
+        }
+
+        private async Task ConnectToServer()
         {
             connection = new HubConnectionBuilder()
            .WithUrl(serverUrl + "/websocket")
            .Build();
+
+            connection.On<string>("Connected", (message) =>
+            {
+                Debug.Log(message);
+                if (ConnectionTask != null)
+                {
+                    ConnectionTask.TrySetResult(true);
+                }
+            });
+
+            connection.On<string>("EnemyConnected", (message) =>
+            {
+                Debug.Log(message);
+                if (EnemyConnectionTask != null)
+                {
+                    EnemyConnectionTask.TrySetResult(true);
+                }
+            });
 
             connection.On<string>("ReceiveMessage", (message) =>
             {
@@ -51,17 +85,31 @@ namespace TCGSim
             {
                 Debug.Log("Message received: " + message);
             });
-
             await connection.StartAsync();
             Debug.Log("WebSocket connection is succesfull!");
-            AddPlayerToGroupInSocket(this.gameID, this.playerName);
         }
 
         public void Init(string gameID,string playerName)
         {
             this.gameID = "TEST";
             this.playerName = playerName;
-            
+            AddPlayerToGroupInSocket(this.gameID, this.playerName);
+        }
+
+        public async Task WaitForConnection()
+        {
+            Debug.Log("Waiting for a connection...");
+            ConnectionTask = new TaskCompletionSource<bool>();
+            await EnemyConnectionTask.Task; // Wait here until a message is received
+            Debug.Log("Connected");
+        }
+
+        public async Task WaitForEnemyToConnect()
+        {
+            Debug.Log("Waiting for enemy connection...");
+            EnemyConnectionTask = new TaskCompletionSource<bool>();
+            await EnemyConnectionTask.Task; // Wait here until a message is received
+            Debug.Log("Enemy connected");
         }
 
         public async void SendMessageToServer(string message)

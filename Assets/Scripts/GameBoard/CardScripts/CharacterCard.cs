@@ -47,7 +47,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
         {
             lineRenderer.enabled = true;
             drawing = true;
-            Debug.Log("XD");
+            Debug.Log("Drawing start");
             startMousePos = this.gameObject.transform.position; 
         }
     }

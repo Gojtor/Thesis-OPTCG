@@ -117,8 +117,10 @@ MonoBehaviour:
   defaultPanelPrefab: {fileID: 5636563940544649250, guid: 69c935a958aaeaa4492873d591b0d6b3, type: 3}
   createGamePanelPrefab: {fileID: 2214805168975750596, guid: 27205b05cb27c9b42996bea22c0e7228, type: 3}
   createGameBtnPrefab: {fileID: 5908791003472545325, guid: 043febfc45ea9de40acc45e0114855aa, type: 3}
+  connectGameBtnPrefab: {fileID: 3045345414194547782, guid: e369d88dc5bb25945b05fe4b11933d66, type: 3}
   namePanelPrefab: {fileID: 9122594219360105287, guid: eb353fed1010d444f900ea5926f20a6f, type: 3}
   gameIDPanelPrefab: {fileID: 6972639056669081352, guid: 34f5a0906c1f73c4e8d11818abad684e, type: 3}
   nameInputPrefab: {fileID: 537997689036183180, guid: c6c3e4e57ddfa5046b39f942225bf170, type: 3}
   gameIDInputPrefab: {fileID: 3889108782865021788, guid: 0f8a045156b1fa742bc577a9405834a7, type: 3}
   startGameBtnPrefab: {fileID: 6449795144490536490, guid: 8208b06415dbe5a4487eece1e17b35c7, type: 3}
+  connectToGameBtnPrefab: {fileID: 3760271903897634264, guid: 05ab32766047edd409692695cdc48c92, type: 3}

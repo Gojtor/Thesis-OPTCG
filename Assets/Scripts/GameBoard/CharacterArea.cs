@@ -27,7 +27,7 @@ namespace TCGSim
             card.transform.SetParent(this.transform);
             card.UpdateParent();
             card.gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            card.playerBoard.serverCon.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);
+            ServerCon.Instance.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

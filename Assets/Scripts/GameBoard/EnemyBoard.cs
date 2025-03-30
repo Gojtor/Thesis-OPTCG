@@ -22,13 +22,9 @@ public class EnemyBoard : Board
         Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
     }
 
-    public async override void Init(string boardName, ServerCon serverCon, string gameCustomID)
+    public async override void Init(string boardName, string gameCustomID)
     {
-        base.Init(boardName, serverCon, gameCustomID);
-        if (serverCon == null)
-        {
-            Debug.LogError("ServerCon prefab NULL after Init!", this);
-        }
+        base.Init(boardName, gameCustomID);
         Debug.Log(boardName);
         cards = await CreateCardsFromDeck();
     }
@@ -36,7 +32,7 @@ public class EnemyBoard : Board
     public async Task<List<Card>> CreateCardsFromDeck()
     {
         List<Card> deck = new List<Card>();
-        List<CardData> cardsFromDB = await serverCon.GetAllCardByGameID("TEST");
+        List<CardData> cardsFromDB = await ServerCon.Instance.GetAllCardByGameID("TEST");
         foreach (CardData cardData in cardsFromDB)
         {
             GameObject cardObj;

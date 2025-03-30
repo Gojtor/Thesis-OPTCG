@@ -19,6 +19,9 @@ namespace TCGSim
         private GameObject createGameBtnPrefab;
 
         [SerializeField]
+        private GameObject connectGameBtnPrefab;
+
+        [SerializeField]
         private GameObject namePanelPrefab;
 
         [SerializeField]
@@ -33,14 +36,19 @@ namespace TCGSim
         [SerializeField]
         private GameObject startGameBtnPrefab;
 
+        [SerializeField]
+        private GameObject connectToGameBtnPrefab;
+
         private GameObject defaultPaneObject;
         private Button createGameBtn;
+        private Button connectGameBtn;
         private GameObject createGamePanelObject;
         private GameObject namePanelObject;
         private GameObject gameIDPanelObject;
         private TMP_InputField nameInputObject;
         private TMP_InputField gameIDInputObject;
         private Button startGameBtnObject;
+        private Button connectToGameBtnObject;
 
         private string playerName="Default";
         private string gameID="Default";
@@ -55,7 +63,9 @@ namespace TCGSim
         {
             defaultPaneObject = Instantiate(defaultPanelPrefab, this.gameObject.transform);
             createGameBtn = Instantiate(createGameBtnPrefab, defaultPaneObject.transform).GetComponent<Button>();
+            connectGameBtn = Instantiate(connectGameBtnPrefab, defaultPaneObject.transform).GetComponent<Button>();
             createGameBtn.onClick.AddListener(CreateGame);
+            connectGameBtn.onClick.AddListener(ConnectToGame);
 
             lineRenderer = this.gameObject.AddComponent<LineRenderer>();
             lineRenderer.startWidth = 0.1f;
@@ -101,11 +111,35 @@ namespace TCGSim
             startGameBtnObject.onClick.AddListener(StartGame);
         }
 
+        public void ConnectToGame()
+        {
+            defaultPaneObject.SetActive(false);
+            createGamePanelObject = Instantiate(createGamePanelPrefab, this.gameObject.transform);
+            namePanelObject = Instantiate(namePanelPrefab, createGamePanelObject.transform);
+            gameIDPanelObject = Instantiate(gameIDPanelPrefab, createGamePanelObject.transform);
+            nameInputObject = Instantiate(nameInputPrefab, namePanelObject.transform).GetComponent<TMP_InputField>();
+            nameInputObject.onEndEdit.AddListener(UpdatePlayerNameFromInputField);
+            gameIDInputObject = Instantiate(gameIDInputPrefab, gameIDPanelObject.transform).GetComponent<TMP_InputField>();
+            gameIDInputObject.onEndEdit.AddListener(UpdateGameIDFromInputField);
+            connectToGameBtnObject = Instantiate(connectToGameBtnPrefab, this.gameObject.transform).GetComponent<Button>();
+            connectToGameBtnObject.onClick.AddListener(Connect);
+        }
+
         public void StartGame()
         {
             GameOptions.playerName = playerName;
             GameOptions.gameID = gameID;
             Debug.Log("Start Game");
+            GameManager.Instance.ChangeGameState(GameState.WAITINGFOROPPONENT);
+            SceneManager.LoadScene("GameBoard");
+        }
+
+        public void Connect()
+        {
+            GameOptions.playerName = playerName;
+            GameOptions.gameID = gameID;
+            Debug.Log("Connect to game");
+            GameManager.Instance.ChangeGameState(GameState.CONNECTING);
             SceneManager.LoadScene("GameBoard");
         }
 

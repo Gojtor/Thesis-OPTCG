@@ -85,7 +85,7 @@ public abstract class Board : MonoBehaviour
     public List<Card> donCards { get; protected set; } = new List<Card>();
     #endregion
 
-    public ServerCon serverCon { get; protected set; }
+    //public ServerCon serverCon { get; protected set; }
     public int activeDon { get; protected set; } = 0;
 
     // Start is called before the first frame update
@@ -99,18 +99,11 @@ public abstract class Board : MonoBehaviour
     {
         
     }
-    public virtual void Init(string boardName, ServerCon serverCon, string gameCustomID)
+    public virtual void Init(string boardName, string gameCustomID)
     {
         this.boardName = boardName;
-        this.serverCon = serverCon;
-        this.serverCon.Init(gameCustomID, playerName);
         this.gameCustomID = gameCustomID;
-        if (serverCon == null)
-        {
-            Debug.LogError("ServerCon prefab NULL after Init!", this);
-        }
         LoadBoardElements();
-        
     }
 
     public virtual void InitPrefabs(GameObject handPrefab, GameObject characterAreaPrefab, GameObject costAreaPrefab, GameObject stageAreaPrefab,
