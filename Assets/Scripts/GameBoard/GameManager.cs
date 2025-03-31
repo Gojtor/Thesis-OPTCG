@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace TCGSim
     {
         public static GameManager Instance { get; private set; }
         public GameState currentState { get; private set; } = GameState.MAINMENU;
+
+        public static event Action<GameState> OnGameStateChange;
 
         private void Awake()
         {
@@ -41,6 +44,8 @@ namespace TCGSim
                 default:
                     break;
             }
+
+            OnGameStateChange?.Invoke(gameState);
         }
 
     }

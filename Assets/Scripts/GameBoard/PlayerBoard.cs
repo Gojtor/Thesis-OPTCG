@@ -16,6 +16,8 @@ namespace TCGSim
 {
     public class PlayerBoard : Board
     {
+        public static PlayerBoard Instance { get; private set; }
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -25,7 +27,10 @@ namespace TCGSim
         // Update is called once per frame
         void Update()
         {
-            Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
+            if (deckObject != null)
+            {
+                Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
+            }
             Debug.Log("Active dons: " + activeDon);
             if (costAreaObject != null)
             {
@@ -34,22 +39,38 @@ namespace TCGSim
         }
         private void Awake()
         {
-
-        }
-        public override async void Init(string boardName, string gameCustomID)
-        {
-            base.Init(boardName, gameCustomID);
-            Shuffle<string>(deckString);
-            deckCards = await CreateCardsFromDeck();
-            Shuffle<Card>(deckCards);
-            ReassingOrderAfterShuffle();
-            Debug.Log(boardName);
-            CreateStartingHand();
-            if (boardName == "PLAYERBOARD")
+            if (Instance != null && Instance != this)
             {
-                handObject.ScaleHandForStartingHand();
-                LoadMulliganKeepButtons();
+                Destroy(this);
             }
+            else
+            {
+                Instance = this;
+            }
+        }
+
+        public override async void GameManagerOnGameStateChange(GameState state)
+        {
+            if (state == GameState.STARTINGPHASE)
+            {
+                this.LoadBoardElements();
+                Shuffle<string>(deckString);
+                deckCards = await CreateCardsFromDeck();
+                Shuffle<Card>(deckCards);
+                ReassingOrderAfterShuffle();
+                Debug.Log(boardName);
+                CreateStartingHand();
+                if (boardName == "PLAYERBOARD")
+                {
+                    handObject.ScaleHandForStartingHand();
+                    LoadMulliganKeepButtons();
+                }
+            }
+        }
+
+        public override void Init(string boardName, string gameCustomID)
+        {
+            base.Init(boardName, gameCustomID); 
         }
 
         public override void LoadBoardElements()
@@ -137,19 +158,11 @@ namespace TCGSim
                     }
                     card.LoadDataFromCardData(cardData);
                     card.SetCardNotActive();
-                    card.Init(this, handObject, cardNumber + "-" + i);
+                    card.Init(handObject, cardNumber + "-" + i);
                     deck.Add(card);
                 } 
             }
             return deck;
-        }
-
-        public void enableRaycastOnTopCard()
-        {
-            if (deckObject.transform.childCount > 0)
-            {
-                deckObject.transform.GetChild(0).GetComponent<Card>().raycastTargetChange(true);
-            }
         }
 
         public void enableDraggingOnTopDeckCard()

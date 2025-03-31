@@ -52,8 +52,16 @@ namespace TCGSim
 
         [SerializeField]
         public GameObject donPrefab;
+
+        [SerializeField]
+        public GameObject waitingForOpponentPrefab;
+
+        [SerializeField]
+        public GameObject connectingPrefab;
         #endregion
 
+        private GameObject waitingForOpp;
+        private GameObject connecting;
         private string playerName;
         private string enemyName;
 
@@ -66,6 +74,10 @@ namespace TCGSim
             gameCustomID = GameOptions.gameID;
             Debug.Log(playerName+" "+gameCustomID);
             ServerCon.Instance.Init(gameCustomID, playerName);
+            connecting = Instantiate(connectingPrefab, this.gameObject.transform);
+            await ServerCon.Instance.ConnectToServer();
+            await ServerCon.Instance.AddPlayerToGroupInSocket(gameCustomID, playerName);
+            CreateBoards();
             switch (GameManager.Instance.currentState)
             {
                 case GameState.CONNECTING:
@@ -73,13 +85,17 @@ namespace TCGSim
                     await ServerCon.Instance.WaitForConnection();
                     break;
                 case GameState.WAITINGFOROPPONENT:
+                    connecting.SetActive(false);
+                    waitingForOpp = Instantiate(waitingForOpponentPrefab, this.gameObject.transform);
                     Debug.Log("Waiting For Opponent!");
                     await ServerCon.Instance.WaitForEnemyToConnect();
                     break;
                 default:
                     break;
             }
-            CreateBoards();
+            connecting.SetActive(false);
+            waitingForOpp.SetActive(false);
+            GameManager.Instance.ChangeGameState(GameState.STARTINGPHASE);
         }
 
         // Update is called once per frame

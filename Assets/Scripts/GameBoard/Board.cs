@@ -4,6 +4,7 @@ using TCGSim.CardScripts;
 using TCGSim;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public abstract class Board : MonoBehaviour
 {
@@ -103,7 +104,12 @@ public abstract class Board : MonoBehaviour
     {
         this.boardName = boardName;
         this.gameCustomID = gameCustomID;
-        LoadBoardElements();
+        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+    }
+
+    public virtual void GameManagerOnGameStateChange(GameState state)
+    {
+        
     }
 
     public virtual void InitPrefabs(GameObject handPrefab, GameObject characterAreaPrefab, GameObject costAreaPrefab, GameObject stageAreaPrefab,
@@ -162,7 +168,7 @@ public abstract class Board : MonoBehaviour
         for (int i = 0; i < 10; i++)
         {
             DonCard donCard = Instantiate(donPrefab, this.donDeckObject.transform).GetComponent<DonCard>();
-            donCard.Init(this, handObject, "DONCARD" + i);
+            donCard.Init(handObject, "DONCARD" + i);
             donCard.transform.SetAsFirstSibling();
             donCards.Add(donCard);
         }

@@ -25,7 +25,7 @@ namespace TCGSim
             if (!card.draggable) { return; }
             Debug.Log("OnEndDrag");
             card.transform.SetParent(this.transform);
-            card.playerBoard.GetComponent<Board>().enableDraggingOnTopDonCard();
+            PlayerBoard.Instance.enableDraggingOnTopDonCard();
         }
 
         public void OnPointerEnter(PointerEventData eventData)

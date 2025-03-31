@@ -26,6 +26,7 @@ namespace TCGSim
         private HubConnection connection;
         private TaskCompletionSource<bool> ConnectionTask;
         private TaskCompletionSource<bool> EnemyConnectionTask;
+        private TaskCompletionSource<bool> AddingToGroupTask;
 
         // Start is called before the first frame update
         void Start()
@@ -39,7 +40,7 @@ namespace TCGSim
 
         }
 
-        private async void Awake()
+        private void Awake()
         {
             if (Instance != null && Instance != this)
             {
@@ -49,10 +50,9 @@ namespace TCGSim
             {
                 Instance = this;
             }
-            await ConnectToServer();
         }
 
-        private async Task ConnectToServer()
+        public async Task ConnectToServer()
         {
             connection = new HubConnectionBuilder()
            .WithUrl(serverUrl + "/websocket")
@@ -83,7 +83,11 @@ namespace TCGSim
 
             connection.On<string>("AddedToClient", (message) =>
             {
-                Debug.Log("Message received: " + message);
+                Debug.Log(message);
+                if (AddingToGroupTask != null)
+                {
+                    AddingToGroupTask.TrySetResult(true);
+                }
             });
             await connection.StartAsync();
             Debug.Log("WebSocket connection is succesfull!");
@@ -93,7 +97,6 @@ namespace TCGSim
         {
             this.gameID = "TEST";
             this.playerName = playerName;
-            AddPlayerToGroupInSocket(this.gameID, this.playerName);
         }
 
         public async Task WaitForConnection()
@@ -117,9 +120,13 @@ namespace TCGSim
             await connection.InvokeAsync<string>("ReceiveMessageFromClient", gameID,message);
         }
 
-        public async void AddPlayerToGroupInSocket(string gameID,string playerName)
+        public async Task AddPlayerToGroupInSocket(string gameID,string playerName)
         {
+            Debug.Log("Adding player to the following group in socket: "+gameID);
+            AddingToGroupTask = new TaskCompletionSource<bool>();
             await connection.InvokeAsync<string>("AddClientToGroupByGameID",gameID,playerName);
+            await AddingToGroupTask.Task;
+            Debug.Log("Player added to group in socket");
         }
 
         private async void OnApplicationQuit()
