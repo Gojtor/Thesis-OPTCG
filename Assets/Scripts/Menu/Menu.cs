@@ -130,6 +130,7 @@ namespace TCGSim
             GameOptions.playerName = playerName;
             GameOptions.gameID = gameID;
             Debug.Log("Start Game");
+            Debug.Log(playerName + " ," + gameID);
             GameManager.Instance.ChangeGameState(GameState.WAITINGFOROPPONENT);
             SceneManager.LoadScene("GameBoard");
         }
@@ -139,6 +140,7 @@ namespace TCGSim
             GameOptions.playerName = playerName;
             GameOptions.gameID = gameID;
             Debug.Log("Connect to game");
+            Debug.Log(playerName + " ," + gameID);
             GameManager.Instance.ChangeGameState(GameState.CONNECTING);
             SceneManager.LoadScene("GameBoard");
         }

@@ -76,15 +76,16 @@ namespace TCGSim
             ServerCon.Instance.Init(gameCustomID, playerName);
             connecting = Instantiate(connectingPrefab, this.gameObject.transform);
             await ServerCon.Instance.ConnectToServer();
-            await ServerCon.Instance.AddPlayerToGroupInSocket(gameCustomID, playerName);
             CreateBoards();
             switch (GameManager.Instance.currentState)
             {
                 case GameState.CONNECTING:
+                    await ServerCon.Instance.AddPlayerToGroupInSocket(gameCustomID,playerName);
                     Debug.Log("Connecting!");
                     await ServerCon.Instance.WaitForConnection();
                     break;
                 case GameState.WAITINGFOROPPONENT:
+                    await ServerCon.Instance.CreateGroupInSocket(gameCustomID, playerName);
                     connecting.SetActive(false);
                     waitingForOpp = Instantiate(waitingForOpponentPrefab, this.gameObject.transform);
                     Debug.Log("Waiting For Opponent!");
@@ -94,7 +95,10 @@ namespace TCGSim
                     break;
             }
             connecting.SetActive(false);
-            waitingForOpp.SetActive(false);
+            if (waitingForOpp != null)
+            {
+                waitingForOpp.SetActive(false);
+            }
             GameManager.Instance.ChangeGameState(GameState.STARTINGPHASE);
         }
 
@@ -116,7 +120,7 @@ namespace TCGSim
                 cardPrefab,lifePrefab,keepBtnPrefab,mulliganBtnPrefab,donDeckPrefab,donPrefab);
             enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
                 cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab);
-            playerBoard.Init("PLAYERBOARD", gameCustomID);
+            playerBoard.Init("PLAYERBOARD", gameCustomID, playerName);
             enemyBoard.Init("ENEMYBOARD", gameCustomID);
             playerBoard.gameObject.transform.Translate(0, -235, 0);
             enemyBoard.gameObject.transform.Translate(0, 235, 0);

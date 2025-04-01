@@ -187,7 +187,8 @@ namespace TCGSim.CardScripts
             this.hand = hand;
             this.cardData.customCardID = customCardID;
             this.gameObject.name = this.cardData.customCardID;
-            this.cardData.playerName = PlayerBoard.Instance.boardName;
+            this.cardData.playerName = PlayerBoard.Instance.playerName;
+            this.cardData.gameCustomID = PlayerBoard.Instance.gameCustomID;
             UpdateParent();
         }
 

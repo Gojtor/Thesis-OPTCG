@@ -100,6 +100,14 @@ public abstract class Board : MonoBehaviour
     {
         
     }
+    public virtual void Init(string boardName, string gameCustomID, string playerName)
+    {
+        this.boardName = boardName;
+        this.gameCustomID = gameCustomID;
+        this.playerName = playerName;
+        GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+    }
+
     public virtual void Init(string boardName, string gameCustomID)
     {
         this.boardName = boardName;
@@ -243,6 +251,11 @@ public abstract class Board : MonoBehaviour
         {
             donDeckObject.transform.GetChild(donDeckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
         }
+    }
+
+    public void SetName(string name)
+    {
+        this.playerName = name;
     }
 
 }

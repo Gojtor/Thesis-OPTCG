@@ -29,7 +29,7 @@ namespace TCGSim
         {
             if (deckObject != null)
             {
-                Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
+                //Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
             }
             Debug.Log("Active dons: " + activeDon);
             if (costAreaObject != null)
@@ -68,9 +68,9 @@ namespace TCGSim
             }
         }
 
-        public override void Init(string boardName, string gameCustomID)
+        public override void Init(string boardName, string gameCustomID, string playerName)
         {
-            base.Init(boardName, gameCustomID); 
+            base.Init(boardName, gameCustomID, playerName); 
         }
 
         public override void LoadBoardElements()
@@ -196,7 +196,7 @@ namespace TCGSim
             }
         }
 
-        public void Mulligan()
+        public async void Mulligan()
         {
             handObject.ScaleHandBackFromStartingHand();
             List<Card> cardsInHandCurrently = handObject.hand.ToList();
@@ -216,9 +216,10 @@ namespace TCGSim
             CreateStartingLife();
             enableDraggingOnTopDeckCard();
             SendAllCardToDB();
+            await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
 
-        public void KeepHand()
+        public async void KeepHand()
         {
             foreach (Card card in handObject.hand)
             {
@@ -230,6 +231,7 @@ namespace TCGSim
             CreateStartingLife();
             enableDraggingOnTopDeckCard();
             SendAllCardToDB();
+            await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
 
         public void Shuffle<T>(IList<T> list)
@@ -278,17 +280,17 @@ namespace TCGSim
             foreach  (Card card in deckCards)
             {
                 card.UpdateParent();
-                StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
+                ServerCon.Instance.AddCardToInGameStateDB(card);
             }
             foreach (Card card in handObject.hand)
             {
                 card.UpdateParent();
-                StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
+                ServerCon.Instance.AddCardToInGameStateDB(card);
             }
             foreach (Card card in lifeObject.lifeCards)
             {
                 card.UpdateParent();
-                StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
+                ServerCon.Instance.AddCardToInGameStateDB(card);
             }
         }
 

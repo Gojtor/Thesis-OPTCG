@@ -27,6 +27,7 @@ namespace TCGSim
         private TaskCompletionSource<bool> ConnectionTask;
         private TaskCompletionSource<bool> EnemyConnectionTask;
         private TaskCompletionSource<bool> AddingToGroupTask;
+        private TaskCompletionSource<bool> GameGroupCreatedTask;
 
         // Start is called before the first frame update
         void Start()
@@ -67,13 +68,14 @@ namespace TCGSim
                 }
             });
 
-            connection.On<string>("EnemyConnected", (message) =>
+            connection.On<string,string>("EnemyConnected", (message,name) =>
             {
                 Debug.Log(message);
                 if (EnemyConnectionTask != null)
                 {
                     EnemyConnectionTask.TrySetResult(true);
                 }
+                EnemyBoard.Instance.SetName(name);
             });
 
             connection.On<string>("ReceiveMessage", (message) =>
@@ -81,7 +83,7 @@ namespace TCGSim
                 Debug.Log("Message received: " + message);
             });
 
-            connection.On<string>("AddedToClient", (message) =>
+            connection.On<string>("AddedToGroup", (message) =>
             {
                 Debug.Log(message);
                 if (AddingToGroupTask != null)
@@ -89,13 +91,43 @@ namespace TCGSim
                     AddingToGroupTask.TrySetResult(true);
                 }
             });
+
+            connection.On<string>("GameGroupCreated", (message) =>
+            {
+                Debug.Log(message);
+                if (GameGroupCreatedTask != null)
+                {
+                    GameGroupCreatedTask.TrySetResult(true);
+                }
+            });
+
+            connection.On<string>("GroupAlreadyExist", (message) =>
+            {
+                Debug.Log(message);
+            });
+
+            connection.On<string>("GroupDoesntExist", (message) =>
+            {
+                Debug.Log(message);
+            });
+
+            connection.On<string>("TwoPlayerAlreadyInGame", (message) =>
+            {
+                Debug.Log(message);
+            });
+
+            connection.On<string>("DoneWithStartingHand", (message) =>
+            {
+                EnemyBoard.Instance.CreateAfterStartingPhase();
+            });
+
             await connection.StartAsync();
             Debug.Log("WebSocket connection is succesfull!");
         }
 
         public void Init(string gameID,string playerName)
         {
-            this.gameID = "TEST";
+            this.gameID = gameID;
             this.playerName = playerName;
         }
 
@@ -103,7 +135,7 @@ namespace TCGSim
         {
             Debug.Log("Waiting for a connection...");
             ConnectionTask = new TaskCompletionSource<bool>();
-            await EnemyConnectionTask.Task; // Wait here until a message is received
+            await ConnectionTask.Task; // Wait here until a message is received
             Debug.Log("Connected");
         }
 
@@ -113,6 +145,7 @@ namespace TCGSim
             EnemyConnectionTask = new TaskCompletionSource<bool>();
             await EnemyConnectionTask.Task; // Wait here until a message is received
             Debug.Log("Enemy connected");
+            await connection.InvokeAsync<string>("ReAssureEnemyConnected", gameID);
         }
 
         public async void SendMessageToServer(string message)
@@ -126,7 +159,20 @@ namespace TCGSim
             AddingToGroupTask = new TaskCompletionSource<bool>();
             await connection.InvokeAsync<string>("AddClientToGroupByGameID",gameID,playerName);
             await AddingToGroupTask.Task;
+        }
+
+        public async Task CreateGroupInSocket(string gameID, string playerName)
+        {
+            Debug.Log("Adding player to the following group in socket: " + gameID);
+            GameGroupCreatedTask = new TaskCompletionSource<bool>();
+            await connection.InvokeAsync<string>("CreateGroupByGameIDAndAddFirstClient", gameID, playerName);
+            await GameGroupCreatedTask.Task;
             Debug.Log("Player added to group in socket");
+        }
+
+        public async Task DoneWithMulliganOrKeep()
+        {
+            await connection.InvokeAsync<string>("DoneWithMulliganOrKeep", gameID);
         }
 
         private async void OnApplicationQuit()
@@ -240,6 +286,36 @@ namespace TCGSim
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
                         //Debug.Log("Received: " + jsonResponse);
+                        return JsonConvert.DeserializeObject<List<CardData>>(jsonResponse);
+
+                }
+                return null;
+            }
+
+        }
+        public async Task<List<CardData>> GetAllCardByGameIDAndPlayerName(string gameID,string playerName)
+        {
+            string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameIDAndPlayer?";
+            //Debug.Log(url + gameID);
+            using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID+ "&playerName=" + playerName))
+            {
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                    await Task.Yield();
+
+                switch (request.result)
+                {
+                    case UnityWebRequest.Result.ConnectionError:
+                    case UnityWebRequest.Result.DataProcessingError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.Success:
+                        string jsonResponse = request.downloadHandler.text;
+                        Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<List<CardData>>(jsonResponse);
 
                 }

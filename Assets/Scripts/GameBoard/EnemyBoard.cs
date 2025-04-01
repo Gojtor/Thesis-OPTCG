@@ -10,7 +10,7 @@ using UnityEngine;
 public class EnemyBoard : Board
 {
     public static EnemyBoard Instance { get; private set; }
-    private List<Card> cards;
+    private List<Card> cards = new List<Card>();
     // Start is called before the first frame update
     void Start()
     {
@@ -43,19 +43,44 @@ public class EnemyBoard : Board
         Debug.Log(boardName);  
     }
 
-    public override async void GameManagerOnGameStateChange(GameState state)
+    public override void GameManagerOnGameStateChange(GameState state)
     {
         if (state == GameState.STARTINGPHASE)
         {
             LoadBoardElements();
-            cards = await CreateCardsFromDeck();
+            CreateStartingPhaseBoard();
         }
     }
 
-    public async Task<List<Card>> CreateCardsFromDeck()
+    public void CreateStartingPhaseBoard()
+    {
+        GameObject deckCardObj = Instantiate(cardPrefab, deckObject.transform);
+        deckCardObj.AddComponent<CharacterCard>();
+        Card deckCard = deckCardObj.GetComponent<CharacterCard>();
+        cards.Add(deckCard);
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject cardObj = Instantiate(cardPrefab, handObject.transform);
+            cardObj.AddComponent<CharacterCard>();
+            Card card = cardObj.GetComponent<CharacterCard>();
+            cards.Add(card);
+        }
+    }
+
+    public async void CreateAfterStartingPhase()
+    {
+        foreach (Card card in cards)
+        {
+            Destroy(card.gameObject);
+        }
+        cards.Clear();
+        //cards = await GetEnemyCardsFromGameDB();
+    }
+
+    public async Task<List<Card>> GetEnemyCardsFromGameDB()
     {
         List<Card> deck = new List<Card>();
-        List<CardData> cardsFromDB = await ServerCon.Instance.GetAllCardByGameID("TEST");
+        List<CardData> cardsFromDB = await ServerCon.Instance.GetAllCardByGameIDAndPlayerName(this.gameCustomID,this.playerName);
         foreach (CardData cardData in cardsFromDB)
         {
             GameObject cardObj;
