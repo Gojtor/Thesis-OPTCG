@@ -105,6 +105,7 @@ public abstract class Board : MonoBehaviour
         this.boardName = boardName;
         this.gameCustomID = gameCustomID;
         this.playerName = playerName;
+        Debug.Log(boardName + " called init " + playerName);
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
     }
 

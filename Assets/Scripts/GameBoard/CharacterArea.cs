@@ -19,7 +19,7 @@ namespace TCGSim
         {
 
         }
-        public void OnDrop(PointerEventData eventData)
+        public async void OnDrop(PointerEventData eventData)
         {
             Card card = eventData.pointerDrag.GetComponent<Card>();
             if (!card.draggable || card == null) { return; }
@@ -28,6 +28,8 @@ namespace TCGSim
             card.UpdateParent();
             card.gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
             ServerCon.Instance.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);
+            await ServerCon.Instance.UpdateCardAtInGameStateDB(card);
+            await ServerCon.Instance.UpdateMyCardAtEnemy(card.cardData.customCardID);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

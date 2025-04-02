@@ -82,10 +82,10 @@ namespace TCGSim.CardScripts
                     {
                         this.SetCardActive();
                         PlayerBoard.Instance.RestDons(this.cardData.cost);
+                        this.draggable = false;
                     }
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
-                    this.draggable = false;
                     break;
                 case CardType.DON:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
@@ -96,7 +96,7 @@ namespace TCGSim.CardScripts
                     }
                     else
                     {
-                        cardImage.raycastTarget = false;
+                        this.draggable = false;
                         this.SetCardActive();
                     }
                     canvasGroup.alpha = 1f;
@@ -112,7 +112,7 @@ namespace TCGSim.CardScripts
                     else
                     {
                         SnapCardBackToParentPos(objectAtDragEnd.transform);
-                        cardImage.raycastTarget = false;
+                        this.draggable = false;
                         PlayerBoard.Instance.RestDons(this.cardData.cost);
                     }
                     canvasGroup.alpha = 1f;
@@ -218,7 +218,12 @@ namespace TCGSim.CardScripts
         {
             this.cardData.currentParent = this.transform.parent.name;
         }
-        
+
+        public void UpdateCardAfterDataLoad()
+        {
+            this.transform.SetParent(PlayerBoard.Instance.GetParentByNameString(this.cardData.currentParent).transform);
+        }
+
         public void SetCardActive()
         {
             this.cardData.active = true;

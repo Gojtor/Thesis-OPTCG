@@ -81,7 +81,7 @@ namespace TCGSim
             {
                 case GameState.CONNECTING:
                     await ServerCon.Instance.AddPlayerToGroupInSocket(gameCustomID,playerName);
-                    Debug.Log("Connecting!");
+                    Debug.Log(playerName+"is connecting!");
                     await ServerCon.Instance.WaitForConnection();
                     break;
                 case GameState.WAITINGFOROPPONENT:

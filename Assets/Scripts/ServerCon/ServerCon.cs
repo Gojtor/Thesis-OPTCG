@@ -12,6 +12,7 @@ using TCGSim.CardScripts;
 using System.Text;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
+using System.Net.Http;
 
 namespace TCGSim
 {
@@ -59,13 +60,14 @@ namespace TCGSim
            .WithUrl(serverUrl + "/websocket")
            .Build();
 
-            connection.On<string>("Connected", (message) =>
+            connection.On<string,string>("Connected", (message,enemyName) =>
             {
-                Debug.Log(message);
+                Debug.Log(message+enemyName);
                 if (ConnectionTask != null)
                 {
                     ConnectionTask.TrySetResult(true);
                 }
+                EnemyBoard.Instance.SetName(enemyName);
             });
 
             connection.On<string,string>("EnemyConnected", (message,name) =>
@@ -76,6 +78,7 @@ namespace TCGSim
                     EnemyConnectionTask.TrySetResult(true);
                 }
                 EnemyBoard.Instance.SetName(name);
+                Debug.Log("Enemy name is: " + EnemyBoard.Instance.playerName);
             });
 
             connection.On<string>("ReceiveMessage", (message) =>
@@ -116,9 +119,22 @@ namespace TCGSim
                 Debug.Log(message);
             });
 
-            connection.On<string>("DoneWithStartingHand", (message) =>
+            connection.On<string>("DoneWithStartingHand", async (message) =>
             {
-                EnemyBoard.Instance.CreateAfterStartingPhase();
+                Debug.Log(message);
+                await UpdateEnemyBoard();
+            });
+
+            connection.On<string>("UpdateEnemyBoard", async (message) =>
+            {
+                Debug.Log(message);
+                await UpdateEnemyBoard();
+            });
+
+            connection.On<string>("UpdateThisEnemyCard", async (message) =>
+            {
+                Debug.Log(message);
+                await UpdateEnemyCard(message);
             });
 
             await connection.StartAsync();
@@ -134,6 +150,7 @@ namespace TCGSim
         public async Task WaitForConnection()
         {
             Debug.Log("Waiting for a connection...");
+            await connection.InvokeAsync<string>("ConnectedAsEnemy", gameID,playerName);
             ConnectionTask = new TaskCompletionSource<bool>();
             await ConnectionTask.Task; // Wait here until a message is received
             Debug.Log("Connected");
@@ -145,7 +162,7 @@ namespace TCGSim
             EnemyConnectionTask = new TaskCompletionSource<bool>();
             await EnemyConnectionTask.Task; // Wait here until a message is received
             Debug.Log("Enemy connected");
-            await connection.InvokeAsync<string>("ReAssureEnemyConnected", gameID);
+            await connection.InvokeAsync<string>("ReAssureEnemyConnected", gameID,playerName);
         }
 
         public async void SendMessageToServer(string message)
@@ -173,6 +190,27 @@ namespace TCGSim
         public async Task DoneWithMulliganOrKeep()
         {
             await connection.InvokeAsync<string>("DoneWithMulliganOrKeep", gameID);
+        }
+        public async Task UpdateMyBoardAtEnemy()
+        {
+            await connection.InvokeAsync<string>("UpdateMyBoardAtEnemy", gameID);
+        }
+
+        public async Task UpdateMyCardAtEnemy(string customCardID)
+        {
+            await connection.InvokeAsync<string>("UpdateMyCardAtEnemy", gameID,customCardID);
+        }
+
+        public async Task UpdateEnemyBoard()
+        {
+            Debug.Log("UpdateEnemyBoard called! Enemy name: "+EnemyBoard.Instance.playerName+"! My name: "+PlayerBoard.Instance.playerName);
+            await EnemyBoard.Instance.UpdateBoardFromGameDB();
+        }
+
+        public async Task UpdateEnemyCard(string customCardID)
+        {
+            Debug.Log("UpdateEnemyBoard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
+            await EnemyBoard.Instance.UpdateCardFromGameDB(customCardID);
         }
 
         private async void OnApplicationQuit()
@@ -235,12 +273,11 @@ namespace TCGSim
 
         }
         
-        public IEnumerator AddCardToInGameStateDB(Card card)
+        public async Task AddCardToInGameStateDB(Card card)
         {
             CardData cardData = card.cardData;
             string url = "http://localhost:5000/api/TCG/SetCardToGameDB";
             string json = JsonConvert.SerializeObject(cardData);
-            //Debug.Log("Sent JSON: " + json);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
             using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
@@ -249,18 +286,45 @@ namespace TCGSim
                 request.downloadHandler = new DownloadHandlerBuffer();
                 request.SetRequestHeader("Content-Type", "application/json");
 
-                yield return request.SendWebRequest();
+                var operation = request.SendWebRequest();
 
-                if (request.result == UnityWebRequest.Result.Success)
+                while (!operation.isDone) // Wait until the request is done
                 {
-                    //Debug.Log("Json sent successfully! Reply: " + request.downloadHandler.text);
+                    await Task.Yield(); // Let Unity handle the next frame
                 }
-                else
+
+                if (request.result != UnityWebRequest.Result.Success)
                 {
                     Debug.LogError("Error: " + request.error);
                 }
             }
+        }
 
+        public async Task UpdateCardAtInGameStateDB(Card card)
+        {
+            CardData cardData = card.cardData;
+            string url = "http://localhost:5000/api/TCG/UpdateCardInGameDB";
+            string json = JsonConvert.SerializeObject(cardData);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+            {
+                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone) // Wait until the request is done
+                {
+                    await Task.Yield(); // Let Unity handle the next frame
+                }
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error: " + request.error);
+                }
+            }
         }
 
         public async Task<List<CardData>> GetAllCardByGameID(string gameID)
@@ -293,11 +357,11 @@ namespace TCGSim
             }
 
         }
-        public async Task<List<CardData>> GetAllCardByGameIDAndPlayerName(string gameID,string playerName)
+        public async Task<List<CardData>> GetAllCardByGameIDAndPlayerName(string gameID, string playerName)
         {
             string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameIDAndPlayer?";
             //Debug.Log(url + gameID);
-            using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID+ "&playerName=" + playerName))
+            using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName))
             {
                 var operation = request.SendWebRequest();
 
@@ -317,6 +381,37 @@ namespace TCGSim
                         string jsonResponse = request.downloadHandler.text;
                         Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<List<CardData>>(jsonResponse);
+
+                }
+                return null;
+            }
+
+        }
+
+        public async Task<CardData> GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(string gameID, string playerName,string customCardID)
+        {
+            string url = "http://localhost:5000/api/TCG/GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID?";
+            Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID);
+            using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName+ "&customCardID="+customCardID))
+            {
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                    await Task.Yield();
+
+                switch (request.result)
+                {
+                    case UnityWebRequest.Result.ConnectionError:
+                    case UnityWebRequest.Result.DataProcessingError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.Success:
+                        string jsonResponse = request.downloadHandler.text;
+                        Debug.Log("Received: " + jsonResponse);
+                        return JsonConvert.DeserializeObject<CardData>(jsonResponse);
 
                 }
                 return null;

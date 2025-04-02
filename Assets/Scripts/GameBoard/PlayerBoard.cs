@@ -39,13 +39,14 @@ namespace TCGSim
         }
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(this);
-            }
-            else
+            if (Instance == null)
             {
                 Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Destroy(gameObject);
+                return;
             }
         }
 
@@ -215,7 +216,7 @@ namespace TCGSim
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
             enableDraggingOnTopDeckCard();
-            SendAllCardToDB();
+            await SendAllCardToDB();
             await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
 
@@ -230,7 +231,7 @@ namespace TCGSim
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
             enableDraggingOnTopDeckCard();
-            SendAllCardToDB();
+            await SendAllCardToDB();
             await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
 
@@ -270,27 +271,27 @@ namespace TCGSim
             }
         }
 
-        public void SendCardToDB(Card card)
+        public async void SendCardToDB(Card card)
         {
-            StartCoroutine(ServerCon.Instance.AddCardToInGameStateDB(card));
+            await ServerCon.Instance.AddCardToInGameStateDB(card);
         }
 
-        public void SendAllCardToDB()
+        public async Task SendAllCardToDB()
         {
             foreach  (Card card in deckCards)
             {
                 card.UpdateParent();
-                ServerCon.Instance.AddCardToInGameStateDB(card);
+                await ServerCon.Instance.AddCardToInGameStateDB(card);
             }
             foreach (Card card in handObject.hand)
             {
                 card.UpdateParent();
-                ServerCon.Instance.AddCardToInGameStateDB(card);
+                await ServerCon.Instance.AddCardToInGameStateDB(card);
             }
             foreach (Card card in lifeObject.lifeCards)
             {
                 card.UpdateParent();
-                ServerCon.Instance.AddCardToInGameStateDB(card);
+                await ServerCon.Instance.AddCardToInGameStateDB(card);
             }
         }
 

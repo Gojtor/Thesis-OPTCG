@@ -33,6 +33,10 @@ namespace TCGSim
 
         public void AddCardToLife(Card card)
         {
+            if (currentTopLifePos == 105)
+            {
+                currentTopLifePos = -45;
+            }
             card.transform.position = this.transform.position;
             card.gameObject.transform.Translate(0, currentTopLifePos, 0);
             currentTopLifePos += 30;
