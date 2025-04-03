@@ -218,6 +218,12 @@ public abstract class Board : MonoBehaviour
                 return handObject.gameObject;
             case "Life":
                 return lifeObject.gameObject;
+            case "CharacterArea":
+                return characterAreaObject.gameObject;
+            case "StageArea":
+                return stageObject.gameObject;
+            case "CostArea":
+                return costAreaObject.gameObject;
             default:
                 return this.gameObject;
 

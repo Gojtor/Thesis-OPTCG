@@ -92,14 +92,22 @@ namespace TCGSim
 
         public async Task UpdateCardFromGameDB(string customCardID)
         {
-            CardData newCardData = new CardData();
             UnityMainThreadDispatcher.Enqueue(async () =>
             {
                 CardData newCardData = await ServerCon.Instance.GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(this.gameCustomID, this.playerName, customCardID);
+                Card card;
+                if (customCardID.Contains("DON"))
+                {
+                    card = donCards.Where(x => x.cardData.customCardID == newCardData.customCardID).Single();
+                }
+                else
+                {
+                    card = cards.Where(x => x.cardData.customCardID == newCardData.customCardID).Single();
+                }
+                card.LoadDataFromCardData(newCardData);
+                card.UpdateEnemyCardAfterDataLoad();
             });
-            Card card = cards.Where(x => x.cardData.customCardID == newCardData.customCardID).Single();
-            card.LoadDataFromCardData(newCardData);
-            card.UpdateCardAfterDataLoad();
+            
             await Task.CompletedTask;
         }
 
@@ -129,15 +137,16 @@ namespace TCGSim
                         card = cardObj.GetComponent<EventCard>();
                         break;
                     default:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
-                        cardObj.AddComponent<Card>();
-                        card = cardObj.GetComponent<Card>();
+                        card = null;
                         break;
                 }
-                card.LoadDataFromCardData(cardData);
-                card.Init();
-                this.SetCardParentByNameString(cardData.currentParent, card);
-                deck.Add(card);
+                if(card != null)
+                {
+                    card.LoadDataFromCardData(cardData);
+                    card.Init();
+                    this.SetCardParentByNameString(cardData.currentParent, card);
+                    deck.Add(card);
+                }  
             }
             return deck;
         }

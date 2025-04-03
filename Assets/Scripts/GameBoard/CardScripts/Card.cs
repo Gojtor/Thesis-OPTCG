@@ -48,9 +48,15 @@ namespace TCGSim.CardScripts
             {
                 FlipCard();
             }
+            if (this.cardData.cardType != CardType.DON)
+            {
+                this.transform.SetParent(hand.transform);
+                this.UpdateParent();
+                SendCardToServer();
+            }
+            canvasGroup.blocksRaycasts = false;
             this.transform.SetParent(this.transform.parent.parent);
             PlayerBoard.Instance.enableDraggingOnTopDeckCard();
-            canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = .8f;
             Debug.Log("OnBeginDrag");
         }
@@ -72,7 +78,7 @@ namespace TCGSim.CardScripts
                     if (hand == null)
                         Debug.LogError("hand is NULL in OnEndDrag!");
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
-                    if (objectAtDragEnd.GetComponent<CharacterArea>() != PlayerBoard.Instance.gameObject.GetComponentInChildren<CharacterArea>() || objectAtDragEnd.transform.childCount == 6
+                    if (objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform || objectAtDragEnd.transform.childCount == 6
                         || this.cardData.cost > PlayerBoard.Instance.activeDon)
                     {
                         SnapCardBackToParentPos(hand.transform);
@@ -84,21 +90,42 @@ namespace TCGSim.CardScripts
                         PlayerBoard.Instance.RestDons(this.cardData.cost);
                         this.draggable = false;
                     }
+                    canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
                     break;
                 case CardType.DON:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
-                    if (objectAtDragEnd.GetComponent<CostArea>() != PlayerBoard.Instance.gameObject.GetComponentInChildren<CostArea>())
+                    if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform)
                     {
-                        SnapCardBackToParentPos(PlayerBoard.Instance.donDeckObject.transform);
-                        FlipCard();
+                        if (this.cardData.active)
+                        {
+                            SnapCardBackToParentPos(PlayerBoard.Instance.costAreaObject.transform);
+                        }
+                        else
+                        {
+                            SnapCardBackToParentPos(PlayerBoard.Instance.donDeckObject.transform);
+                            FlipCard();
+                        }     
                     }
                     else
                     {
-                        this.draggable = false;
                         this.SetCardActive();
                     }
+                    if(objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
+                    {
+                        SnapCardBackToParentPos(PlayerBoard.Instance.costAreaObject.transform);
+                        this.SetCardActive();
+                        FlipCard();
+                        PlayerBoard.Instance.enableDraggingOnTopDonCard();
+                        this.UpdateParent();
+                        SendCardToServer();
+                    }
+                    if(objectAtDragEnd.gameObject.GetComponent<CharacterCard>() != null)
+                    {
+                        AttachDon(objectAtDragEnd.gameObject.GetComponent<Card>());
+                    }
+                    canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
                     break;
@@ -112,19 +139,43 @@ namespace TCGSim.CardScripts
                     else
                     {
                         SnapCardBackToParentPos(objectAtDragEnd.transform);
-                        this.draggable = false;
+                        this.UpdateParent();
+                        SendCardToServer();
                         PlayerBoard.Instance.RestDons(this.cardData.cost);
                     }
+                    canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
                     break;
                 default:
                     SnapCardBackToParentPos(hand.transform);
+                    canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
                     Debug.Log("OnEndDrag");
                     break;
             }
 
+        }
+
+        private void AttachDon(Card card)
+        {
+            Canvas cardCanvas = card.GetComponent<Canvas>();
+            cardCanvas.overrideSorting = true;
+            cardCanvas.sortingOrder = 2;
+            Canvas thisCardCanvas = this.GetComponent<Canvas>();
+            thisCardCanvas.overrideSorting = true;
+            thisCardCanvas.sortingOrder = 1;
+            card.GetComponent<LineRenderer>().sortingOrder = 3;
+            SnapCardBackToParentPos(card.transform);
+            this.transform.Translate(0, -30, 0);
+            this.SetCardNotActive();
+            this.draggable = false;
+        }
+
+        private async void SendCardToServer()
+        {
+            await ServerCon.Instance.UpdateCardAtInGameStateDB(this);
+            await ServerCon.Instance.UpdateMyCardAtEnemy(this.cardData.customCardID);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -219,9 +270,15 @@ namespace TCGSim.CardScripts
             this.cardData.currentParent = this.transform.parent.name;
         }
 
-        public void UpdateCardAfterDataLoad()
+        public void UpdateEnemyCardAfterDataLoad()
         {
-            this.transform.SetParent(PlayerBoard.Instance.GetParentByNameString(this.cardData.currentParent).transform);
+            this.transform.SetParent(EnemyBoard.Instance.GetParentByNameString(this.cardData.currentParent).transform);
+            Transform newParent = this.transform.parent;
+            if (newParent == EnemyBoard.Instance.characterAreaObject.transform || newParent==EnemyBoard.Instance.stageObject.transform || newParent == EnemyBoard.Instance.costAreaObject.transform)
+            {
+                this.FlipCard();
+            }
+            this.transform.position = this.transform.parent.position;
         }
 
         public void SetCardActive()
@@ -238,7 +295,6 @@ namespace TCGSim.CardScripts
         {
             this.transform.SetParent(newParent);
             this.transform.position = this.transform.parent.position;
-            canvasGroup.blocksRaycasts = true;
         }
 
         public void SetDraggable(bool isDraggable)

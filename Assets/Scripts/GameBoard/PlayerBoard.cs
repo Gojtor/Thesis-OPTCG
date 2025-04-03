@@ -293,6 +293,11 @@ namespace TCGSim
                 card.UpdateParent();
                 await ServerCon.Instance.AddCardToInGameStateDB(card);
             }
+            foreach (Card card in donCards)
+            {
+                card.UpdateParent();
+                await ServerCon.Instance.AddCardToInGameStateDB(card);
+            }
         }
 
         public void RestDons(int donCountToRest)

@@ -22,14 +22,20 @@ namespace TCGSim
         public async void OnDrop(PointerEventData eventData)
         {
             Card card = eventData.pointerDrag.GetComponent<Card>();
-            if (!card.draggable || card == null) { return; }
+            if (!card.draggable || card == null || 
+                eventData.pointerDrag.gameObject.GetComponent<DonCard>() != null ||
+                eventData.pointerDrag.gameObject.GetComponent<StageCard>() != null) 
+            { return; }
+
             Debug.Log("OnEndDrag");
             card.transform.SetParent(this.transform);
             card.UpdateParent();
-            card.gameObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
-            ServerCon.Instance.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);
-            await ServerCon.Instance.UpdateCardAtInGameStateDB(card);
-            await ServerCon.Instance.UpdateMyCardAtEnemy(card.cardData.customCardID);
+            if (card.transform.parent == PlayerBoard.Instance.characterAreaObject.transform)
+            {
+                ServerCon.Instance.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);
+                await ServerCon.Instance.UpdateCardAtInGameStateDB(card);
+                await ServerCon.Instance.UpdateMyCardAtEnemy(card.cardData.customCardID);
+            }
         }
 
         public void OnPointerEnter(PointerEventData eventData)

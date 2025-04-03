@@ -28,6 +28,7 @@ namespace TCGSim.CardScripts
             if (this.cardData.active)
             {
                 this.cardData.active = false;
+                this.draggable = false;
                 this.transform.Rotate(0, 0, 90);
             }           
         }
@@ -37,6 +38,7 @@ namespace TCGSim.CardScripts
             if (!this.cardData.active)
             {
                 this.cardData.active = true;
+                this.draggable = true;
                 this.transform.Rotate(0, 0, -90);
             }          
         }
