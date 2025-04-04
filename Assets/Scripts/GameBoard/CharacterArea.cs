@@ -24,12 +24,14 @@ namespace TCGSim
             Card card = eventData.pointerDrag.GetComponent<Card>();
             if (!card.draggable || card == null || 
                 eventData.pointerDrag.gameObject.GetComponent<DonCard>() != null ||
-                eventData.pointerDrag.gameObject.GetComponent<StageCard>() != null) 
+                eventData.pointerDrag.gameObject.GetComponent<StageCard>() != null
+                || card.cardData.cost>PlayerBoard.Instance.activeDon) 
             { return; }
 
-            Debug.Log("OnEndDrag");
+            //Debug.Log("OnEndDrag");
             card.transform.SetParent(this.transform);
             card.UpdateParent();
+            card.SetCardVisibility(CardResources.CardVisibility.BOTH);
             if (card.transform.parent == PlayerBoard.Instance.characterAreaObject.transform)
             {
                 ServerCon.Instance.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);

@@ -20,7 +20,6 @@ namespace TCGSim.CardScripts
        
         //Init variables
         private Hand hand = null;
-        public CardVisibility cardVisibility { get; private set; } = CardVisibility.NONE;
 
         // Start is called before the first frame update
         void Start()
@@ -56,9 +55,8 @@ namespace TCGSim.CardScripts
             }
             canvasGroup.blocksRaycasts = false;
             this.transform.SetParent(this.transform.parent.parent);
-            PlayerBoard.Instance.enableDraggingOnTopDeckCard();
             canvasGroup.alpha = .8f;
-            Debug.Log("OnBeginDrag");
+            //Debug.Log("OnBeginDrag");
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -74,10 +72,8 @@ namespace TCGSim.CardScripts
             }
             switch (this.cardData.cardType)
             {
-                case CardType.CHARACTER:
-                    if (hand == null)
-                        Debug.LogError("hand is NULL in OnEndDrag!");
-                    Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
+                case CardType.CHARACTER:;
+                    //Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
                     if (objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform || objectAtDragEnd.transform.childCount == 6
                         || this.cardData.cost > PlayerBoard.Instance.activeDon)
                     {
@@ -92,7 +88,7 @@ namespace TCGSim.CardScripts
                     }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
-                    Debug.Log("OnEndDrag");
+                    //Debug.Log("OnEndDrag");
                     break;
                 case CardType.DON:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
@@ -108,26 +104,22 @@ namespace TCGSim.CardScripts
                             FlipCard();
                         }     
                     }
-                    else
-                    {
-                        this.SetCardActive();
-                    }
                     if(objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
                     {
                         SnapCardBackToParentPos(PlayerBoard.Instance.costAreaObject.transform);
                         this.SetCardActive();
-                        FlipCard();
-                        PlayerBoard.Instance.enableDraggingOnTopDonCard();
                         this.UpdateParent();
+                        this.SetCardVisibility(CardResources.CardVisibility.BOTH);
                         SendCardToServer();
                     }
-                    if(objectAtDragEnd.gameObject.GetComponent<CharacterCard>() != null)
+                    CharacterCard charCard = objectAtDragEnd.gameObject.GetComponent<CharacterCard>();
+                    if(charCard != null && charCard.transform.parent.parent.GetComponent<PlayerBoard>() != null && charCard.transform.parent.GetComponent<CharacterArea>() != null)
                     {
                         AttachDon(objectAtDragEnd.gameObject.GetComponent<Card>());
                     }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
-                    Debug.Log("OnEndDrag");
+                    //Debug.Log("OnEndDrag");
                     break;
                 case CardType.STAGE:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
@@ -140,18 +132,19 @@ namespace TCGSim.CardScripts
                     {
                         SnapCardBackToParentPos(objectAtDragEnd.transform);
                         this.UpdateParent();
+                        this.SetCardVisibility(CardResources.CardVisibility.BOTH);
                         SendCardToServer();
                         PlayerBoard.Instance.RestDons(this.cardData.cost);
                     }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
-                    Debug.Log("OnEndDrag");
+                    //Debug.Log("OnEndDrag");
                     break;
                 default:
                     SnapCardBackToParentPos(hand.transform);
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
-                    Debug.Log("OnEndDrag");
+                    //Debug.Log("OnEndDrag");
                     break;
             }
 
@@ -182,13 +175,13 @@ namespace TCGSim.CardScripts
         {
             if (!draggable) { return; }
             this.transform.position = eventData.position;
-            Debug.Log("OnDrag");
+            //Debug.Log("OnDrag");
         }
 
         public void OnDrop(PointerEventData eventData)
         {
             if (!draggable) { return; }
-            Debug.Log("OnDrop");
+            //Debug.Log("OnDrop");
         }
 
         public void FlipCard()
@@ -213,12 +206,13 @@ namespace TCGSim.CardScripts
                 {
                     cardImage.sprite = Resources.Load<Sprite>("Cards/donback");
                     isImgLoaded = !isImgLoaded;
+                    cardData.cardVisibility = CardVisibility.NONE;
                 }
                 else
                 {
                     cardImage.sprite = Resources.Load<Sprite>("Cards/cardback");
                     isImgLoaded = !isImgLoaded;
-                    cardVisibility = CardVisibility.NONE;
+                    cardData.cardVisibility = CardVisibility.NONE;
                 }   
             }
         }
@@ -254,12 +248,12 @@ namespace TCGSim.CardScripts
         }
         public void SetCardVisibility(CardVisibility visibility)
         {
-            this.cardVisibility = visibility;
+            this.cardData.cardVisibility = visibility;
         }
 
         public void CheckCardVisibility()
         {
-            if (cardVisibility == CardVisibility.PLAYERBOARD && !isImgLoaded)
+            if ((cardData.cardVisibility == CardVisibility.PLAYERBOARD || cardData.cardVisibility == CardVisibility.BOTH) && !isImgLoaded)
             {
                 FlipCard();
             }
@@ -274,9 +268,13 @@ namespace TCGSim.CardScripts
         {
             this.transform.SetParent(EnemyBoard.Instance.GetParentByNameString(this.cardData.currentParent).transform);
             Transform newParent = this.transform.parent;
-            if (newParent == EnemyBoard.Instance.characterAreaObject.transform || newParent==EnemyBoard.Instance.stageObject.transform || newParent == EnemyBoard.Instance.costAreaObject.transform)
+            if(this.GetComponent<DonCard>()!=null && !this.cardData.active)
             {
-                this.FlipCard();
+                this.GetComponent<DonCard>().RestDon();
+            }
+            if (this.GetComponent<DonCard>() != null && this.cardData.active)
+            {
+                this.GetComponent<DonCard>().RestandDon();
             }
             this.transform.position = this.transform.parent.position;
         }

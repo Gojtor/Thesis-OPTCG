@@ -131,6 +131,7 @@ MonoBehaviour:
   donPrefab: {fileID: 4947900133005985141, guid: 1e3016a665ae4634a8870b8d5616d18b, type: 3}
   waitingForOpponentPrefab: {fileID: 1790130609298053966, guid: 4fef1ee17ad3c654c9b199a34e77919e, type: 3}
   connectingPrefab: {fileID: 2098526775852076597, guid: 8ccefe64dd86cf04aaff0ae233534c39, type: 3}
+  endOfTurnBtnPrefab: {fileID: 1067700984236907855, guid: fd98d19f980b95f46b7242bc0303de76, type: 3}
 --- !u!1 &7425409318985540678
 GameObject:
   m_ObjectHideFlags: 0

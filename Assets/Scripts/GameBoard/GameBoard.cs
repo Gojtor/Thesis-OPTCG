@@ -58,6 +58,9 @@ namespace TCGSim
 
         [SerializeField]
         public GameObject connectingPrefab;
+
+        [SerializeField]
+        public GameObject endOfTurnBtnPrefab;
         #endregion
 
         private GameObject waitingForOpp;
@@ -117,9 +120,9 @@ namespace TCGSim
             EnemyBoard enemyBoard = enemyBoardObj.GetComponent<EnemyBoard>();
             PlayerBoard playerBoard = playerBoardObj.GetComponent<PlayerBoard>();
             playerBoard.InitPrefabs(handPrefab,characterAreaPrefab,costAreaPrefab,stageAreaPrefab,deckPrefab,leaderPrefab,trashPrefab,
-                cardPrefab,lifePrefab,keepBtnPrefab,mulliganBtnPrefab,donDeckPrefab,donPrefab);
+                cardPrefab,lifePrefab,keepBtnPrefab,mulliganBtnPrefab,donDeckPrefab,donPrefab, endOfTurnBtnPrefab);
             enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
-                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab);
+                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab);
             playerBoard.Init("PLAYERBOARD", gameCustomID, playerName);
             enemyBoard.Init("ENEMYBOARD", gameCustomID);
             playerBoard.gameObject.transform.Translate(0, -235, 0);

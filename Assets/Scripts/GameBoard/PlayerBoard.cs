@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TCGSim.CardResources;
 using TCGSim.CardScripts;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,6 +18,8 @@ namespace TCGSim
     public class PlayerBoard : Board
     {
         public static PlayerBoard Instance { get; private set; }
+
+        private bool firstRound = true;
 
         // Start is called before the first frame update
         private void Start()
@@ -35,7 +38,7 @@ namespace TCGSim
             if (costAreaObject != null)
             {
                 activeDon = costAreaObject.GetActiveDonCount();
-            }    
+            }
         }
         private void Awake()
         {
@@ -50,28 +53,9 @@ namespace TCGSim
             }
         }
 
-        public override async void GameManagerOnGameStateChange(GameState state)
-        {
-            if (state == GameState.STARTINGPHASE)
-            {
-                this.LoadBoardElements();
-                Shuffle<string>(deckString);
-                deckCards = await CreateCardsFromDeck();
-                Shuffle<Card>(deckCards);
-                ReassingOrderAfterShuffle();
-                Debug.Log(boardName);
-                CreateStartingHand();
-                if (boardName == "PLAYERBOARD")
-                {
-                    handObject.ScaleHandForStartingHand();
-                    LoadMulliganKeepButtons();
-                }
-            }
-        }
-
         public override void Init(string boardName, string gameCustomID, string playerName)
         {
-            base.Init(boardName, gameCustomID, playerName); 
+            base.Init(boardName, gameCustomID, playerName);
         }
 
         public override void LoadBoardElements()
@@ -94,7 +78,15 @@ namespace TCGSim
                 mulliganBtn.onClick.AddListener(Mulligan);
             }
         }
-
+        public void CreateEndOfTurnBtn()
+        {
+            endOfTurnBtn = Instantiate(endOfTurnBtnPrefab, this.gameObject.transform).GetComponent<Button>();
+            endOfTurnBtn.gameObject.SetActive(false);
+            if (keepBtn != null)
+            {
+                endOfTurnBtn.onClick.AddListener(EndOfTurnTrigger);
+            }
+        }
         public void CreateADeck()
         {
             deckString = new List<string>
@@ -161,7 +153,7 @@ namespace TCGSim
                     card.SetCardNotActive();
                     card.Init(handObject, cardNumber + "-" + i);
                     deck.Add(card);
-                } 
+                }
             }
             return deck;
         }
@@ -170,7 +162,7 @@ namespace TCGSim
         {
             if (deckObject.transform.childCount > 0)
             {
-                deckObject.transform.GetChild(deckObject.transform.childCount-1).GetComponent<Card>().ChangeDraggable(true);
+                deckObject.transform.GetChild(deckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
             }
         }
 
@@ -179,7 +171,7 @@ namespace TCGSim
             this.handObject.AddCardToHand(card);
             deckCards.Remove(card);
         }
-        
+
 
         public void PutCardBackToDeck(Card card)
         {
@@ -208,29 +200,21 @@ namespace TCGSim
             Shuffle<Card>(deckCards);
             ReassingOrderAfterShuffle();
             CreateStartingHand();
-            foreach (Card card in handObject.hand)
-            {
-                card.ChangeDraggable(true);
-            }
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
-            enableDraggingOnTopDeckCard();
+            CreateEndOfTurnBtn();
             await SendAllCardToDB();
-            await ServerCon.Instance.DoneWithMulliganOrKeep();
+            await ServerCon.Instance.DoneWithMulliganOrKeep(); 
         }
 
         public async void KeepHand()
         {
-            foreach (Card card in handObject.hand)
-            {
-                card.ChangeDraggable(true);
-            }
             handObject.ScaleHandBackFromStartingHand();
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
-            enableDraggingOnTopDeckCard();
+            CreateEndOfTurnBtn();
             await SendAllCardToDB();
             await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
@@ -278,7 +262,7 @@ namespace TCGSim
 
         public async Task SendAllCardToDB()
         {
-            foreach  (Card card in deckCards)
+            foreach (Card card in deckCards)
             {
                 card.UpdateParent();
                 await ServerCon.Instance.AddCardToInGameStateDB(card);
@@ -286,6 +270,7 @@ namespace TCGSim
             foreach (Card card in handObject.hand)
             {
                 card.UpdateParent();
+                card.SetCardVisibility(CardVisibility.NONE);
                 await ServerCon.Instance.AddCardToInGameStateDB(card);
             }
             foreach (Card card in lifeObject.lifeCards)
@@ -304,5 +289,95 @@ namespace TCGSim
         {
             costAreaObject.RestDons(donCountToRest);
         }
+
+        public async void EndOfTurnTrigger()
+        {
+            await ServerCon.Instance.ChangeEnemyGameStateToPlayerPhase(gameCustomID);
+            GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
+            endOfTurnBtn.gameObject.SetActive(false);
+        }
+
+        public override void GameManagerOnGameStateChange(GameState state)
+        {
+            switch (state)
+            {
+                case GameState.STARTINGPHASE:
+                    HandleStartingPhase();
+                    break;
+                case GameState.PLAYERPHASE:
+                    HandlePlayerPhase();
+                    break;
+                case GameState.ENEMYPHASE:
+                    HandleEnemyPhase();
+                    break;
+                default:
+                    break;
+            }
+        }
+        private async void HandleStartingPhase()
+        {
+            this.LoadBoardElements();
+            Shuffle<string>(deckString);
+            deckCards = await CreateCardsFromDeck();
+            Shuffle<Card>(deckCards);
+            ReassingOrderAfterShuffle();
+            Debug.Log(boardName);
+            CreateStartingHand();
+            if (boardName == "PLAYERBOARD")
+            {
+                handObject.ScaleHandForStartingHand();
+                LoadMulliganKeepButtons();
+            }
+        }
+
+        private void HandlePlayerPhase()
+        {
+            UnityMainThreadDispatcher.Enqueue(() =>
+            {
+                endOfTurnBtn.gameObject.SetActive(true);
+            });
+            UnityMainThreadDispatcher.Enqueue(() =>
+            {
+                ActivateHandCards();
+                if (firstRound && ServerCon.Instance.firstTurnIsMine)
+                {
+                    enableDraggingOnTopDonCard();
+                    firstRound = false;
+                }
+                else if (firstRound && !ServerCon.Instance.firstTurnIsMine)
+                {
+                    enableDraggingOnTopTwoDonCard();
+                    enableDraggingOnTopDeckCard();
+                }
+                else
+                {
+                    enableDraggingOnTopTwoDonCard();
+                    enableDraggingOnTopDeckCard();
+                }
+            }); 
+        }
+        private void HandleEnemyPhase()
+        {
+            endOfTurnBtn.gameObject.SetActive(false);
+            DeactivateHandCards();
+        }
+
+        private void ActivateHandCards()
+        {
+            foreach (Card card in handObject.hand)
+            {
+                card.ChangeDraggable(true);
+            }
+        }
+
+        private void DeactivateHandCards()
+        {
+            foreach (Card card in handObject.hand)
+            {
+                card.ChangeDraggable(false);
+            }
+        }
+
+
     }
 }

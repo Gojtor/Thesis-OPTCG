@@ -19,6 +19,7 @@ namespace TCGSim.CardResources
         public CharacterType characterType { get; set; } = CharacterType.NONE;
         public Attributes attribute { get; set; } = Attributes.NONE;
         public Colors color { get; set; } = Colors.Red;
+        public CardVisibility cardVisibility { get; set; } = CardVisibility.NONE;
         public bool active { get; set; } = false;
         public string customCardID { get; set; } = "#";
         public string playerName { get; set; } = "#";

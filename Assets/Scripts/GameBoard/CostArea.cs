@@ -19,20 +19,26 @@ namespace TCGSim
         {
 
         }
-        public async void OnDrop(PointerEventData eventData)
+        public void OnDrop(PointerEventData eventData)
         {
             Card card = eventData.pointerDrag.GetComponent<Card>();
             if (!card.draggable || eventData.pointerDrag.gameObject.GetComponent<DonCard>() == null) { return; }
-            Debug.Log("OnEndDrag");
+            //Debug.Log("OnEndDrag");
             card.transform.SetParent(this.transform);
             card.UpdateParent();
-            PlayerBoard.Instance.enableDraggingOnTopDonCard();
+            card.SetCardVisibility(CardResources.CardVisibility.BOTH);
+            card.SetCardActive();
             if (card.transform.parent == PlayerBoard.Instance.costAreaObject.transform)
             {
-                ServerCon.Instance.SendMessageToServer(eventData.pointerDrag.GetComponent<Card>().cardData.customCardID);
-                await ServerCon.Instance.UpdateCardAtInGameStateDB(card);
-                await ServerCon.Instance.UpdateMyCardAtEnemy(card.cardData.customCardID);
+                UpdateCardAtServer(card);
             }
+        }
+
+        public async void UpdateCardAtServer(Card card)
+        {
+            ServerCon.Instance.SendMessageToServer(card.cardData.customCardID);
+            await ServerCon.Instance.UpdateCardAtInGameStateDB(card);
+            await ServerCon.Instance.UpdateMyCardAtEnemy(card.cardData.customCardID);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -53,6 +59,7 @@ namespace TCGSim
                 for (int i = 0; i < donCountToRest; i++)
                 {
                     activeDons[i].RestDon();
+                    UpdateCardAtServer(activeDons[i]);
                 }
             }
             else

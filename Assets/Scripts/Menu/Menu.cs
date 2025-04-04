@@ -90,7 +90,6 @@ namespace TCGSim
                 lineRenderer.SetPosition(0, new Vector3(startMousePos.x, startMousePos.y, 1f));
                 lineRenderer.SetPosition(1, new Vector3(mousePos.x, mousePos.y, 1f));
             }
-            Debug.Log(defaultPaneObject.name);
         }
 
         private void Awake()
@@ -130,7 +129,6 @@ namespace TCGSim
             GameOptions.playerName = playerName;
             GameOptions.gameID = gameID;
             Debug.Log("Start Game");
-            Debug.Log(playerName + " ," + gameID);
             GameManager.Instance.ChangeGameState(GameState.WAITINGFOROPPONENT);
             SceneManager.LoadScene("GameBoard");
         }
@@ -140,7 +138,6 @@ namespace TCGSim
             GameOptions.playerName = playerName;
             GameOptions.gameID = gameID;
             Debug.Log("Connect to game");
-            Debug.Log(playerName + " ," + gameID);
             GameManager.Instance.ChangeGameState(GameState.CONNECTING);
             SceneManager.LoadScene("GameBoard");
         }

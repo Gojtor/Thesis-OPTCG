@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Net.Http;
+using System.Threading;
 
 namespace TCGSim
 {
@@ -23,6 +24,9 @@ namespace TCGSim
         public string serverUrl { get; } = "http://localhost:5000";
         public string gameID { get; private set; }
         public string playerName { get; private set; }
+        public bool firstTurnIsMine { get; private set; }
+        private bool enemyFinishedWithStartingHand = false;
+
 
         private HubConnection connection;
         private TaskCompletionSource<bool> ConnectionTask;
@@ -137,6 +141,20 @@ namespace TCGSim
                 await UpdateEnemyCard(message);
             });
 
+            connection.On<string>("WhoIsFirst", (message) =>
+            {
+                Debug.Log("The first player is :"+message);
+                if (message == playerName)
+                {
+                    firstTurnIsMine = true;
+                }
+            });
+            connection.On<string>("ChangeGameStateToPlayerPhase", (message) =>
+            {
+                Debug.Log(message);
+                GameManager.Instance.ChangeGameState(GameState.PLAYERPHASE);
+            });
+
             await connection.StartAsync();
             Debug.Log("WebSocket connection is succesfull!");
         }
@@ -165,6 +183,25 @@ namespace TCGSim
             await connection.InvokeAsync<string>("ReAssureEnemyConnected", gameID,playerName);
         }
 
+        public async Task WaitForEnemyToFinishStartingHand()
+        {
+            Debug.Log("Waiting for enemy to finish starting hand");
+            while (!enemyFinishedWithStartingHand)
+            {
+                await Task.Delay(1000);
+            }
+            Debug.Log("Enemy is done with starting hand!");
+            if (firstTurnIsMine)
+            {
+                GameManager.Instance.ChangeGameState(GameState.PLAYERPHASE);
+            }
+            else
+            {
+                GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
+            }
+            await Task.CompletedTask;
+        }
+
         public async void SendMessageToServer(string message)
         {
             await connection.InvokeAsync<string>("ReceiveMessageFromClient", gameID,message);
@@ -190,6 +227,7 @@ namespace TCGSim
         public async Task DoneWithMulliganOrKeep()
         {
             await connection.InvokeAsync<string>("DoneWithMulliganOrKeep", gameID);
+            await WaitForEnemyToFinishStartingHand();
         }
         public async Task UpdateMyBoardAtEnemy()
         {
@@ -205,12 +243,18 @@ namespace TCGSim
         {
             Debug.Log("UpdateEnemyBoard called! Enemy name: "+EnemyBoard.Instance.playerName+"! My name: "+PlayerBoard.Instance.playerName);
             await EnemyBoard.Instance.UpdateBoardFromGameDB();
+            enemyFinishedWithStartingHand = true;
         }
 
         public async Task UpdateEnemyCard(string customCardID)
         {
             Debug.Log("UpdateEnemyBoard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
             await EnemyBoard.Instance.UpdateCardFromGameDB(customCardID);
+        }
+
+        public async Task ChangeEnemyGameStateToPlayerPhase(string customCardID)
+        {
+            await connection.InvokeAsync<string>("ChangeEnemyGameStateToPlayerPhase", gameID);
         }
 
         private async void OnApplicationQuit()

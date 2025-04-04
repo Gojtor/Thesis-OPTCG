@@ -54,6 +54,9 @@ public abstract class Board : MonoBehaviour
 
     [SerializeField]
     public GameObject donPrefab { get; protected set; }
+
+    [SerializeField]
+    public GameObject endOfTurnBtnPrefab { get; protected set; }
     #endregion
 
 
@@ -72,6 +75,7 @@ public abstract class Board : MonoBehaviour
     public Life lifeObject { get; protected set; }
     public Button keepBtn { get; protected set; }
     public Button mulliganBtn { get; protected set; }
+    public Button endOfTurnBtn { get; protected set; }
     public Button testBtn { get; protected set; }
 
     public CharacterArea characterAreaObject { get; protected set; }
@@ -118,12 +122,12 @@ public abstract class Board : MonoBehaviour
 
     public virtual void GameManagerOnGameStateChange(GameState state)
     {
-        
+
     }
 
     public virtual void InitPrefabs(GameObject handPrefab, GameObject characterAreaPrefab, GameObject costAreaPrefab, GameObject stageAreaPrefab,
         GameObject deckPrefab, GameObject leaderPrefab, GameObject trashPrefab, GameObject cardPrefab, GameObject lifePrefab,
-        GameObject keepBtnPrefab, GameObject mulliganBtnPrefab, GameObject donDeckPrefab, GameObject donPrefab)
+        GameObject keepBtnPrefab, GameObject mulliganBtnPrefab, GameObject donDeckPrefab, GameObject donPrefab, GameObject endOfTurnBtnPrefab)
     {
         this.handPrefab = handPrefab;
         this.characterAreaPrefab = characterAreaPrefab;
@@ -138,6 +142,7 @@ public abstract class Board : MonoBehaviour
         this.mulliganBtnPrefab = mulliganBtnPrefab;
         this.donDeckPrefab = donDeckPrefab;
         this.donPrefab = donPrefab;
+        this.endOfTurnBtnPrefab = endOfTurnBtnPrefab;
     }
 
     public virtual void LoadBoardElements()
@@ -181,7 +186,7 @@ public abstract class Board : MonoBehaviour
             donCard.transform.SetAsFirstSibling();
             donCards.Add(donCard);
         }
-        donDeckObject.transform.GetChild(donDeckObject.transform.childCount-1).GetComponent<Card>().ChangeDraggable(true);
+        //donDeckObject.transform.GetChild(donDeckObject.transform.childCount-1).GetComponent<Card>().ChangeDraggable(true);
     }
     public void CreateCostArea()
     {
@@ -255,6 +260,19 @@ public abstract class Board : MonoBehaviour
     public void enableDraggingOnTopDonCard()
     {
         if (donDeckObject.transform.childCount > 0)
+        {
+            donDeckObject.transform.GetChild(donDeckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
+        }
+    }
+
+    public void enableDraggingOnTopTwoDonCard()
+    {
+        if (donDeckObject.transform.childCount > 1)
+        {
+            donDeckObject.transform.GetChild(donDeckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
+            donDeckObject.transform.GetChild(donDeckObject.transform.childCount - 2).GetComponent<Card>().ChangeDraggable(true);
+        }
+        if(donDeckObject.transform.childCount == 1)
         {
             donDeckObject.transform.GetChild(donDeckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
         }
