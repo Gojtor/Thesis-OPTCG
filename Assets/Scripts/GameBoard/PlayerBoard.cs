@@ -602,7 +602,7 @@ namespace TCGSim
         }
         private void HandleEndOfBattleStep(Card attacker, Card attacked)
         {
-            Debug.Log("Battle ended");
+            Debug.Log("Battle ended between: "+attacker.cardData.customCardID+" and: "+attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
         }
         private async void SendBattleHasEnded()
@@ -686,7 +686,7 @@ namespace TCGSim
             UnityMainThreadDispatcher.Enqueue(() =>
             {
                 LeaderCard enemyLeader = EnemyBoard.Instance.leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-                if (enemyLeader.cardData.customCardID == attackedCardID)
+                if (enemyLeader.cardData.customCardID == attackerCardID)
                 {
                     cardThatAttacks = enemyLeader;
                 }

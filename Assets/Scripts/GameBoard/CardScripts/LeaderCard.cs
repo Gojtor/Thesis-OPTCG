@@ -31,7 +31,9 @@ namespace TCGSim
             lineRenderer.startColor = Color.black;
             lineRenderer.endColor = Color.black;
             CardAttacks += LeaderCard_CardAttacks;
+            GameManager.OnBattlePhaseChange += GameManagerOnBattlePhaseChange;
         }
+
         // Update is called once per frame
         void Update()
         {
@@ -93,15 +95,9 @@ namespace TCGSim
         {
             canAttack = false;
         }
-        private async void LeaderCard_CardAttacks(Card card)
+        private void LeaderCard_CardAttacks(Card card)
         {
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ATTACKDECLARATION,this,card);
-            while (GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE)
-            {
-                await Task.Delay(1000);
-            }
-            Debug.Log("Removing attack line after battle ended!");
-            lineRenderer.enabled = false;
         }
         public void DrawAttackLine(Card endPoint)
         {
@@ -118,6 +114,13 @@ namespace TCGSim
         public void ReduceLife(int amount)
         {
             life = life - amount;
+        }
+        private void GameManagerOnBattlePhaseChange(BattlePhases phases, Card attacker, Card attacked)
+        {
+            if (phases == BattlePhases.NOBATTLE)
+            {
+                lineRenderer.enabled = false;
+            }
         }
     }
 }
