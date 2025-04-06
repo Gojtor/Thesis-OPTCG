@@ -31,7 +31,6 @@ namespace TCGSim
             lineRenderer.startColor = Color.black;
             lineRenderer.endColor = Color.black;
             CardAttacks += LeaderCard_CardAttacks;
-            GameManager.OnBattlePhaseChange += GameManagerOnBattlePhaseChange;
         }
 
         // Update is called once per frame
@@ -95,32 +94,36 @@ namespace TCGSim
         {
             canAttack = false;
         }
-        private void LeaderCard_CardAttacks(Card card)
+        private async void LeaderCard_CardAttacks(Card card)
         {
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ATTACKDECLARATION,this,card);
+            while (GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE)
+            {
+                await Task.Delay(1000);
+            }
+            lineRenderer.enabled = false;
         }
         public void DrawAttackLine(Card endPoint)
         {
+            Canvas cardCanvas = this.GetComponent<Canvas>();
+            cardCanvas.overrideSorting = true;
+            cardCanvas.sortingOrder = 2;
+            lineRenderer.sortingOrder = 3;
             lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, this.transform.position);
-            lineRenderer.SetPosition(1, endPoint.transform.position);
+            lineRenderer.SetPosition(0, this.gameObject.transform.position);
+            lineRenderer.SetPosition(1, endPoint.gameObject.transform.position);
         }
 
         public void RemoveAttackLine()
         {
+            Canvas cardCanvas = this.GetComponent<Canvas>();
+            cardCanvas.overrideSorting = false;
             lineRenderer.enabled = false;
         }
 
         public void ReduceLife(int amount)
         {
             life = life - amount;
-        }
-        private void GameManagerOnBattlePhaseChange(BattlePhases phases, Card attacker, Card attacked)
-        {
-            if (phases == BattlePhases.NOBATTLE)
-            {
-                lineRenderer.enabled = false;
-            }
         }
     }
 }

@@ -101,7 +101,8 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     public void DrawAttackLine(Card endPoint)
     {
         lineRenderer.enabled = true;
-        lineRenderer.SetPosition(1, endPoint.transform.position);
+        lineRenderer.SetPosition(0, this.gameObject.transform.position);
+        lineRenderer.SetPosition(1, endPoint.gameObject.transform.position);
     }
     public void RemoveAttackLine()
     {

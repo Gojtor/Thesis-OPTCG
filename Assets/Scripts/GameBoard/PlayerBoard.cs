@@ -480,7 +480,29 @@ namespace TCGSim
                     donCard.SendCardToServer();
                 }
             }
-            //Ezt kell karakterekre is majd
+            foreach(CharacterCard card in characterAreaCards)
+            {
+                if (card.rested)
+                {
+                    card.Restand(true,false);
+                    card.SendCardToServer();
+                }
+            }
+            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            if (leader.rested)
+            {
+                leader.Restand(true, false);
+                leader.SendCardToServer();
+            }
+            if (stageObject.transform.childCount != 0)
+            {
+                StageCard stageCard = stageObject.transform.GetChild(0).GetComponent<StageCard>();
+                if (stageCard.rested)
+                {
+                    stageCard.Restand(true, false);
+                    stageCard.SendCardToServer();
+                }
+            }
             GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.DRAWPHASE);
         }
         private void HandleDrawPhase()
@@ -547,7 +569,7 @@ namespace TCGSim
                     HandleDamageStep(attacker, attacked);
                     break;
                 case BattlePhases.ENDOFBATTLE:
-                    HandleEndOfBattleStep(attacker, attacked);
+                    HandleEndOfBattleStep();
                     break;
                 case BattlePhases.NOBATTLE:
                     break;
@@ -597,17 +619,16 @@ namespace TCGSim
                         break;
                 }
             }
-            SendBattleHasEnded();
+            SendBattleHasEnded(attacker.cardData.customCardID,attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE, attacker, attacked);
         }
-        private void HandleEndOfBattleStep(Card attacker, Card attacked)
+        private void HandleEndOfBattleStep()
         {
-            Debug.Log("Battle ended between: "+attacker.cardData.customCardID+" and: "+attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
         }
-        private async void SendBattleHasEnded()
+        private async void SendBattleHasEnded(string attackerID, string attackedID)
         {
-            await ServerCon.Instance.BattleEnded();
+            await ServerCon.Instance.BattleEnded(attackerID,attackerID);
         }
 
         private void CorrectAmountOfCardDrawn()

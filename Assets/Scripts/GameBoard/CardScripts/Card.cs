@@ -249,6 +249,7 @@ namespace TCGSim.CardScripts
         {
             this.gameObject.name = this.cardData.customCardID;
             UpdateParent();
+            
         }
 
         public virtual void LoadDataFromCardData(CardData cardData)
@@ -295,7 +296,7 @@ namespace TCGSim.CardScripts
             }
             if (this.cardData.active)
             {
-                this.Restand(true, true);
+                this.Restand(true, false);
             }
             else
             {
@@ -370,11 +371,18 @@ namespace TCGSim.CardScripts
 
         public void Restand(bool active,bool canAttack)
         {
-            if (rested)
+            if (rested && this.transform.parent.parent==EnemyBoard.Instance.transform)
             {
-                this.cardData.active = true;
-                this.canAttack = true;
+                this.cardData.active = active;
+                this.canAttack = canAttack;
                 this.transform.rotation = Quaternion.Euler(0, 0, 180);
+                this.rested = false;
+            }
+            else if(rested && this.transform.parent.parent == PlayerBoard.Instance.transform)
+            {
+                this.cardData.active = active;
+                this.canAttack = canAttack;
+                this.transform.rotation = Quaternion.Euler(0, 0, 0);
                 this.rested = false;
             }
         }

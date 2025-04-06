@@ -130,13 +130,13 @@ namespace TCGSim
 
             connection.On<string>("UpdateEnemyBoard", async (message) =>
             {
-                Debug.Log(message);
+                //Debug.Log(message);
                 await UpdateEnemyBoard();
             });
 
             connection.On<string>("UpdateThisEnemyCard", async (message) =>
             {
-                Debug.Log(message);
+                //Debug.Log(message);
                 await UpdateEnemyCard(message);
             });
 
@@ -165,8 +165,9 @@ namespace TCGSim
                 await MyCardIsAttacked(cardThatAttacksID, attackedCard, power);
             });
 
-            connection.On<string, string, int>("BattleEnded", (cardThatAttacksID, attackedCard, power) =>
+            connection.On<string>("BattleEnded", (message) =>
             {
+                Debug.Log(message);
                 GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE);
             });
 
@@ -290,9 +291,9 @@ namespace TCGSim
             await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard,power);
         }
 
-        public async Task BattleEnded()
+        public async Task BattleEnded(string attackerID,string attackedID)
         {
-            await connection.InvokeAsync<string>("BattleEnded", gameID);
+            await connection.InvokeAsync<string>("BattleEnded", gameID,attackerID,attackedID);
         }
 
         private async void OnApplicationQuit()
@@ -412,7 +413,7 @@ namespace TCGSim
         public async Task<List<CardData>> GetAllCardByGameID(string gameID)
         {
             string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameID?gameCustomID=";
-            Debug.Log(url + gameID);
+            //Debug.Log(url + gameID);
             using (UnityWebRequest request = UnityWebRequest.Get(url + gameID))
             {
                 var operation = request.SendWebRequest();
@@ -442,7 +443,7 @@ namespace TCGSim
         public async Task<List<CardData>> GetAllCardByGameIDAndPlayerName(string gameID, string playerName)
         {
             string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameIDAndPlayer?";
-            Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName);
+            //Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName);
             using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName))
             {
                 var operation = request.SendWebRequest();
@@ -461,7 +462,7 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
-                        Debug.Log("Received: " + jsonResponse);
+                        //Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<List<CardData>>(jsonResponse);
 
                 }
@@ -473,7 +474,7 @@ namespace TCGSim
         public async Task<CardData> GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(string gameID, string playerName,string customCardID)
         {
             string url = "http://localhost:5000/api/TCG/GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID?";
-            Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID);
+            //Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID);
             using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName+ "&customCardID="+customCardID))
             {
                 var operation = request.SendWebRequest();
@@ -492,7 +493,7 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
-                        Debug.Log("Received: " + jsonResponse);
+                        //Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<CardData>(jsonResponse);
 
                 }
