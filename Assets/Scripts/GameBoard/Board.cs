@@ -87,7 +87,10 @@ public abstract class Board : MonoBehaviour
     #region Cards
     public List<string> deckString { get; protected set; }
     public List<Card> deckCards { get; protected set; } = new List<Card>();
-    public List<Card> donCards { get; protected set; } = new List<Card>();
+    public List<Card> donCardsInDeck { get; protected set; } = new List<Card>();
+    public List<Card> characterAreaCards { get; protected set; } = new List<Card>();
+
+    public List<Card> donInCostArea { get; protected set; } = new List<Card>();
     #endregion
 
     //public ServerCon serverCon { get; protected set; }
@@ -111,6 +114,8 @@ public abstract class Board : MonoBehaviour
         this.playerName = playerName;
         Debug.Log(boardName + " called init " + playerName);
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+        GameManager.OnPlayerTurnPhaseChange += GameManagerOnPlayerTurnPhaseChange;
+        GameManager.OnBattlePhaseChange += GameManagerOnBattlePhaseChange;
     }
 
     public virtual void Init(string boardName, string gameCustomID)
@@ -118,9 +123,20 @@ public abstract class Board : MonoBehaviour
         this.boardName = boardName;
         this.gameCustomID = gameCustomID;
         GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+        GameManager.OnPlayerTurnPhaseChange += GameManagerOnPlayerTurnPhaseChange;
+        GameManager.OnBattlePhaseChange += GameManagerOnBattlePhaseChange;
     }
 
     public virtual void GameManagerOnGameStateChange(GameState state)
+    {
+
+    }
+
+    public virtual void GameManagerOnPlayerTurnPhaseChange(PlayerTurnPhases turnPhase)
+    {
+
+    }
+    public virtual void GameManagerOnBattlePhaseChange(BattlePhases battlePhase, Card attacker, Card attacked)
     {
 
     }
@@ -184,7 +200,7 @@ public abstract class Board : MonoBehaviour
             DonCard donCard = Instantiate(donPrefab, this.donDeckObject.transform).GetComponent<DonCard>();
             donCard.Init(handObject, "DONCARD" + i);
             donCard.transform.SetAsFirstSibling();
-            donCards.Add(donCard);
+            donCardsInDeck.Add(donCard);
         }
         //donDeckObject.transform.GetChild(donDeckObject.transform.childCount-1).GetComponent<Card>().ChangeDraggable(true);
     }
@@ -200,7 +216,10 @@ public abstract class Board : MonoBehaviour
 
     public void CreateLeaderArea()
     {
-        leaderObject = Instantiate(leaderPrefab, this.gameObject.transform);
+        if (leaderObject == null)
+        {
+            leaderObject = Instantiate(leaderPrefab, this.gameObject.transform);
+        }
     }
 
     public void CreateTrashArea()
@@ -229,6 +248,8 @@ public abstract class Board : MonoBehaviour
                 return stageObject.gameObject;
             case "CostArea":
                 return costAreaObject.gameObject;
+            case "LeaderArea":
+                return leaderObject.gameObject;
             default:
                 return this.gameObject;
 

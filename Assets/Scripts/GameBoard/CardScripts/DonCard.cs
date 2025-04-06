@@ -9,7 +9,6 @@ namespace TCGSim.CardScripts
 
     public class DonCard : Card
     {
-        private bool rested = false;
 
         // Start is called before the first frame update
         void Start()
@@ -30,7 +29,7 @@ namespace TCGSim.CardScripts
                 this.cardData.active = false;
                 this.draggable = false;
                 this.transform.Rotate(0, 0, 90);
-                rested = true;
+                this.rested = true;
             }
         }
 
@@ -41,7 +40,30 @@ namespace TCGSim.CardScripts
                 this.cardData.active = true;
                 this.draggable = true;
                 this.transform.Rotate(0, 0, -90);
+                this.rested = false;
             } 
+        }
+
+        public void EnemyRestDon()
+        {
+            if (!rested)
+            {
+                this.cardData.active = false;
+                this.draggable = false;
+                this.transform.Rotate(0, 0, -90);
+                this.rested = true;
+            }
+        }
+
+        public void EnemyRestandDon()
+        {
+            if (rested)
+            {
+                this.cardData.active = true;
+                this.draggable = true;
+                this.transform.Rotate(0, 0, 90);
+                this.rested = false;
+            }
         }
 
     }

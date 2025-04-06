@@ -13,7 +13,7 @@ namespace TCGSim
     public class EnemyBoard : Board
     {
         public static EnemyBoard Instance { get; private set; }
-        private List<Card> cards = new List<Card>();
+        public List<Card> cards { get; private set; } = new List<Card>();
         // Start is called before the first frame update
         void Start()
         {
@@ -96,13 +96,17 @@ namespace TCGSim
             {
                 CardData newCardData = await ServerCon.Instance.GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(this.gameCustomID, this.playerName, customCardID);
                 Card card;
-                if (customCardID.Contains("DON"))
+                switch (newCardData.cardType)
                 {
-                    card = donCards.Where(x => x.cardData.customCardID == newCardData.customCardID).Single();
-                }
-                else
-                {
-                    card = cards.Where(x => x.cardData.customCardID == newCardData.customCardID).Single();
+                    case CardType.DON:
+                        card = donCardsInDeck.Where(x => x.cardData.customCardID == newCardData.customCardID).Single();
+                        break;
+                    case CardType.LEADER:
+                        card = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+                        break;
+                    default:
+                        card = cards.Where(x => x.cardData.customCardID == newCardData.customCardID).Single();
+                        break;
                 }
                 card.LoadDataFromCardData(newCardData);
                 card.UpdateEnemyCardAfterDataLoad();
@@ -111,7 +115,34 @@ namespace TCGSim
             await Task.CompletedTask;
         }
 
-    public async Task<List<Card>> GetEnemyCardsFromGameDB()
+        public async Task CreateOrUpdateLeaderCardFromGameDB(string customCardID)
+        {
+            UnityMainThreadDispatcher.Enqueue(async () =>
+            {
+                if (leaderObject == null)
+                {
+                    this.CreateLeaderArea();
+                }
+                if (leaderObject.transform.childCount == 0)
+                {
+                    CardData leaderCardData = await ServerCon.Instance.GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(this.gameCustomID, this.playerName, customCardID);
+                    GameObject cardObj = Instantiate(cardPrefab, this.leaderObject.transform);
+                    cardObj.AddComponent<LeaderCard>();
+                    LeaderCard card = cardObj.GetComponent<LeaderCard>();
+                    card.LoadDataFromCardData(leaderCardData);
+                    card.Init();
+                    card.UpdateEnemyCardAfterDataLoad();
+                }
+                else
+                {
+                    await UpdateCardFromGameDB(customCardID);
+                }
+            });
+
+            await Task.CompletedTask;
+        }
+
+        public async Task<List<Card>> GetEnemyCardsFromGameDB()
         {
             List<Card> deck = new List<Card>();
             List<CardData> cardsFromDB = await ServerCon.Instance.GetAllCardByGameIDAndPlayerName(this.gameCustomID, this.playerName);
@@ -122,17 +153,17 @@ namespace TCGSim
                 switch (cardData.cardType)
                 {
                     case CardType.CHARACTER:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
+                        cardObj = Instantiate(cardPrefab, EnemyBoard.Instance.GetParentByNameString(cardData.currentParent).transform);
                         cardObj.AddComponent<CharacterCard>();
                         card = cardObj.GetComponent<CharacterCard>();
                         break;
                     case CardType.STAGE:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
+                        cardObj = Instantiate(cardPrefab, EnemyBoard.Instance.GetParentByNameString(cardData.currentParent).transform);
                         cardObj.AddComponent<StageCard>();
                         card = cardObj.GetComponent<StageCard>();
                         break;
                     case CardType.EVENT:
-                        cardObj = Instantiate(cardPrefab, deckObject.transform);
+                        cardObj = Instantiate(cardPrefab, EnemyBoard.Instance.GetParentByNameString(cardData.currentParent).transform);
                         cardObj.AddComponent<EventCard>();
                         card = cardObj.GetComponent<EventCard>();
                         break;

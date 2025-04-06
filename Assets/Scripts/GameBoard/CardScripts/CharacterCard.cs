@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TCGSim;
 using TCGSim.CardResources;
 using TCGSim.CardScripts;
 using UnityEngine;
@@ -12,6 +15,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     private Vector2 mousePos;
     private Vector2 startMousePos;
     private bool drawing = false;
+    public event Action<Card> CardAttacks;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +27,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
         lineRenderer.positionCount = 2;
         lineRenderer.startColor=Color.black;
         lineRenderer.endColor = Color.black;
+        CardAttacks += CharacterCard_CardAttacks;
     }
 
     // Update is called once per frame
@@ -43,7 +48,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (this.cardData.active)
+        if (this.cardData.active && canAttack)
         {
             lineRenderer.enabled = true;
             drawing = true;
@@ -59,18 +64,47 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (this.cardData.active)
+        if (canAttack)
         {
             Card card = eventData.pointerEnter.GetComponent<Card>();
-            if (card == null || !card.cardData.active || card.cardData.playerName==this.cardData.playerName)
+            if (card == null || (card.cardData.active && card.cardData.cardType != CardType.LEADER) || card.cardData.playerName == this.cardData.playerName)
             {
                 lineRenderer.enabled = false;
             }
             else
             {
                 lineRenderer.SetPosition(1, card.transform.position);
+                CardAttacks?.Invoke(card);
             }
             drawing = false;
         }
+    }
+
+    public void CardCanAttack()
+    {
+        canAttack = true;
+    }
+
+    public void CardCannotAttack()
+    {
+        canAttack = false;
+    }
+    private async void CharacterCard_CardAttacks(Card card)
+    {
+        GameManager.Instance.ChangeBattlePhase(BattlePhases.ATTACKDECLARATION, this, card);
+        while (GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE)
+        {
+            await Task.Delay(1000);
+        }
+        lineRenderer.enabled = false;
+    }
+    public void DrawAttackLine(Card endPoint)
+    {
+        lineRenderer.enabled = true;
+        lineRenderer.SetPosition(1, endPoint.transform.position);
+    }
+    public void RemoveAttackLine()
+    {
+        lineRenderer.enabled = false;
     }
 }

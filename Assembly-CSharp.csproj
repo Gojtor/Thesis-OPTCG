@@ -114,6 +114,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\Scripts\GameBoard\Hand.cs" />
     <Compile Include="Assets\Scripts\Menu\Menu.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\PlayerTurnPhases.cs" />
     <Compile Include="Assets\Scripts\GameBoard\GameBoard.cs" />
     <Compile Include="Assets\Scripts\GameBoard\Life.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
@@ -143,9 +144,11 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Scripts\ServerCon\ServerCon.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\BattlePhases.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\DonCard.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardData\Attributes.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\CardScripts\LeaderCard.cs" />
     <Compile Include="Assets\Scripts\GameBoard\Deck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CostArea.cs" />

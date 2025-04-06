@@ -27,7 +27,6 @@ namespace TCGSim
         public bool firstTurnIsMine { get; private set; }
         private bool enemyFinishedWithStartingHand = false;
 
-
         private HubConnection connection;
         private TaskCompletionSource<bool> ConnectionTask;
         private TaskCompletionSource<bool> EnemyConnectionTask;
@@ -155,6 +154,22 @@ namespace TCGSim
                 GameManager.Instance.ChangeGameState(GameState.PLAYERPHASE);
             });
 
+            connection.On<string>("UpdateEnemyLeaderCard", async (message) =>
+            {
+                Debug.Log(message);
+                await UpdateEnemyLeaderCard(message);
+            });
+
+            connection.On<string,string,int>("MyCardIsAttacked", async (cardThatAttacksID, attackedCard, power) =>
+            {
+                await MyCardIsAttacked(cardThatAttacksID, attackedCard, power);
+            });
+
+            connection.On<string, string, int>("BattleEnded", (cardThatAttacksID, attackedCard, power) =>
+            {
+                GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE);
+            });
+
             await connection.StartAsync();
             Debug.Log("WebSocket connection is succesfull!");
         }
@@ -251,10 +266,33 @@ namespace TCGSim
             Debug.Log("UpdateEnemyBoard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
             await EnemyBoard.Instance.UpdateCardFromGameDB(customCardID);
         }
+        public async Task UpdateEnemyLeaderCard(string customCardID)
+        {
+            Debug.Log("UpdateEnemyLeaderCard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
+            await EnemyBoard.Instance.CreateOrUpdateLeaderCardFromGameDB(customCardID);
+        }
+        public async Task MyCardIsAttacked(string cardThatAttacksID, string attackedCard,int power)
+        {
+            Debug.Log("Card: " + cardThatAttacksID + " with this power: " + power + " attacked this card: " + attackedCard);
+            await PlayerBoard.Instance.EnemyAttacked(cardThatAttacksID,attackedCard);
+        }
 
         public async Task ChangeEnemyGameStateToPlayerPhase(string customCardID)
         {
             await connection.InvokeAsync<string>("ChangeEnemyGameStateToPlayerPhase", gameID);
+        }
+        public async Task UpdateMyLeaderCardAtEnemy(string customCardID)
+        {
+            await connection.InvokeAsync<string>("UpdateMyLeaderCardAtEnemy", gameID,customCardID);
+        }
+        public async Task AttackedEnemyCard(string cardThatAttacksID, string attackedCard, int power)
+        {
+            await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard,power);
+        }
+
+        public async Task BattleEnded()
+        {
+            await connection.InvokeAsync<string>("BattleEnded", gameID);
         }
 
         private async void OnApplicationQuit()
@@ -404,7 +442,7 @@ namespace TCGSim
         public async Task<List<CardData>> GetAllCardByGameIDAndPlayerName(string gameID, string playerName)
         {
             string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameIDAndPlayer?";
-            //Debug.Log(url + gameID);
+            Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName);
             using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName))
             {
                 var operation = request.SendWebRequest();

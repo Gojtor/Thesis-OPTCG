@@ -91,6 +91,7 @@ namespace TCGSim
         {
             deckString = new List<string>
             {
+            "1xST01-001",
             "4xST01-002",
             "4xST01-003",
             "4xST01-004",
@@ -143,6 +144,11 @@ namespace TCGSim
                             cardObj.AddComponent<EventCard>();
                             card = cardObj.GetComponent<EventCard>();
                             break;
+                        case CardType.LEADER:
+                            cardObj = Instantiate(cardPrefab, leaderObject.transform);
+                            cardObj.AddComponent<LeaderCard>();
+                            card = cardObj.GetComponent<LeaderCard>();
+                            break;
                         default:
                             cardObj = Instantiate(cardPrefab, deckObject.transform);
                             cardObj.AddComponent<Card>();
@@ -150,9 +156,19 @@ namespace TCGSim
                             break;
                     }
                     card.LoadDataFromCardData(cardData);
-                    card.SetCardNotActive();
                     card.Init(handObject, cardNumber + "-" + i);
-                    deck.Add(card);
+                    card.SetCardActive();
+                    if (card.cardData.cardType == CardType.LEADER)
+                    {
+                        card.cardData.cardVisibility = CardVisibility.BOTH;
+                        card.UpdateParent();
+                        SendCardToDB(card);
+                        await ServerCon.Instance.UpdateMyLeaderCardAtEnemy(card.cardData.customCardID);
+                    }
+                    else
+                    {
+                        deck.Add(card);
+                    }
                 }
             }
             return deck;
@@ -162,30 +178,102 @@ namespace TCGSim
         {
             if (deckObject.transform.childCount > 0)
             {
-                deckObject.transform.GetChild(deckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
+                Card topCard = deckObject.transform.GetChild(deckObject.transform.childCount - 1).GetComponent<Card>();
+                topCard.ChangeDraggable(true);
             }
         }
 
-        public void AddCardToHand(Card card)
+        public void AddCardToHandFromDeck(Card card, bool turnOffDraggable, bool sendToServer)
         {
             this.handObject.AddCardToHand(card);
             deckCards.Remove(card);
+            card.UpdateParent();
+            if (turnOffDraggable)
+            {
+                card.ChangeDraggable(false);
+            }
+            if (sendToServer)
+            {
+                card.SendCardToServer();
+            }
+        }
+
+        public void AddCardToHandFromLife(Card card, bool turnOffDraggable, bool sendToServer)
+        {
+            this.handObject.AddCardToHand(card);
+            lifeObject.TakeLife(card);
+            card.UpdateParent();
+            if (turnOffDraggable)
+            {
+                card.ChangeDraggable(false);
+            }
+            if (sendToServer)
+            {
+                card.SendCardToServer();
+            }
         }
 
 
         public void PutCardBackToDeck(Card card)
         {
-            handObject.RemoveCardFromHand(card, this.deckObject);
+            handObject.RemoveCardFromHand(card, this.deckObject.transform);
+            card.SetCardVisibility(CardResources.CardVisibility.NONE);
             card.transform.position = this.deckObject.transform.position;
             card.FlipCard();
             deckCards.Add(card);
+        }
+        public void MoveCardFromHandToCharacterArea(Card card)
+        {
+            card.SetCardActive();
+            card.SetCardVisibility(CardResources.CardVisibility.BOTH);
+            handObject.RemoveCardFromHand(card, this.characterAreaObject.transform);
+            characterAreaCards.Add(card);
+            card.ChangeDraggable(false);
+            card.UpdateParent();
+            card.SendCardToServer();
+        }
+        public void MoveDonFromDeckToCostArea(Card card)
+        {
+            if (!donInCostArea.Contains(card))
+            {
+                card.SetCardVisibility(CardResources.CardVisibility.BOTH);
+                donCardsInDeck.Remove(card);
+                donInCostArea.Add(card);
+                card.transform.SetParent(this.costAreaObject.transform);
+                card.SetCardActive();
+                card.ChangeDraggable(true);
+                card.UpdateParent();
+                card.SendCardToServer();
+            }
+        }
+        public void MoveStageFromHandToStageArea(Card card)
+        {
+            card.SetCardVisibility(CardResources.CardVisibility.BOTH);
+            handObject.RemoveCardFromHand(card, this.stageObject.transform);
+            card.SetCardActive();
+            card.ChangeDraggable(false);
+            card.UpdateParent();
+            card.SendCardToServer();
+        }
+        public void MoveCardToTrash(Card card)
+        {
+            if (characterAreaCards.Contains(card)) { characterAreaCards.Remove(card); }
+            if (handObject.hand.Contains(card)) { handObject.RemoveCardFromHand(card, this.trashObject.transform); }
+            else
+            {
+                card.transform.SetParent(this.trashObject.transform);
+            }
+            card.SetCardNotActive();
+            card.ChangeDraggable(false);
+            card.UpdateParent();
+            card.SendCardToServer();
         }
 
         public void CreateStartingHand()
         {
             for (int i = 0; i < 5; i++)
             {
-                AddCardToHand(deckCards[i]);
+                AddCardToHandFromDeck(deckCards[i],true,false);
             }
         }
 
@@ -205,7 +293,7 @@ namespace TCGSim
             CreateStartingLife();
             CreateEndOfTurnBtn();
             await SendAllCardToDB();
-            await ServerCon.Instance.DoneWithMulliganOrKeep(); 
+            await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
 
         public async void KeepHand()
@@ -249,7 +337,9 @@ namespace TCGSim
 
         public void CreateStartingLife()
         {
-            for (int i = 0; i < 5; i++)
+            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            if (leader == null) { return; }
+            for (int i = 0; i < leader.life; i++)
             {
                 AddCardToLife(deckCards[i]);
             }
@@ -278,7 +368,7 @@ namespace TCGSim
                 card.UpdateParent();
                 await ServerCon.Instance.AddCardToInGameStateDB(card);
             }
-            foreach (Card card in donCards)
+            foreach (Card card in donCardsInDeck)
             {
                 card.UpdateParent();
                 await ServerCon.Instance.AddCardToInGameStateDB(card);
@@ -290,11 +380,9 @@ namespace TCGSim
             costAreaObject.RestDons(donCountToRest);
         }
 
-        public async void EndOfTurnTrigger()
+        public void EndOfTurnTrigger()
         {
-            await ServerCon.Instance.ChangeEnemyGameStateToPlayerPhase(gameCustomID);
-            GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
-            endOfTurnBtn.gameObject.SetActive(false);
+            GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.ENDPHASE);
         }
 
         public override void GameManagerOnGameStateChange(GameState state)
@@ -328,8 +416,8 @@ namespace TCGSim
                 handObject.ScaleHandForStartingHand();
                 LoadMulliganKeepButtons();
             }
+            Card.CorrectAmountCardsDrawn += CorrectAmountOfCardDrawn;
         }
-
         private void HandlePlayerPhase()
         {
             UnityMainThreadDispatcher.Enqueue(() =>
@@ -338,39 +426,236 @@ namespace TCGSim
             });
             UnityMainThreadDispatcher.Enqueue(() =>
             {
-                ActivateHandCards();
-                if (firstRound && ServerCon.Instance.firstTurnIsMine)
-                {
-                    enableDraggingOnTopDonCard();
-                    firstRound = false;
-                }
-                else if (firstRound && !ServerCon.Instance.firstTurnIsMine)
-                {
-                    enableDraggingOnTopTwoDonCard();
-                    enableDraggingOnTopDeckCard();
-                }
-                else
-                {
-                    enableDraggingOnTopTwoDonCard();
-                    enableDraggingOnTopDeckCard();
-                }
-            }); 
+                GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.REFRESHPHASE);
+            });
         }
         private void HandleEnemyPhase()
         {
-            endOfTurnBtn.gameObject.SetActive(false);
-            DeactivateHandCards();
+
         }
 
-        private void ActivateHandCards()
+        public override void GameManagerOnPlayerTurnPhaseChange(PlayerTurnPhases turnPhase)
+        {
+            switch (turnPhase)
+            {
+                case PlayerTurnPhases.REFRESHPHASE:
+                    HandleRefreshPhase();
+                    break;
+                case PlayerTurnPhases.DRAWPHASE:
+                    HandleDrawPhase();
+                    break;
+                case PlayerTurnPhases.DONPHASE:
+                    HandleDONPhase();
+                    break;
+                case PlayerTurnPhases.MAINPHASE:
+                    HandleMainPhase();
+                    break;
+                case PlayerTurnPhases.ENDPHASE:
+                    HandleEndPhase();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void HandleRefreshPhase()
+        {
+            foreach(DonCard donCard in donCardsInDeck)
+            {
+                if (!(donCard.transform.parent!=PlayerBoard.Instance.costAreaObject.transform || donCard.transform.parent != PlayerBoard.Instance.donDeckObject.transform))
+                {
+                    donCard.transform.SetParent(PlayerBoard.Instance.costAreaObject.transform);
+                    donCard.UpdateParent();
+                    donCard.SetCardActive();
+                    donCard.ChangeDraggable(true);
+                }
+            }
+            foreach(DonCard donCard in donInCostArea)
+            {
+                if (donCard.transform.parent == PlayerBoard.Instance.costAreaObject.transform)
+                {
+                    donCard.SetCardActive();
+                    donCard.ChangeDraggable(true);
+                    donCard.RestandDon();
+                    donCard.SendCardToServer();
+                }
+            }
+            //Ezt kell karakterekre is majd
+            GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.DRAWPHASE);
+        }
+        private void HandleDrawPhase()
+        {
+            if (!firstRound || !ServerCon.Instance.firstTurnIsMine)
+            {
+                enableDraggingOnTopDeckCard();
+                Card.SetHowManyCardNeedsToBeDrawn(1);
+                Card.NeedToWatchHowManyCardsDrawn(true,deckObject.transform);
+            }
+            else
+            {
+                GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.DONPHASE);
+            }
+        }
+        private void HandleDONPhase()
+        {
+            if (!firstRound || !ServerCon.Instance.firstTurnIsMine)
+            {
+                enableDraggingOnTopTwoDonCard();
+                Card.SetHowManyCardNeedsToBeDrawn(2);
+                Card.NeedToWatchHowManyCardsDrawn(true,donDeckObject.transform);
+            }
+            else
+            {
+                enableDraggingOnTopDonCard();
+                Card.SetHowManyCardNeedsToBeDrawn(1);
+                Card.NeedToWatchHowManyCardsDrawn(true, donDeckObject.transform);
+            }
+            
+        }
+        private void HandleMainPhase()
+        {
+            MakeLeaderAttackActive();
+            MakeHandCardsDraggable();
+            ActivateCharacterAreaCards();
+        }
+        private async void HandleEndPhase()
+        {
+            firstRound = false;
+            DeactivateDraggableHandCards();
+            DeactivateAttackOnLeader();
+            DeactivateAttackOnCharacterAreaCards();
+            TurnOffDraggableOnAllDon();
+            await ServerCon.Instance.ChangeEnemyGameStateToPlayerPhase(gameCustomID);
+            GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
+            endOfTurnBtn.gameObject.SetActive(false);
+        }
+
+        public override void GameManagerOnBattlePhaseChange(BattlePhases battlePhase,Card attacker, Card attacked)
+        {
+            switch (battlePhase)
+            {
+                case BattlePhases.ATTACKDECLARATION:
+                    HandleAttackDeclaration(attacker,attacked);
+                    break;
+                case BattlePhases.BLOCKSTEP:
+                    HandleBlockStep(attacker, attacked);
+                    break;
+                case BattlePhases.COUNTERSTEP:
+                    HandleCounterStep(attacker, attacked);
+                    break;
+                case BattlePhases.DAMAGESTEP:
+                    HandleDamageStep(attacker, attacked);
+                    break;
+                case BattlePhases.ENDOFBATTLE:
+                    HandleEndOfBattleStep(attacker, attacked);
+                    break;
+                case BattlePhases.NOBATTLE:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private async void HandleAttackDeclaration(Card attacker, Card attacked)
+        {
+            attacker.Rest();
+            attacker.SendCardToServer();
+            await ServerCon.Instance.AttackedEnemyCard(attacker.cardData.customCardID, attacked.cardData.customCardID, attacker.cardData.power);
+        }
+        private void HandleBlockStep(Card attacker, Card attacked)
+        {
+            switch (attacker.cardData.cardType)
+            {
+                case CardType.CHARACTER:
+                    attacker.GetComponent<CharacterCard>().DrawAttackLine(attacked);
+                    break;
+                case CardType.LEADER:
+                    attacker.GetComponent<LeaderCard>().DrawAttackLine(attacked);
+                    break;
+                default:
+                    break;
+            }
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.COUNTERSTEP, attacker, attacked);
+        }
+        private void HandleCounterStep(Card attacker, Card attacked)
+        {
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.DAMAGESTEP, attacker, attacked);
+        }
+        private async void HandleDamageStep(Card attacker, Card attacked)
+        {
+            await Task.Delay(2000);
+            if (attacked.cardData.power <= attacker.cardData.power)
+            {
+                switch (attacked.cardData.cardType)
+                {
+                    case CardType.CHARACTER:
+                        attacker.GetComponent<CharacterCard>().RemoveAttackLine();
+                        break;
+                    case CardType.LEADER:
+                        TakeLife();
+                        attacker.GetComponent<LeaderCard>().RemoveAttackLine();
+                        break;
+                }
+            }
+            SendBattleHasEnded();
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE, attacker, attacked);
+        }
+        private void HandleEndOfBattleStep(Card attacker, Card attacked)
+        {
+            Debug.Log("Battle ended");
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+        }
+        private async void SendBattleHasEnded()
+        {
+            await ServerCon.Instance.BattleEnded();
+        }
+
+        private void CorrectAmountOfCardDrawn()
+        {
+            Card.NeedToWatchHowManyCardsDrawn(false, handObject.transform);
+            if (GameManager.Instance.currentPlayerTurnPhase == PlayerTurnPhases.DRAWPHASE)
+            {
+                GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.DONPHASE);
+            }
+            else if (GameManager.Instance.currentPlayerTurnPhase == PlayerTurnPhases.DONPHASE)
+            {
+                GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.MAINPHASE);
+            }
+        }
+        private void MakeHandCardsDraggable()
         {
             foreach (Card card in handObject.hand)
             {
                 card.ChangeDraggable(true);
             }
         }
+        private void ActivateCharacterAreaCards()
+        {
+            foreach (CharacterCard card in characterAreaCards)
+            {
+                card.SetCardActive();
+                if (!firstRound)
+                {
+                    card.CardCanAttack();
+                }
+            }
+        }
+        private void MakeLeaderAttackActive()
+        {
+            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            if (!firstRound)
+            {
+                leader.CardCanAttack();
+            } 
+        }
 
-        private void DeactivateHandCards()
+        private void DeactivateAttackOnLeader()
+        {
+            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            leader.CardCannotAttack();
+        }
+
+        private void DeactivateDraggableHandCards()
         {
             foreach (Card card in handObject.hand)
             {
@@ -378,6 +663,66 @@ namespace TCGSim
             }
         }
 
+        private void DeactivateAttackOnCharacterAreaCards()
+        {
+            foreach (CharacterCard card in characterAreaCards)
+            {
+                card.CardCannotAttack();
+            }
+        }
 
+        private void TurnOffDraggableOnAllDon()
+        {
+            foreach (DonCard donCard in donCardsInDeck)
+            {
+                donCard.ChangeDraggable(false);
+            }
+        }
+        
+        public async Task EnemyAttacked(string attackerCardID, string attackedCardID)
+        {
+            Card cardThatAttacks = null;
+            Card attackedCard = null;
+            UnityMainThreadDispatcher.Enqueue(() =>
+            {
+                LeaderCard enemyLeader = EnemyBoard.Instance.leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+                if (enemyLeader.cardData.customCardID == attackedCardID)
+                {
+                    cardThatAttacks = enemyLeader;
+                }
+                else
+                {
+                    cardThatAttacks = EnemyBoard.Instance.cards.Where(x => x.cardData.customCardID == attackerCardID).Single();
+                }   
+            });
+            UnityMainThreadDispatcher.Enqueue(() =>
+            {
+                LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+                if (leader.cardData.customCardID == attackedCardID)
+                {
+                    attackedCard = leader;
+                }
+                else
+                {
+                    foreach (Card card in characterAreaCards)
+                    {
+                        if (card.cardData.customCardID == attackedCardID)
+                        {
+                            attackedCard = card;
+                            return;
+                        }
+                    }
+                }
+                GameManager.Instance.ChangeBattlePhase(BattlePhases.BLOCKSTEP, cardThatAttacks, attackedCard);
+            });
+            await Task.CompletedTask;
+        }
+        private void TakeLife()
+        {
+            Card topLife = lifeObject.lifeCards.Last();
+            AddCardToHandFromLife(topLife,true,true);
+            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            leader.ReduceLife(1);
+        }
     }
 }

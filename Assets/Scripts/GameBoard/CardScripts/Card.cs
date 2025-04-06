@@ -17,7 +17,14 @@ namespace TCGSim.CardScripts
         private Image cardImage;
         private bool isImgLoaded = false;
         public bool draggable { get; protected set; } = false;
-       
+        public bool canAttack { get; protected set; } = false;
+        public bool rested { get; protected set; } = false;
+        public static int howManyCardsNeedToBeDrawn { get; protected set; } = 0;
+        public static bool needToWatchHowManyDrawn { get; protected set; } = false;
+        public static Transform fromWhereTheCardNeedsToBeDrawn { get; protected set; }
+        protected static int onBeginDragCounter { get; set; } = 0;
+        public static event Action CorrectAmountCardsDrawn;
+
         //Init variables
         private Hand hand = null;
 
@@ -43,15 +50,27 @@ namespace TCGSim.CardScripts
         public void OnBeginDrag(PointerEventData pointerEventData)
         {
             if (!draggable) { return; }
+            if (needToWatchHowManyDrawn && this.gameObject.transform.parent == fromWhereTheCardNeedsToBeDrawn)
+            {
+                onBeginDragCounter++;
+                if (onBeginDragCounter == howManyCardsNeedToBeDrawn)
+                {
+                    CorrectAmountCardsDrawn?.Invoke();
+                }
+            }
             if (!isImgLoaded)
             {
                 FlipCard();
             }
             if (this.cardData.cardType != CardType.DON)
             {
-                this.transform.SetParent(hand.transform);
+                this.transform.SetParent(PlayerBoard.Instance.handObject.transform);
                 this.UpdateParent();
-                SendCardToServer();
+            }
+            else
+            {
+                this.transform.SetParent(PlayerBoard.Instance.costAreaObject.transform);
+                this.UpdateParent();
             }
             canvasGroup.blocksRaycasts = false;
             this.transform.SetParent(this.transform.parent.parent);
@@ -66,51 +85,31 @@ namespace TCGSim.CardScripts
             if (objectAtDragEnd == null)
             {
                 Debug.Log("objectAtDragEnd is NULL - Dropped outside the scene!");
-                SnapCardBackToParentPos(hand.transform);
+                SnapCardBackToParentPos();
                 canvasGroup.alpha = 1f;
                 return;
             }
             switch (this.cardData.cardType)
             {
-                case CardType.CHARACTER:;
-                    //Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
+                case CardType.CHARACTER:
                     if (objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform || objectAtDragEnd.transform.childCount == 6
                         || this.cardData.cost > PlayerBoard.Instance.activeDon)
                     {
-                        SnapCardBackToParentPos(hand.transform);
+                        SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
                     }
                     else
                     {
-                        this.SetCardActive();
                         PlayerBoard.Instance.RestDons(this.cardData.cost);
-                        this.draggable = false;
+                        PlayerBoard.Instance.MoveCardFromHandToCharacterArea(this);
                     }
                     canvasGroup.blocksRaycasts = true;
-                    canvasGroup.alpha = 1f;
-                    //Debug.Log("OnEndDrag");
+                    canvasGroup.alpha = 1f; //100% opacity
                     break;
                 case CardType.DON:
-                    Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
-                    if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform)
+                    if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
                     {
-                        if (this.cardData.active)
-                        {
-                            SnapCardBackToParentPos(PlayerBoard.Instance.costAreaObject.transform);
-                        }
-                        else
-                        {
-                            SnapCardBackToParentPos(PlayerBoard.Instance.donDeckObject.transform);
-                            FlipCard();
-                        }     
-                    }
-                    if(objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
-                    {
-                        SnapCardBackToParentPos(PlayerBoard.Instance.costAreaObject.transform);
-                        this.SetCardActive();
-                        this.UpdateParent();
-                        this.SetCardVisibility(CardResources.CardVisibility.BOTH);
-                        SendCardToServer();
+                        SnapCardBackToParentPos();
                     }
                     CharacterCard charCard = objectAtDragEnd.gameObject.GetComponent<CharacterCard>();
                     if(charCard != null && charCard.transform.parent.parent.GetComponent<PlayerBoard>() != null && charCard.transform.parent.GetComponent<CharacterArea>() != null)
@@ -118,33 +117,42 @@ namespace TCGSim.CardScripts
                         AttachDon(objectAtDragEnd.gameObject.GetComponent<Card>());
                     }
                     canvasGroup.blocksRaycasts = true;
-                    canvasGroup.alpha = 1f;
-                    //Debug.Log("OnEndDrag");
+                    canvasGroup.alpha = 1f; //100% opacity
                     break;
                 case CardType.STAGE:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
                     if (objectAtDragEnd.transform != PlayerBoard.Instance.stageObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon)
                     {
-                        SnapCardBackToParentPos(hand.transform);
+                        SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
                     }
                     else
                     {
-                        SnapCardBackToParentPos(objectAtDragEnd.transform);
-                        this.UpdateParent();
-                        this.SetCardVisibility(CardResources.CardVisibility.BOTH);
-                        SendCardToServer();
                         PlayerBoard.Instance.RestDons(this.cardData.cost);
+                        PlayerBoard.Instance.MoveStageFromHandToStageArea(this);   
                     }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
-                    //Debug.Log("OnEndDrag");
                     break;
-                default:
-                    SnapCardBackToParentPos(hand.transform);
+                case CardType.EVENT:
+                    Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
+                    if (objectAtDragEnd.transform != PlayerBoard.Instance.stageObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon)
+                    {
+                        SnapCardBackToParentPos();
+                        Debug.Log("Cannot play the card!");
+                    }
+                    else
+                    {
+                        PlayerBoard.Instance.RestDons(this.cardData.cost);
+                        PlayerBoard.Instance.MoveCardToTrash(this);
+                    }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
-                    //Debug.Log("OnEndDrag");
+                    break;
+                default:
+                    SnapCardBackToParentPos();
+                    canvasGroup.blocksRaycasts = true;
+                    canvasGroup.alpha = 1f;
                     break;
             }
 
@@ -165,7 +173,7 @@ namespace TCGSim.CardScripts
             this.draggable = false;
         }
 
-        private async void SendCardToServer()
+        public async void SendCardToServer()
         {
             await ServerCon.Instance.UpdateCardAtInGameStateDB(this);
             await ServerCon.Instance.UpdateMyCardAtEnemy(this.cardData.customCardID);
@@ -240,6 +248,7 @@ namespace TCGSim.CardScripts
         public void Init()
         {
             this.gameObject.name = this.cardData.customCardID;
+            UpdateParent();
         }
 
         public virtual void LoadDataFromCardData(CardData cardData)
@@ -253,7 +262,11 @@ namespace TCGSim.CardScripts
 
         public void CheckCardVisibility()
         {
-            if ((cardData.cardVisibility == CardVisibility.PLAYERBOARD || cardData.cardVisibility == CardVisibility.BOTH) && !isImgLoaded)
+            if (cardData.cardVisibility == CardVisibility.PLAYERBOARD && !isImgLoaded && this.transform.parent.parent!=EnemyBoard.Instance.transform)
+            {
+                FlipCard();
+            }
+            else if(cardData.cardVisibility == CardVisibility.BOTH && !isImgLoaded)
             {
                 FlipCard();
             }
@@ -268,13 +281,25 @@ namespace TCGSim.CardScripts
         {
             this.transform.SetParent(EnemyBoard.Instance.GetParentByNameString(this.cardData.currentParent).transform);
             Transform newParent = this.transform.parent;
-            if(this.GetComponent<DonCard>()!=null && !this.cardData.active)
+            if(this.GetComponent<DonCard>()!=null && !this.cardData.active && this.transform.parent!=PlayerBoard.Instance.donDeckObject.transform)
             {
-                this.GetComponent<DonCard>().RestDon();
+                this.GetComponent<DonCard>().EnemyRestDon();
             }
-            if (this.GetComponent<DonCard>() != null && this.cardData.active)
+            if (this.GetComponent<DonCard>() != null && this.cardData.active && this.transform.parent != PlayerBoard.Instance.donDeckObject.transform)
             {
-                this.GetComponent<DonCard>().RestandDon();
+                this.GetComponent<DonCard>().EnemyRestandDon();
+            }
+            if (!this.cardData.currentParent.Contains("LifeArea"))
+            {
+                this.transform.rotation= Quaternion.Euler(0, 0, 180);
+            }
+            if (this.cardData.active)
+            {
+                this.Restand(true, true);
+            }
+            else
+            {
+                this.Rest();
             }
             this.transform.position = this.transform.parent.position;
         }
@@ -295,9 +320,64 @@ namespace TCGSim.CardScripts
             this.transform.position = this.transform.parent.position;
         }
 
+        public void SnapCardBackToParentPos()
+        {
+            if (this.cardData.cardType == CardType.DON)
+            {
+                PlayerBoard.Instance.MoveDonFromDeckToCostArea(this);
+            }
+            else
+            {
+                if (GameManager.Instance.currentPlayerTurnPhase == PlayerTurnPhases.DONPHASE)
+                {
+                    PlayerBoard.Instance.AddCardToHandFromDeck(this, true, true);
+                }
+                else
+                {
+                    this.transform.SetParent(PlayerBoard.Instance.handObject.transform);
+                }
+            } 
+            this.transform.position = this.transform.parent.position;
+        }
+
         public void SetDraggable(bool isDraggable)
         {
             this.draggable = isDraggable;
         }
+
+        public static void SetHowManyCardNeedsToBeDrawn(int thisMany)
+        {
+            howManyCardsNeedToBeDrawn = thisMany;
+        }
+
+        public static void NeedToWatchHowManyCardsDrawn(bool need, Transform fromWhere)
+        {
+            onBeginDragCounter = 0;
+            needToWatchHowManyDrawn = need;
+            fromWhereTheCardNeedsToBeDrawn = fromWhere;
+        }
+
+        public void Rest()
+        {
+            if (!rested)
+            {
+                this.cardData.active = false;
+                this.canAttack = false;
+                this.transform.rotation = Quaternion.Euler(0, 0, 90);
+                this.rested = true;
+            }
+        }
+
+        public void Restand(bool active,bool canAttack)
+        {
+            if (rested)
+            {
+                this.cardData.active = true;
+                this.canAttack = true;
+                this.transform.rotation = Quaternion.Euler(0, 0, 180);
+                this.rested = false;
+            }
+        }
+
     }
 }

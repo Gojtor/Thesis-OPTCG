@@ -37,24 +37,13 @@ namespace TCGSim
         public void AddCardToHand(Card card)
         {
             card.transform.SetParent(this.transform);
-            switch (board.boardName)
-            {
-                case ("PLAYERBOARD"):
-                    card.SetCardVisibility(CardVisibility.PLAYERBOARD);
-                    break;
-                case ("ENEMYBOARD"):
-                    card.SetCardVisibility(CardVisibility.ENEMYBOARD);
-                    break;
-                default:
-                    card.SetCardVisibility(CardVisibility.NONE);
-                    break;
-            }
+            card.SetCardVisibility(CardVisibility.PLAYERBOARD);
             hand.Add(card);      
         }
 
-        public void RemoveCardFromHand(Card card, GameObject gameObject)
+        public void RemoveCardFromHand(Card card, Transform gameObject)
         {
-            card.transform.SetParent(gameObject.transform);
+            card.transform.SetParent(gameObject);
             hand.Remove(card);
         }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TCGSim.CardResources;
 using TCGSim.CardScripts;
 using UnityEngine;
@@ -44,6 +45,15 @@ namespace TCGSim
             card.transform.SetParent(this.transform);
             card.SetCardVisibility(CardVisibility.NONE);
             lifeCards.Add(card);
+        }
+
+        public void TakeLife(Card card)
+        {
+            card.transform.Rotate(0, 0, -90);
+            card.SetCardVisibility(CardVisibility.PLAYERBOARD);
+            card.transform.SetParent(PlayerBoard.Instance.handObject.transform);
+            card.transform.position = card.transform.parent.position;
+            lifeCards.Remove(card);
         }
     }
 }
