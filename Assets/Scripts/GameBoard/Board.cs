@@ -5,6 +5,7 @@ using TCGSim;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using System.Threading.Tasks;
 
 public abstract class Board : MonoBehaviour
 {
@@ -57,6 +58,12 @@ public abstract class Board : MonoBehaviour
 
     [SerializeField]
     public GameObject endOfTurnBtnPrefab { get; protected set; }
+
+    [SerializeField]
+    public GameObject noBlockBtnPrefab { get; protected set; }
+
+    [SerializeField]
+    public GameObject noMoreCounterBtnPrefab { get; protected set; }
     #endregion
 
 
@@ -76,6 +83,8 @@ public abstract class Board : MonoBehaviour
     public Button keepBtn { get; protected set; }
     public Button mulliganBtn { get; protected set; }
     public Button endOfTurnBtn { get; protected set; }
+    public Button noBlockBtn { get; protected set; }
+    public Button noMoreCounterBtn { get; protected set; }
     public Button testBtn { get; protected set; }
 
     public CharacterArea characterAreaObject { get; protected set; }
@@ -143,7 +152,8 @@ public abstract class Board : MonoBehaviour
 
     public virtual void InitPrefabs(GameObject handPrefab, GameObject characterAreaPrefab, GameObject costAreaPrefab, GameObject stageAreaPrefab,
         GameObject deckPrefab, GameObject leaderPrefab, GameObject trashPrefab, GameObject cardPrefab, GameObject lifePrefab,
-        GameObject keepBtnPrefab, GameObject mulliganBtnPrefab, GameObject donDeckPrefab, GameObject donPrefab, GameObject endOfTurnBtnPrefab)
+        GameObject keepBtnPrefab, GameObject mulliganBtnPrefab, GameObject donDeckPrefab, GameObject donPrefab, GameObject endOfTurnBtnPrefab,
+        GameObject noBlockBtnPrefab, GameObject noMoreCounterBtnPrefab)
     {
         this.handPrefab = handPrefab;
         this.characterAreaPrefab = characterAreaPrefab;
@@ -159,6 +169,8 @@ public abstract class Board : MonoBehaviour
         this.donDeckPrefab = donDeckPrefab;
         this.donPrefab = donPrefab;
         this.endOfTurnBtnPrefab = endOfTurnBtnPrefab;
+        this.noBlockBtnPrefab = noBlockBtnPrefab;
+        this.noMoreCounterBtnPrefab = noMoreCounterBtnPrefab;
     }
 
     public virtual void LoadBoardElements()

@@ -282,17 +282,17 @@ namespace TCGSim.CardScripts
         {
             this.transform.SetParent(EnemyBoard.Instance.GetParentByNameString(this.cardData.currentParent).transform);
             Transform newParent = this.transform.parent;
-            if(this.GetComponent<DonCard>()!=null && !this.cardData.active && this.transform.parent!=PlayerBoard.Instance.donDeckObject.transform)
+            if (!this.cardData.currentParent.Contains("LifeArea"))
+            {
+                this.transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
+            if (this.GetComponent<DonCard>()!=null && !this.cardData.active && this.transform.parent!=PlayerBoard.Instance.donDeckObject.transform)
             {
                 this.GetComponent<DonCard>().EnemyRestDon();
             }
             if (this.GetComponent<DonCard>() != null && this.cardData.active && this.transform.parent != PlayerBoard.Instance.donDeckObject.transform)
             {
                 this.GetComponent<DonCard>().EnemyRestandDon();
-            }
-            if (!this.cardData.currentParent.Contains("LifeArea"))
-            {
-                this.transform.rotation= Quaternion.Euler(0, 0, 180);
             }
             if (this.cardData.active)
             {

@@ -78,11 +78,15 @@ namespace TCGSim
                 mulliganBtn.onClick.AddListener(Mulligan);
             }
         }
-        public void CreateEndOfTurnBtn()
+        public void CreateGameButtons()
         {
             endOfTurnBtn = Instantiate(endOfTurnBtnPrefab, this.gameObject.transform).GetComponent<Button>();
+            noBlockBtn = Instantiate(noBlockBtnPrefab, this.gameObject.transform).GetComponent<Button>();
+            noMoreCounterBtn = Instantiate(noMoreCounterBtnPrefab, this.gameObject.transform).GetComponent<Button>();
             endOfTurnBtn.gameObject.SetActive(false);
-            if (keepBtn != null)
+            noBlockBtn.gameObject.SetActive(false);
+            noMoreCounterBtn.gameObject.SetActive(false);
+            if (endOfTurnBtn != null)
             {
                 endOfTurnBtn.onClick.AddListener(EndOfTurnTrigger);
             }
@@ -163,7 +167,6 @@ namespace TCGSim
                         card.cardData.cardVisibility = CardVisibility.BOTH;
                         card.UpdateParent();
                         SendCardToDB(card);
-                        await ServerCon.Instance.UpdateMyLeaderCardAtEnemy(card.cardData.customCardID);
                     }
                     else
                     {
@@ -266,6 +269,7 @@ namespace TCGSim
             card.SetCardNotActive();
             card.ChangeDraggable(false);
             card.UpdateParent();
+            card.transform.position = card.transform.parent.position;
             card.SendCardToServer();
         }
 
@@ -273,7 +277,7 @@ namespace TCGSim
         {
             for (int i = 0; i < 5; i++)
             {
-                AddCardToHandFromDeck(deckCards[i],true,false);
+                AddCardToHandFromDeck(deckCards[i], true, false);
             }
         }
 
@@ -291,7 +295,7 @@ namespace TCGSim
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
-            CreateEndOfTurnBtn();
+            CreateGameButtons();
             await SendAllCardToDB();
             await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
@@ -302,7 +306,7 @@ namespace TCGSim
             keepBtn.gameObject.SetActive(false);
             mulliganBtn.gameObject.SetActive(false);
             CreateStartingLife();
-            CreateEndOfTurnBtn();
+            CreateGameButtons();
             await SendAllCardToDB();
             await ServerCon.Instance.DoneWithMulliganOrKeep();
         }
@@ -384,6 +388,16 @@ namespace TCGSim
         {
             GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.ENDPHASE);
         }
+        public void NoBlockTrigger(Card attacker, Card attacked)
+        {
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.COUNTERSTEP, attacker, attacked);
+        }
+
+        public void NoMoreCounterTrigger(Card attacker, Card attacked)
+        {
+
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.DAMAGESTEP, attacker, attacked);
+        }
 
         public override void GameManagerOnGameStateChange(GameState state)
         {
@@ -415,6 +429,11 @@ namespace TCGSim
             {
                 handObject.ScaleHandForStartingHand();
                 LoadMulliganKeepButtons();
+                LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+                if (leader != null)
+                {
+                    await ServerCon.Instance.UpdateMyLeaderCardAtEnemy(leader.cardData.customCardID);
+                }
             }
             Card.CorrectAmountCardsDrawn += CorrectAmountOfCardDrawn;
         }
@@ -422,16 +441,12 @@ namespace TCGSim
         {
             UnityMainThreadDispatcher.Enqueue(() =>
             {
-                endOfTurnBtn.gameObject.SetActive(true);
-            });
-            UnityMainThreadDispatcher.Enqueue(() =>
-            {
                 GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.REFRESHPHASE);
             });
         }
         private void HandleEnemyPhase()
         {
-
+            ChatManager.Instance.AddMessage("Enemy turn!");
         }
 
         public override void GameManagerOnPlayerTurnPhaseChange(PlayerTurnPhases turnPhase)
@@ -460,9 +475,9 @@ namespace TCGSim
 
         private void HandleRefreshPhase()
         {
-            foreach(DonCard donCard in donCardsInDeck)
+            foreach (DonCard donCard in donCardsInDeck)
             {
-                if (!(donCard.transform.parent!=PlayerBoard.Instance.costAreaObject.transform || donCard.transform.parent != PlayerBoard.Instance.donDeckObject.transform))
+                if (!(donCard.transform.parent != PlayerBoard.Instance.costAreaObject.transform || donCard.transform.parent != PlayerBoard.Instance.donDeckObject.transform))
                 {
                     donCard.transform.SetParent(PlayerBoard.Instance.costAreaObject.transform);
                     donCard.UpdateParent();
@@ -470,7 +485,7 @@ namespace TCGSim
                     donCard.ChangeDraggable(true);
                 }
             }
-            foreach(DonCard donCard in donInCostArea)
+            foreach (DonCard donCard in donInCostArea)
             {
                 if (donCard.transform.parent == PlayerBoard.Instance.costAreaObject.transform)
                 {
@@ -480,11 +495,11 @@ namespace TCGSim
                     donCard.SendCardToServer();
                 }
             }
-            foreach(CharacterCard card in characterAreaCards)
+            foreach (CharacterCard card in characterAreaCards)
             {
                 if (card.rested)
                 {
-                    card.Restand(true,false);
+                    card.Restand(true, false);
                     card.SendCardToServer();
                 }
             }
@@ -509,9 +524,10 @@ namespace TCGSim
         {
             if (!firstRound || !ServerCon.Instance.firstTurnIsMine)
             {
+                ChatManager.Instance.AddMessage("Please draw 1 card from your deck!");
                 enableDraggingOnTopDeckCard();
                 Card.SetHowManyCardNeedsToBeDrawn(1);
-                Card.NeedToWatchHowManyCardsDrawn(true,deckObject.transform);
+                Card.NeedToWatchHowManyCardsDrawn(true, deckObject.transform);
             }
             else
             {
@@ -520,25 +536,37 @@ namespace TCGSim
         }
         private void HandleDONPhase()
         {
-            if (!firstRound || !ServerCon.Instance.firstTurnIsMine)
+            if (this.activeDon == 10)
             {
-                enableDraggingOnTopTwoDonCard();
-                Card.SetHowManyCardNeedsToBeDrawn(2);
-                Card.NeedToWatchHowManyCardsDrawn(true,donDeckObject.transform);
+                ChatManager.Instance.AddMessage("You alrady drawn all of your DON!! card. Proceed to your main phase!");
+                GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.MAINPHASE);
             }
             else
             {
-                enableDraggingOnTopDonCard();
-                Card.SetHowManyCardNeedsToBeDrawn(1);
-                Card.NeedToWatchHowManyCardsDrawn(true, donDeckObject.transform);
+                if ((!firstRound || !ServerCon.Instance.firstTurnIsMine) && this.activeDon != 9)
+                {
+                    ChatManager.Instance.AddMessage("Please draw 2 DON!! card!");
+                    enableDraggingOnTopTwoDonCard();
+                    Card.SetHowManyCardNeedsToBeDrawn(2);
+                    Card.NeedToWatchHowManyCardsDrawn(true, donDeckObject.transform);
+                }
+                else
+                {
+                    ChatManager.Instance.AddMessage("Please draw 1 DON!! card!");
+                    enableDraggingOnTopDonCard();
+                    Card.SetHowManyCardNeedsToBeDrawn(1);
+                    Card.NeedToWatchHowManyCardsDrawn(true, donDeckObject.transform);
+                }
             }
-            
         }
         private void HandleMainPhase()
         {
+
+            endOfTurnBtn.gameObject.SetActive(true);
             MakeLeaderAttackActive();
             MakeHandCardsDraggable();
             ActivateCharacterAreaCards();
+
         }
         private async void HandleEndPhase()
         {
@@ -552,12 +580,12 @@ namespace TCGSim
             endOfTurnBtn.gameObject.SetActive(false);
         }
 
-        public override void GameManagerOnBattlePhaseChange(BattlePhases battlePhase,Card attacker, Card attacked)
+        public override void GameManagerOnBattlePhaseChange(BattlePhases battlePhase, Card attacker, Card attacked)
         {
             switch (battlePhase)
             {
                 case BattlePhases.ATTACKDECLARATION:
-                    HandleAttackDeclaration(attacker,attacked);
+                    HandleAttackDeclaration(attacker, attacked);
                     break;
                 case BattlePhases.BLOCKSTEP:
                     HandleBlockStep(attacker, attacked);
@@ -580,12 +608,25 @@ namespace TCGSim
 
         private async void HandleAttackDeclaration(Card attacker, Card attacked)
         {
+            string attackerID = attacker.cardData.customCardID;
+            string attackedID = attacked.cardData.customCardID;
+            ChatManager.Instance.AddMessage("You attacked the following card: " + attackedID + " with the following card: " + attackerID);
             attacker.Rest();
             attacker.SendCardToServer();
-            await ServerCon.Instance.AttackedEnemyCard(attacker.cardData.customCardID, attacked.cardData.customCardID, attacker.cardData.power);
+            await ServerCon.Instance.AttackedEnemyCard(attackerID, attackedID, attacker.cardData.power);
         }
         private void HandleBlockStep(Card attacker, Card attacked)
         {
+            string attackerID = attacker.cardData.customCardID;
+            string attackedID = attacked.cardData.customCardID;
+            ChatManager.Instance.AddMessage("The enemy attacked your card: " + attackedID + " with the following card: " + attackerID);
+            ChatManager.Instance.AddMessage("Select a blocker or click on no block button!");
+            if (noBlockBtn != null)
+            {
+                noBlockBtn.onClick.AddListener(() => NoBlockTrigger(attacker, attacked));
+            }
+            endOfTurnBtn.gameObject.SetActive(false);
+            noBlockBtn.gameObject.SetActive(true);
             switch (attacker.cardData.cardType)
             {
                 case CardType.CHARACTER:
@@ -597,21 +638,30 @@ namespace TCGSim
                 default:
                     break;
             }
-            GameManager.Instance.ChangeBattlePhase(BattlePhases.COUNTERSTEP, attacker, attacked);
+
         }
         private void HandleCounterStep(Card attacker, Card attacked)
         {
-            GameManager.Instance.ChangeBattlePhase(BattlePhases.DAMAGESTEP, attacker, attacked);
+            ChatManager.Instance.AddMessage("Select cards you want to counter with or click on no more counter button!");
+            noBlockBtn.gameObject.SetActive(false);
+            noBlockBtn.onClick.RemoveAllListeners();
+            if (noMoreCounterBtn != null)
+            {
+                noMoreCounterBtn.onClick.AddListener(() => NoMoreCounterTrigger(attacker, attacked));
+            }
+            noMoreCounterBtn.gameObject.SetActive(true);
         }
-        private async void HandleDamageStep(Card attacker, Card attacked)
+        private void HandleDamageStep(Card attacker, Card attacked)
         {
-            await Task.Delay(2000);
+            noMoreCounterBtn.gameObject.SetActive(false);
+            noMoreCounterBtn.onClick.RemoveAllListeners();
             if (attacked.cardData.power <= attacker.cardData.power)
             {
                 switch (attacked.cardData.cardType)
                 {
                     case CardType.CHARACTER:
                         attacker.GetComponent<CharacterCard>().RemoveAttackLine();
+                        TrashCharacter(attacked);
                         break;
                     case CardType.LEADER:
                         TakeLife();
@@ -619,7 +669,7 @@ namespace TCGSim
                         break;
                 }
             }
-            SendBattleHasEnded(attacker.cardData.customCardID,attacked.cardData.customCardID);
+            SendBattleHasEnded(attacker.cardData.customCardID, attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE, attacker, attacked);
         }
         private void HandleEndOfBattleStep()
@@ -628,7 +678,7 @@ namespace TCGSim
         }
         private async void SendBattleHasEnded(string attackerID, string attackedID)
         {
-            await ServerCon.Instance.BattleEnded(attackerID,attackerID);
+            await ServerCon.Instance.BattleEnded(attackerID, attackerID);
         }
 
         private void CorrectAmountOfCardDrawn()
@@ -667,7 +717,7 @@ namespace TCGSim
             if (!firstRound)
             {
                 leader.CardCanAttack();
-            } 
+            }
         }
 
         private void DeactivateAttackOnLeader()
@@ -699,7 +749,7 @@ namespace TCGSim
                 donCard.ChangeDraggable(false);
             }
         }
-        
+
         public async Task EnemyAttacked(string attackerCardID, string attackedCardID)
         {
             Card cardThatAttacks = null;
@@ -714,7 +764,7 @@ namespace TCGSim
                 else
                 {
                     cardThatAttacks = EnemyBoard.Instance.cards.Where(x => x.cardData.customCardID == attackerCardID).Single();
-                }   
+                }
             });
             UnityMainThreadDispatcher.Enqueue(() =>
             {
@@ -741,9 +791,16 @@ namespace TCGSim
         private void TakeLife()
         {
             Card topLife = lifeObject.lifeCards.Last();
-            AddCardToHandFromLife(topLife,true,true);
+            AddCardToHandFromLife(topLife, true, true);
             LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            ChatManager.Instance.AddMessage("Enemy successfully damaged your leader! Taking " + 1 + " life!");
             leader.ReduceLife(1);
+        }
+        private void TrashCharacter(Card card)
+        {
+            MoveCardToTrash(card);
+            ChatManager.Instance.AddMessage("Enemy successfully damaged your character! Trashing character!");
+
         }
     }
 }

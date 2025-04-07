@@ -61,6 +61,18 @@ namespace TCGSim
 
         [SerializeField]
         public GameObject endOfTurnBtnPrefab;
+
+        [SerializeField]
+        public GameObject noBlockBtnPrefab;
+
+        [SerializeField]
+        public GameObject noMoreCounterBtnPrefab;
+
+        [SerializeField]
+        public GameObject chatManagerPrefab;
+
+        [SerializeField]
+        public GameObject chatViewPrefab;
         #endregion
 
         private GameObject waitingForOpp;
@@ -79,6 +91,9 @@ namespace TCGSim
             ServerCon.Instance.Init(gameCustomID, playerName);
             connecting = Instantiate(connectingPrefab, this.gameObject.transform);
             await ServerCon.Instance.ConnectToServer();
+            GameObject chatView = Instantiate(chatViewPrefab, this.gameObject.transform);
+            ChatManager chatManager = Instantiate(chatManagerPrefab, this.gameObject.transform).GetComponent<ChatManager>();
+            chatManager.SetChatContent(chatView.transform.GetChild(0).GetChild(0).gameObject.GetComponent<CanvasGroup>());
             CreateBoards();
             switch (GameManager.Instance.currentState)
             {
@@ -120,13 +135,13 @@ namespace TCGSim
             EnemyBoard enemyBoard = enemyBoardObj.GetComponent<EnemyBoard>();
             PlayerBoard playerBoard = playerBoardObj.GetComponent<PlayerBoard>();
             playerBoard.InitPrefabs(handPrefab,characterAreaPrefab,costAreaPrefab,stageAreaPrefab,deckPrefab,leaderPrefab,trashPrefab,
-                cardPrefab,lifePrefab,keepBtnPrefab,mulliganBtnPrefab,donDeckPrefab,donPrefab, endOfTurnBtnPrefab);
+                cardPrefab,lifePrefab,keepBtnPrefab,mulliganBtnPrefab,donDeckPrefab,donPrefab, endOfTurnBtnPrefab,noBlockBtnPrefab,noMoreCounterBtnPrefab);
             enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
-                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab);
+                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, noMoreCounterBtnPrefab);
             playerBoard.Init("PLAYERBOARD", gameCustomID, playerName);
             enemyBoard.Init("ENEMYBOARD", gameCustomID);
-            playerBoard.gameObject.transform.Translate(0, -235, 0);
-            enemyBoard.gameObject.transform.Translate(0, 235, 0);
+            playerBoard.gameObject.transform.Translate(0, -255, 0);
+            enemyBoard.gameObject.transform.Translate(0, 255, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
         }
     }

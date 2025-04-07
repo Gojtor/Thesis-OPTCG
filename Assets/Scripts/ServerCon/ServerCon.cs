@@ -142,7 +142,8 @@ namespace TCGSim
 
             connection.On<string>("WhoIsFirst", (message) =>
             {
-                Debug.Log("The first player is :"+message);
+                Debug.Log("The first player is : "+message);
+                ChatManager.Instance.AddMessage("The first player is: " + message);
                 if (message == playerName)
                 {
                     firstTurnIsMine = true;

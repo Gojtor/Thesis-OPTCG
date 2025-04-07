@@ -42,6 +42,7 @@ namespace TCGSim
                 case GameState.STARTINGPHASE:
                     break;
                 case GameState.PLAYERPHASE:
+                    ChatManager.Instance.AddMessage("Its your turn!");
                     break;
                 case GameState.ENEMYPHASE:
                     break;

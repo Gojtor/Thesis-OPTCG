@@ -50,7 +50,7 @@ namespace TCGSim.CardScripts
             {
                 this.cardData.active = false;
                 this.draggable = false;
-                this.transform.Rotate(0, 0, -90);
+                this.transform.rotation = Quaternion.Euler(0, 0, 90);
                 this.rested = true;
             }
         }
@@ -61,7 +61,7 @@ namespace TCGSim.CardScripts
             {
                 this.cardData.active = true;
                 this.draggable = true;
-                this.transform.Rotate(0, 0, 90);
+                this.transform.rotation = Quaternion.Euler(0, 0, 180);
                 this.rested = false;
             }
         }
