@@ -13,6 +13,8 @@ namespace TCGSim
        WAITINGFOROPPONENT,
        STARTINGPHASE,
        PLAYERPHASE,
-       ENEMYPHASE
+       ENEMYPHASE,
+       MATCHLOST,
+       MATCHWON
     }
 }

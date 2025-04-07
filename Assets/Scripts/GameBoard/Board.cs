@@ -262,6 +262,8 @@ public abstract class Board : MonoBehaviour
                 return costAreaObject.gameObject;
             case "LeaderArea":
                 return leaderObject.gameObject;
+            case "TrashArea":
+                return trashObject.gameObject;
             default:
                 return this.gameObject;
 

@@ -83,11 +83,13 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     public void CardCanAttack()
     {
         canAttack = true;
+        this.MakeBordedForThisCard();
     }
 
     public void CardCannotAttack()
     {
         canAttack = false;
+        this.RemoveBorderForThisCard();
     }
     private async void CharacterCard_CardAttacks(Card card)
     {
@@ -100,12 +102,16 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     }
     public void DrawAttackLine(Card endPoint)
     {
+        this.EnableCanvasOverrideSorting();
+        lineRenderer.sortingOrder = 1;
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, this.gameObject.transform.position);
         lineRenderer.SetPosition(1, endPoint.gameObject.transform.position);
     }
     public void RemoveAttackLine()
     {
+        this.RemoveBorderForThisCard();
+        this.ResetCanvasOverrideSorting();
         lineRenderer.enabled = false;
     }
 }

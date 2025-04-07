@@ -52,10 +52,23 @@ namespace TCGSim
                 return;
             }
         }
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+        }
 
         public override void Init(string boardName, string gameCustomID, string playerName)
         {
-            base.Init(boardName, gameCustomID, playerName);
+            this.boardName = boardName;
+            this.gameCustomID = gameCustomID;
+            this.playerName = playerName;
+            Debug.Log(boardName + " called init " + playerName);
+            GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+            GameManager.OnPlayerTurnPhaseChange += GameManagerOnPlayerTurnPhaseChange;
+            GameManager.OnBattlePhaseChange += GameManagerOnBattlePhaseChange;
         }
 
         public override void LoadBoardElements()
@@ -129,49 +142,52 @@ namespace TCGSim
                 for (int i = 0; i < count; i++)
                 {
                     CardData cardData = await ServerCon.Instance.GetCardByCardID(cardNumber);
-                    GameObject cardObj = null;
-                    Card card = null;
-                    switch (cardData.cardType)
+                    UnityMainThreadDispatcher.Enqueue(() =>
                     {
-                        case CardType.CHARACTER:
-                            cardObj = Instantiate(cardPrefab, deckObject.transform);
-                            cardObj.AddComponent<CharacterCard>();
-                            card = cardObj.GetComponent<CharacterCard>();
-                            break;
-                        case CardType.STAGE:
-                            cardObj = Instantiate(cardPrefab, deckObject.transform);
-                            cardObj.AddComponent<StageCard>();
-                            card = cardObj.GetComponent<StageCard>();
-                            break;
-                        case CardType.EVENT:
-                            cardObj = Instantiate(cardPrefab, deckObject.transform);
-                            cardObj.AddComponent<EventCard>();
-                            card = cardObj.GetComponent<EventCard>();
-                            break;
-                        case CardType.LEADER:
-                            cardObj = Instantiate(cardPrefab, leaderObject.transform);
-                            cardObj.AddComponent<LeaderCard>();
-                            card = cardObj.GetComponent<LeaderCard>();
-                            break;
-                        default:
-                            cardObj = Instantiate(cardPrefab, deckObject.transform);
-                            cardObj.AddComponent<Card>();
-                            card = cardObj.GetComponent<Card>();
-                            break;
-                    }
-                    card.LoadDataFromCardData(cardData);
-                    card.Init(handObject, cardNumber + "-" + i);
-                    card.SetCardActive();
-                    if (card.cardData.cardType == CardType.LEADER)
-                    {
-                        card.cardData.cardVisibility = CardVisibility.BOTH;
-                        card.UpdateParent();
-                        SendCardToDB(card);
-                    }
-                    else
-                    {
-                        deck.Add(card);
-                    }
+                        GameObject cardObj = null;
+                        Card card = null;
+                        switch (cardData.cardType)
+                        {
+                            case CardType.CHARACTER:
+                                cardObj = Instantiate(cardPrefab, deckObject.transform);
+                                cardObj.AddComponent<CharacterCard>();
+                                card = cardObj.GetComponent<CharacterCard>();
+                                break;
+                            case CardType.STAGE:
+                                cardObj = Instantiate(cardPrefab, deckObject.transform);
+                                cardObj.AddComponent<StageCard>();
+                                card = cardObj.GetComponent<StageCard>();
+                                break;
+                            case CardType.EVENT:
+                                cardObj = Instantiate(cardPrefab, deckObject.transform);
+                                cardObj.AddComponent<EventCard>();
+                                card = cardObj.GetComponent<EventCard>();
+                                break;
+                            case CardType.LEADER:
+                                cardObj = Instantiate(cardPrefab, leaderObject.transform);
+                                cardObj.AddComponent<LeaderCard>();
+                                card = cardObj.GetComponent<LeaderCard>();
+                                break;
+                            default:
+                                cardObj = Instantiate(cardPrefab, deckObject.transform);
+                                cardObj.AddComponent<Card>();
+                                card = cardObj.GetComponent<Card>();
+                                break;
+                        }
+                        card.LoadDataFromCardData(cardData);
+                        card.Init(handObject, cardNumber + "-" + i);
+                        card.SetCardActive();
+                        if (card.cardData.cardType == CardType.LEADER)
+                        {
+                            card.cardData.cardVisibility = CardVisibility.BOTH;
+                            card.UpdateParent();
+                            SendCardToDB(card);
+                        }
+                        else
+                        {
+                            deck.Add(card);
+                        }
+                    });
                 }
             }
             return deck;
@@ -248,6 +264,14 @@ namespace TCGSim
                 card.UpdateParent();
                 card.SendCardToServer();
             }
+            else
+            {
+                card.SetCardVisibility(CardResources.CardVisibility.BOTH);
+                card.transform.SetParent(this.costAreaObject.transform);
+                card.SetCardActive();
+                card.ChangeDraggable(true);
+                card.UpdateParent();
+            }
         }
         public void MoveStageFromHandToStageArea(Card card)
         {
@@ -270,6 +294,7 @@ namespace TCGSim
             card.ChangeDraggable(false);
             card.UpdateParent();
             card.transform.position = card.transform.parent.position;
+            card.transform.rotation = Quaternion.Euler(0, 0, 0);
             card.SendCardToServer();
         }
 
@@ -412,30 +437,42 @@ namespace TCGSim
                 case GameState.ENEMYPHASE:
                     HandleEnemyPhase();
                     break;
+                case GameState.MATCHLOST:
+                    HandleMatchLost();
+                    break;
+                case GameState.MATCHWON:
+                    HandleMatchWon();
+                    break;
                 default:
                     break;
             }
         }
         private async void HandleStartingPhase()
         {
+
             this.LoadBoardElements();
             Shuffle<string>(deckString);
             deckCards = await CreateCardsFromDeck();
-            Shuffle<Card>(deckCards);
-            ReassingOrderAfterShuffle();
-            Debug.Log(boardName);
-            CreateStartingHand();
-            if (boardName == "PLAYERBOARD")
+            UnityMainThreadDispatcher.Enqueue(async () =>
             {
-                handObject.ScaleHandForStartingHand();
-                LoadMulliganKeepButtons();
-                LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-                if (leader != null)
+                Shuffle<Card>(deckCards);
+                ReassingOrderAfterShuffle();
+                Debug.Log(boardName);
+                CreateStartingHand();
+                if (boardName == "PLAYERBOARD")
                 {
-                    await ServerCon.Instance.UpdateMyLeaderCardAtEnemy(leader.cardData.customCardID);
+                    handObject.ScaleHandForStartingHand();
+                    LoadMulliganKeepButtons();
+                    LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+                    if (leader != null)
+                    {
+                        await ServerCon.Instance.UpdateMyLeaderCardAtEnemy(leader.cardData.customCardID);
+
+                    }
                 }
-            }
-            Card.CorrectAmountCardsDrawn += CorrectAmountOfCardDrawn;
+                Card.CorrectAmountCardsDrawn += CorrectAmountOfCardDrawn;
+            });
+
         }
         private void HandlePlayerPhase()
         {
@@ -448,6 +485,17 @@ namespace TCGSim
         {
             ChatManager.Instance.AddMessage("Enemy turn!");
         }
+        private void HandleMatchLost()
+        {
+            ChatManager.Instance.AddMessage("You lost the match!");
+            GameBoard.Instance.GameLost();
+        }
+        private void HandleMatchWon()
+        {
+            ChatManager.Instance.AddMessage("You won the game!");
+            GameBoard.Instance.GameWon();
+        }
+
 
         public override void GameManagerOnPlayerTurnPhaseChange(PlayerTurnPhases turnPhase)
         {
@@ -576,8 +624,11 @@ namespace TCGSim
             DeactivateAttackOnCharacterAreaCards();
             TurnOffDraggableOnAllDon();
             await ServerCon.Instance.ChangeEnemyGameStateToPlayerPhase(gameCustomID);
-            GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
-            endOfTurnBtn.gameObject.SetActive(false);
+            UnityMainThreadDispatcher.Enqueue(() =>
+            {
+                GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
+                endOfTurnBtn.gameObject.SetActive(false);
+            });
         }
 
         public override void GameManagerOnBattlePhaseChange(BattlePhases battlePhase, Card attacker, Card attacked)
@@ -600,6 +651,7 @@ namespace TCGSim
                     HandleEndOfBattleStep();
                     break;
                 case BattlePhases.NOBATTLE:
+                    HandleNoBattle();
                     break;
                 default:
                     break;
@@ -613,6 +665,7 @@ namespace TCGSim
             ChatManager.Instance.AddMessage("You attacked the following card: " + attackedID + " with the following card: " + attackerID);
             attacker.Rest();
             attacker.SendCardToServer();
+            endOfTurnBtn.gameObject.SetActive(false);
             await ServerCon.Instance.AttackedEnemyCard(attackerID, attackedID, attacker.cardData.power);
         }
         private void HandleBlockStep(Card attacker, Card attacked)
@@ -660,21 +713,43 @@ namespace TCGSim
                 switch (attacked.cardData.cardType)
                 {
                     case CardType.CHARACTER:
-                        attacker.GetComponent<CharacterCard>().RemoveAttackLine();
                         TrashCharacter(attacked);
                         break;
                     case CardType.LEADER:
                         TakeLife();
-                        attacker.GetComponent<LeaderCard>().RemoveAttackLine();
                         break;
                 }
+            }
+            switch (attacker.cardData.cardType)
+            {
+                case CardType.CHARACTER:
+                    attacker.GetComponent<CharacterCard>().RemoveAttackLine();
+                    break;
+                case CardType.LEADER:
+                    attacker.GetComponent<LeaderCard>().RemoveAttackLine();
+                    break;
             }
             SendBattleHasEnded(attacker.cardData.customCardID, attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE, attacker, attacked);
         }
         private void HandleEndOfBattleStep()
         {
-            GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            if (leader.life >= 0)
+            {
+                GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+            }
+            else
+            {
+                GameManager.Instance.ChangeGameState(GameState.MATCHLOST);
+            }
+        }
+        private void HandleNoBattle()
+        {
+            if (GameManager.Instance.currentState == GameState.PLAYERPHASE)
+            {
+                endOfTurnBtn.gameObject.SetActive(true);
+            }
         }
         private async void SendBattleHasEnded(string attackerID, string attackedID)
         {
@@ -780,7 +855,7 @@ namespace TCGSim
                         if (card.cardData.customCardID == attackedCardID)
                         {
                             attackedCard = card;
-                            return;
+                            break;
                         }
                     }
                 }

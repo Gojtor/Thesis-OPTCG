@@ -24,7 +24,7 @@ namespace TCGSim.CardScripts
         public static Transform fromWhereTheCardNeedsToBeDrawn { get; protected set; }
         protected static int onBeginDragCounter { get; set; } = 0;
         public static event Action CorrectAmountCardsDrawn;
-
+        protected GameObject border;
         //Init variables
         private Hand hand = null;
 
@@ -93,7 +93,7 @@ namespace TCGSim.CardScripts
             {
                 case CardType.CHARACTER:
                     if (objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform || objectAtDragEnd.transform.childCount == 6
-                        || this.cardData.cost > PlayerBoard.Instance.activeDon)
+                        || this.cardData.cost > PlayerBoard.Instance.activeDon || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE)
                     {
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
@@ -107,7 +107,7 @@ namespace TCGSim.CardScripts
                     canvasGroup.alpha = 1f; //100% opacity
                     break;
                 case CardType.DON:
-                    if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
+                    if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
                     {
                         SnapCardBackToParentPos();
                     }
@@ -121,7 +121,7 @@ namespace TCGSim.CardScripts
                     break;
                 case CardType.STAGE:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
-                    if (objectAtDragEnd.transform != PlayerBoard.Instance.stageObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon)
+                    if (objectAtDragEnd.transform != PlayerBoard.Instance.stageObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE || this.cardData.cost > PlayerBoard.Instance.activeDon)
                     {
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
@@ -136,7 +136,7 @@ namespace TCGSim.CardScripts
                     break;
                 case CardType.EVENT:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
-                    if (objectAtDragEnd.transform != PlayerBoard.Instance.stageObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon)
+                    if (objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase!=PlayerTurnPhases.MAINPHASE || this.cardData.cost > PlayerBoard.Instance.activeDon)
                     {
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
@@ -160,13 +160,11 @@ namespace TCGSim.CardScripts
 
         private void AttachDon(Card card)
         {
-            Canvas cardCanvas = card.GetComponent<Canvas>();
-            cardCanvas.overrideSorting = true;
-            cardCanvas.sortingOrder = 2;
+            card.EnableCanvasOverrideSorting();
             Canvas thisCardCanvas = this.GetComponent<Canvas>();
             thisCardCanvas.overrideSorting = true;
             thisCardCanvas.sortingOrder = 1;
-            card.GetComponent<LineRenderer>().sortingOrder = 3;
+            card.GetComponent<LineRenderer>().sortingOrder = 4;
             SnapCardBackToParentPos(card.transform);
             this.transform.Translate(0, -30, 0);
             this.SetCardNotActive();
@@ -363,7 +361,17 @@ namespace TCGSim.CardScripts
             if (!rested)
             {
                 this.cardData.active = false;
-                this.canAttack = false;
+                if (this.GetComponent<CharacterCard>() != null)
+                {
+                    this.GetComponent<CharacterCard>().CardCannotAttack();
+                }
+                else if (this.GetComponent<LeaderCard>()!=null)
+                {
+                    this.GetComponent<LeaderCard>().CardCannotAttack();
+                }
+                {
+                    this.canAttack = false;
+                }
                 this.transform.rotation = Quaternion.Euler(0, 0, 90);
                 this.rested = true;
             }
@@ -387,5 +395,45 @@ namespace TCGSim.CardScripts
             }
         }
 
+        public void MakeBordedForThisCard()
+        {
+            border = new GameObject("Outline");
+            border.transform.SetParent(this.gameObject.transform);
+            Image borderIMG = border.AddComponent<Image>();
+            RectTransform rectTransform = border.GetComponent<RectTransform>();
+            border.transform.position = this.transform.position;
+            rectTransform.sizeDelta = new Vector2(110, 150);
+            borderIMG.color = Color.green;
+            Outline borderOutline = border.AddComponent<Outline>();
+            borderOutline.enabled = true;
+            borderOutline.effectColor = Color.green;
+            borderOutline.effectDistance = new Vector2(10, 10);
+            Canvas canvas = border.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 2;
+            EnableCanvasOverrideSorting();
+        }
+
+        public async void RemoveBorderForThisCard()
+        {
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                Destroy(border);
+                ResetCanvasOverrideSorting();
+            });
+        }
+
+        public void ResetCanvasOverrideSorting()
+        {
+            Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
+            thisCardCanvas.overrideSorting = false;
+        }
+
+        public void EnableCanvasOverrideSorting()
+        {
+            Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
+            thisCardCanvas.overrideSorting = true;
+            thisCardCanvas.sortingOrder = 3;
+        }
     }
 }

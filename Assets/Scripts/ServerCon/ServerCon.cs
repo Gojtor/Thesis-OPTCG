@@ -36,13 +36,20 @@ namespace TCGSim
         // Start is called before the first frame update
         void Start()
         {
-           
+
         }
 
         // Update is called once per frame
         void Update()
         {
 
+        }
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
         }
 
         private void Awake()
@@ -63,25 +70,32 @@ namespace TCGSim
            .WithUrl(serverUrl + "/websocket")
            .Build();
 
-            connection.On<string,string>("Connected", (message,enemyName) =>
+            connection.On<string, string>("Connected", async (message, enemyName) =>
             {
-                Debug.Log(message+enemyName);
+                Debug.Log(message + enemyName);
                 if (ConnectionTask != null)
                 {
                     ConnectionTask.TrySetResult(true);
                 }
-                EnemyBoard.Instance.SetName(enemyName);
+                await UnityMainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    GameBoard.Instance.SetEnemyName(enemyName);
+                });
+                Debug.Log("Enemy name is: " + GameBoard.Instance.enemyName);
             });
 
-            connection.On<string,string>("EnemyConnected", (message,name) =>
+            connection.On<string, string>("EnemyConnected", async (message, name) =>
             {
                 Debug.Log(message);
                 if (EnemyConnectionTask != null)
                 {
                     EnemyConnectionTask.TrySetResult(true);
                 }
-                EnemyBoard.Instance.SetName(name);
-                Debug.Log("Enemy name is: " + EnemyBoard.Instance.playerName);
+                await UnityMainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    GameBoard.Instance.SetEnemyName(name);
+                });
+                Debug.Log("Enemy name is: " + GameBoard.Instance.enemyName);
             });
 
             connection.On<string>("ReceiveMessage", (message) =>
@@ -110,16 +124,25 @@ namespace TCGSim
             connection.On<string>("GroupAlreadyExist", (message) =>
             {
                 Debug.Log(message);
+                GameBoard.Instance.GameWithIDAlreadyExist();
+            });
+
+            connection.On<string>("PlayerAlreadyInThisGroup", (message) =>
+            {
+                Debug.Log(message);
+                GameBoard.Instance.PlayerWithThisNameAlreadyIsInTheGame();
             });
 
             connection.On<string>("GroupDoesntExist", (message) =>
             {
                 Debug.Log(message);
+                GameBoard.Instance.GameWithIDDoesntExist();
             });
 
             connection.On<string>("TwoPlayerAlreadyInGame", (message) =>
             {
                 Debug.Log(message);
+                GameBoard.Instance.TwoPlayerAlreadyInGame();
             });
 
             connection.On<string>("DoneWithStartingHand", async (message) =>
@@ -140,14 +163,18 @@ namespace TCGSim
                 await UpdateEnemyCard(message);
             });
 
-            connection.On<string>("WhoIsFirst", (message) =>
+            connection.On<string>("WhoIsFirst", async (message) =>
             {
-                Debug.Log("The first player is : "+message);
+                Debug.Log("The first player is : " + message);
                 ChatManager.Instance.AddMessage("The first player is: " + message);
                 if (message == playerName)
                 {
                     firstTurnIsMine = true;
                 }
+                await UnityMainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    GameBoard.Instance.BuildUpBoards();
+                });
             });
             connection.On<string>("ChangeGameStateToPlayerPhase", (message) =>
             {
@@ -158,10 +185,18 @@ namespace TCGSim
             connection.On<string>("UpdateEnemyLeaderCard", async (message) =>
             {
                 Debug.Log(message);
-                await UpdateEnemyLeaderCard(message);
+                await WaitUntilAsync(() =>
+                    PlayerBoard.Instance?.handObject != null &&
+                    EnemyBoard.Instance?.leaderObject != null
+                );
+
+                await UnityMainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    UpdateEnemyLeaderCard(message);
+                });
             });
 
-            connection.On<string,string,int>("MyCardIsAttacked", async (cardThatAttacksID, attackedCard, power) =>
+            connection.On<string, string, int>("MyCardIsAttacked", async (cardThatAttacksID, attackedCard, power) =>
             {
                 await MyCardIsAttacked(cardThatAttacksID, attackedCard, power);
             });
@@ -176,16 +211,23 @@ namespace TCGSim
             Debug.Log("WebSocket connection is succesfull!");
         }
 
-        public void Init(string gameID,string playerName)
+        public void Init(string gameID, string playerName)
         {
             this.gameID = gameID;
             this.playerName = playerName;
+        }
+        public static async Task WaitUntilAsync(Func<bool> condition, int checkIntervalMs = 100)
+        {
+            while (!condition())
+            {
+                await Task.Delay(checkIntervalMs);
+            }
         }
 
         public async Task WaitForConnection()
         {
             Debug.Log("Waiting for a connection...");
-            await connection.InvokeAsync<string>("ConnectedAsEnemy", gameID,playerName);
+            await connection.InvokeAsync<string>("ConnectedAsEnemy", gameID, playerName);
             ConnectionTask = new TaskCompletionSource<bool>();
             await ConnectionTask.Task; // Wait here until a message is received
             Debug.Log("Connected");
@@ -197,7 +239,7 @@ namespace TCGSim
             EnemyConnectionTask = new TaskCompletionSource<bool>();
             await EnemyConnectionTask.Task; // Wait here until a message is received
             Debug.Log("Enemy connected");
-            await connection.InvokeAsync<string>("ReAssureEnemyConnected", gameID,playerName);
+            await connection.InvokeAsync<string>("ReAssureEnemyConnected", gameID, playerName);
         }
 
         public async Task WaitForEnemyToFinishStartingHand()
@@ -207,28 +249,31 @@ namespace TCGSim
             {
                 await Task.Delay(1000);
             }
-            Debug.Log("Enemy is done with starting hand!");
-            if (firstTurnIsMine)
+            UnityMainThreadDispatcher.Enqueue(() =>
             {
-                GameManager.Instance.ChangeGameState(GameState.PLAYERPHASE);
-            }
-            else
-            {
-                GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
-            }
+                Debug.Log("Enemy is done with starting hand!");
+                if (firstTurnIsMine)
+                {
+                    GameManager.Instance.ChangeGameState(GameState.PLAYERPHASE);
+                }
+                else
+                {
+                    GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
+                }
+            });
             await Task.CompletedTask;
         }
 
         public async void SendMessageToServer(string message)
         {
-            await connection.InvokeAsync<string>("ReceiveMessageFromClient", gameID,message);
+            await connection.InvokeAsync<string>("ReceiveMessageFromClient", gameID, message);
         }
 
-        public async Task AddPlayerToGroupInSocket(string gameID,string playerName)
+        public async Task AddPlayerToGroupInSocket(string gameID, string playerName)
         {
-            Debug.Log("Adding player to the following group in socket: "+gameID);
+            Debug.Log("Adding player to the following group in socket: " + gameID);
             AddingToGroupTask = new TaskCompletionSource<bool>();
-            await connection.InvokeAsync<string>("AddClientToGroupByGameID",gameID,playerName);
+            await connection.InvokeAsync<string>("AddClientToGroupByGameID", gameID, playerName);
             await AddingToGroupTask.Task;
         }
 
@@ -253,12 +298,12 @@ namespace TCGSim
 
         public async Task UpdateMyCardAtEnemy(string customCardID)
         {
-            await connection.InvokeAsync<string>("UpdateMyCardAtEnemy", gameID,customCardID);
+            await connection.InvokeAsync<string>("UpdateMyCardAtEnemy", gameID, customCardID);
         }
 
         public async Task UpdateEnemyBoard()
         {
-            Debug.Log("UpdateEnemyBoard called! Enemy name: "+EnemyBoard.Instance.playerName+"! My name: "+PlayerBoard.Instance.playerName);
+            Debug.Log("UpdateEnemyBoard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
             await EnemyBoard.Instance.UpdateBoardFromGameDB();
             enemyFinishedWithStartingHand = true;
         }
@@ -268,15 +313,15 @@ namespace TCGSim
             Debug.Log("UpdateEnemyBoard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
             await EnemyBoard.Instance.UpdateCardFromGameDB(customCardID);
         }
-        public async Task UpdateEnemyLeaderCard(string customCardID)
+        public void UpdateEnemyLeaderCard(string customCardID)
         {
             Debug.Log("UpdateEnemyLeaderCard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
-            await EnemyBoard.Instance.CreateOrUpdateLeaderCardFromGameDB(customCardID);
+            EnemyBoard.Instance.CreateOrUpdateLeaderCardFromGameDB(customCardID);
         }
-        public async Task MyCardIsAttacked(string cardThatAttacksID, string attackedCard,int power)
+        public async Task MyCardIsAttacked(string cardThatAttacksID, string attackedCard, int power)
         {
             Debug.Log("Card: " + cardThatAttacksID + " with this power: " + power + " attacked this card: " + attackedCard);
-            await PlayerBoard.Instance.EnemyAttacked(cardThatAttacksID,attackedCard);
+            await PlayerBoard.Instance.EnemyAttacked(cardThatAttacksID, attackedCard);
         }
 
         public async Task ChangeEnemyGameStateToPlayerPhase(string customCardID)
@@ -285,16 +330,16 @@ namespace TCGSim
         }
         public async Task UpdateMyLeaderCardAtEnemy(string customCardID)
         {
-            await connection.InvokeAsync<string>("UpdateMyLeaderCardAtEnemy", gameID,customCardID);
+            await connection.InvokeAsync<string>("UpdateMyLeaderCardAtEnemy", gameID, customCardID);
         }
         public async Task AttackedEnemyCard(string cardThatAttacksID, string attackedCard, int power)
         {
-            await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard,power);
+            await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard, power);
         }
 
-        public async Task BattleEnded(string attackerID,string attackedID)
+        public async Task BattleEnded(string attackerID, string attackedID)
         {
-            await connection.InvokeAsync<string>("BattleEnded", gameID,attackerID,attackedID);
+            await connection.InvokeAsync<string>("BattleEnded", gameID, attackerID, attackedID);
         }
 
         private async void OnApplicationQuit()
@@ -356,7 +401,7 @@ namespace TCGSim
             }
 
         }
-        
+
         public async Task AddCardToInGameStateDB(Card card)
         {
             CardData cardData = card.cardData;
@@ -472,11 +517,11 @@ namespace TCGSim
 
         }
 
-        public async Task<CardData> GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(string gameID, string playerName,string customCardID)
+        public async Task<CardData> GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(string gameID, string playerName, string customCardID)
         {
             string url = "http://localhost:5000/api/TCG/GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID?";
             //Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID);
-            using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName+ "&customCardID="+customCardID))
+            using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID))
             {
                 var operation = request.SendWebRequest();
 

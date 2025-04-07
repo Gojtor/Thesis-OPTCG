@@ -136,6 +136,12 @@ MonoBehaviour:
   noMoreCounterBtnPrefab: {fileID: 1067700984236907855, guid: a795fc64b7f99434384d91b917f00228, type: 3}
   chatManagerPrefab: {fileID: 318156613135273951, guid: 3e559dde99eec3d49b7652974fbc37d3, type: 3}
   chatViewPrefab: {fileID: 7929732396435257826, guid: 5942e91e6ee85b14d89e34f867e84470, type: 3}
+  gameAlreadyExistPrefab: {fileID: 3918970886372085481, guid: 7c25e06e8cad1b54fbd3bc51199d3b67, type: 3}
+  playerAlreadyInGamePrefab: {fileID: 2397044123511737399, guid: 243a00fedab91cd4b9242f766cd811d2, type: 3}
+  twoPlayerInGamePrefab: {fileID: 2397044123511737399, guid: bdd77ceac0d598242af33de6c3ef5fc1, type: 3}
+  gameDoesntExitsPrefab: {fileID: 3918970886372085481, guid: ffe25045f6177a84aa4e7bd32e46ab65, type: 3}
+  matchWonPrefab: {fileID: 2397044123511737399, guid: 87db70f9a1f65e947b708dc3a5e9fa62, type: 3}
+  matchLostPrefab: {fileID: 2397044123511737399, guid: f2823eccfc33ffb44a06b62582369714, type: 3}
 --- !u!1 &7425409318985540678
 GameObject:
   m_ObjectHideFlags: 0

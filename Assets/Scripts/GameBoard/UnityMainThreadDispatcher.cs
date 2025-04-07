@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace TCGSim
@@ -28,6 +29,16 @@ namespace TCGSim
                 }
                 action?.Invoke();
             }
+        }
+        public static Task RunOnMainThread(Action action)
+        {
+            var tcs = new TaskCompletionSource<bool>();
+            UnityMainThreadDispatcher.Enqueue(() =>
+            {
+                action();
+                tcs.SetResult(true);
+            });
+            return tcs.Task;
         }
     }
 }

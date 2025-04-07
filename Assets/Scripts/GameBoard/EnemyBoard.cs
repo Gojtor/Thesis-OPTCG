@@ -40,11 +40,23 @@ namespace TCGSim
                 //Debug.Log(boardName + "- In hand:" + handObject.transform.childCount + ", in deck: " + deckObject.transform.childCount + ", in life: " + lifeObject.transform.childCount);
             }
         }
-
-        public override void Init(string boardName, string gameCustomID)
+        private void OnDestroy()
         {
-            base.Init(boardName, gameCustomID);
-            Debug.Log(boardName);
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+        }
+
+        public override void Init(string boardName, string gameCustomID, string playerName)
+        {
+            this.boardName = boardName;
+            this.gameCustomID = gameCustomID;
+            this.playerName = playerName;
+            Debug.Log(boardName + " called init " + playerName);
+            GameManager.OnGameStateChange += GameManagerOnGameStateChange;
+            GameManager.OnPlayerTurnPhaseChange += GameManagerOnPlayerTurnPhaseChange;
+            GameManager.OnBattlePhaseChange += GameManagerOnBattlePhaseChange;
         }
 
         public override void GameManagerOnGameStateChange(GameState state)
@@ -115,9 +127,9 @@ namespace TCGSim
             await Task.CompletedTask;
         }
 
-        public async Task CreateOrUpdateLeaderCardFromGameDB(string customCardID)
+        public async void CreateOrUpdateLeaderCardFromGameDB(string customCardID)
         {
-            UnityMainThreadDispatcher.Enqueue(async () =>
+            await UnityMainThreadDispatcher.RunOnMainThread(async () =>
             {
                 if (leaderObject == null)
                 {
@@ -138,8 +150,6 @@ namespace TCGSim
                     await UpdateCardFromGameDB(customCardID);
                 }
             });
-
-            await Task.CompletedTask;
         }
 
         public async Task<List<Card>> GetEnemyCardsFromGameDB()

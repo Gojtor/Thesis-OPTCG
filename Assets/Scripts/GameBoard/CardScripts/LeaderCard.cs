@@ -88,11 +88,13 @@ namespace TCGSim
         public void CardCanAttack()
         {
             canAttack = true;
+            this.MakeBordedForThisCard();
         }
 
         public void CardCannotAttack()
         {
             canAttack = false;
+            this.RemoveBorderForThisCard();
         }
         private async void LeaderCard_CardAttacks(Card card)
         {
@@ -105,10 +107,8 @@ namespace TCGSim
         }
         public void DrawAttackLine(Card endPoint)
         {
-            Canvas cardCanvas = this.GetComponent<Canvas>();
-            cardCanvas.overrideSorting = true;
-            cardCanvas.sortingOrder = 2;
-            lineRenderer.sortingOrder = 3;
+            this.EnableCanvasOverrideSorting();
+            lineRenderer.sortingOrder = 1;
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, this.gameObject.transform.position);
             lineRenderer.SetPosition(1, endPoint.gameObject.transform.position);
@@ -116,8 +116,8 @@ namespace TCGSim
 
         public void RemoveAttackLine()
         {
-            Canvas cardCanvas = this.GetComponent<Canvas>();
-            cardCanvas.overrideSorting = false;
+            this.ResetCanvasOverrideSorting();
+            this.ResetCanvasOverrideSorting();
             lineRenderer.enabled = false;
         }
 
