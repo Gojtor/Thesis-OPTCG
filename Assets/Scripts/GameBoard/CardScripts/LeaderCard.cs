@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 
 namespace TCGSim
 {
-    class LeaderCard : Card, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
+    public class LeaderCard : Card, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
         private LineRenderer lineRenderer;
         private Vector2 mousePos;
@@ -31,6 +31,7 @@ namespace TCGSim
             lineRenderer.startColor = Color.black;
             lineRenderer.endColor = Color.black;
             CardAttacks += LeaderCard_CardAttacks;
+            GameManager.OnBattlePhaseChange += GameManager_OnBattlePhaseChange;
         }
 
         // Update is called once per frame
@@ -72,7 +73,7 @@ namespace TCGSim
             if (canAttack)
             {
                 Card card = eventData.pointerEnter.GetComponent<Card>();
-                if (card == null || (card.cardData.active && card.cardData.cardType != CardType.LEADER) || card.cardData.playerName == this.cardData.playerName )
+                if (card == null || (card.cardData.active && card.cardData.cardType != CardType.LEADER) || card.cardData.playerName == this.cardData.playerName)
                 {
                     lineRenderer.enabled = false;
                 }
@@ -96,14 +97,9 @@ namespace TCGSim
             canAttack = false;
             this.RemoveBorderForThisCard();
         }
-        private async void LeaderCard_CardAttacks(Card card)
+        private void LeaderCard_CardAttacks(Card card)
         {
-            GameManager.Instance.ChangeBattlePhase(BattlePhases.ATTACKDECLARATION,this,card);
-            while (GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE)
-            {
-                await Task.Delay(1000);
-            }
-            lineRenderer.enabled = false;
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.ATTACKDECLARATION, this, card);
         }
         public void DrawAttackLine(Card endPoint)
         {
@@ -116,14 +112,25 @@ namespace TCGSim
 
         public void RemoveAttackLine()
         {
-            this.ResetCanvasOverrideSorting();
-            this.ResetCanvasOverrideSorting();
-            lineRenderer.enabled = false;
+            if (lineRenderer != null)
+            {
+                lineRenderer.enabled = false;
+            }
         }
 
         public void ReduceLife(int amount)
         {
             life = life - amount;
+        }
+        private async void GameManager_OnBattlePhaseChange(BattlePhases battlePhase, Card attacker, Card attacked)
+        {
+            if (battlePhase == BattlePhases.ENDOFBATTLE)
+            {
+                await UnityMainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    RemoveAttackLine();
+                });
+            }
         }
     }
 }

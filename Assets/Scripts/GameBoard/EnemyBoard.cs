@@ -21,13 +21,13 @@ namespace TCGSim
         }
         private void Awake()
         {
-            if (Instance == null)
+            if (Instance == null || Instance == this)
             {
                 Instance = this;
             }
             else if (Instance != this)
             {
-                Destroy(gameObject);
+                Destroy(this.gameObject);
                 return;
             }
         }
@@ -42,6 +42,9 @@ namespace TCGSim
         }
         private void OnDestroy()
         {
+            GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
+            GameManager.OnPlayerTurnPhaseChange -= GameManagerOnPlayerTurnPhaseChange;
+            GameManager.OnBattlePhaseChange -= GameManagerOnBattlePhaseChange;
             if (Instance == this)
             {
                 Instance = null;

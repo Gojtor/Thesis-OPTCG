@@ -418,22 +418,31 @@ namespace TCGSim.CardScripts
         {
             await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
-                Destroy(border);
+                if (border != null)
+                {
+                    Destroy(border);
+                }
                 ResetCanvasOverrideSorting();
             });
         }
 
         public void ResetCanvasOverrideSorting()
         {
-            Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
-            thisCardCanvas.overrideSorting = false;
+            if (this!=null)
+            {
+                Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
+                thisCardCanvas.overrideSorting = false;
+            }
         }
 
         public void EnableCanvasOverrideSorting()
         {
-            Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
-            thisCardCanvas.overrideSorting = true;
-            thisCardCanvas.sortingOrder = 3;
+            if (this != null)
+            {
+                Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
+                thisCardCanvas.overrideSorting = true;
+                thisCardCanvas.sortingOrder = 3;
+            }
         }
     }
 }

@@ -25,9 +25,10 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
         lineRenderer.endWidth = 10f;
         lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // Basic material
         lineRenderer.positionCount = 2;
-        lineRenderer.startColor=Color.black;
+        lineRenderer.startColor = Color.black;
         lineRenderer.endColor = Color.black;
         CardAttacks += CharacterCard_CardAttacks;
+        GameManager.OnBattlePhaseChange += GameManager_OnBattlePhaseChange;
     }
 
     // Update is called once per frame
@@ -53,7 +54,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
             lineRenderer.enabled = true;
             drawing = true;
             Debug.Log("Drawing start");
-            startMousePos = this.gameObject.transform.position; 
+            startMousePos = this.gameObject.transform.position;
         }
     }
 
@@ -91,14 +92,9 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
         canAttack = false;
         this.RemoveBorderForThisCard();
     }
-    private async void CharacterCard_CardAttacks(Card card)
+    private void CharacterCard_CardAttacks(Card card)
     {
         GameManager.Instance.ChangeBattlePhase(BattlePhases.ATTACKDECLARATION, this, card);
-        while (GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE)
-        {
-            await Task.Delay(1000);
-        }
-        lineRenderer.enabled = false;
     }
     public void DrawAttackLine(Card endPoint)
     {
@@ -110,8 +106,19 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     }
     public void RemoveAttackLine()
     {
-        this.RemoveBorderForThisCard();
-        this.ResetCanvasOverrideSorting();
-        lineRenderer.enabled = false;
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = false;
+        }
+    }
+    private async void GameManager_OnBattlePhaseChange(BattlePhases battlePhase, Card attacker, Card attacked)
+    {
+        if (battlePhase == BattlePhases.ENDOFBATTLE)
+        {
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                RemoveAttackLine();
+            });
+        }
     }
 }

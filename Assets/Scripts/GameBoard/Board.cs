@@ -136,6 +136,13 @@ public abstract class Board : MonoBehaviour
         GameManager.OnBattlePhaseChange += GameManagerOnBattlePhaseChange;
     }
 
+    private void OnDestroy()
+    {
+        GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
+        GameManager.OnPlayerTurnPhaseChange -= GameManagerOnPlayerTurnPhaseChange;
+        GameManager.OnBattlePhaseChange -= GameManagerOnBattlePhaseChange;
+    }
+
     public virtual void GameManagerOnGameStateChange(GameState state)
     {
 

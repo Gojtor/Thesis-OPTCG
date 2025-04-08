@@ -18,6 +18,7 @@ namespace TCGSim
     public class PlayerBoard : Board
     {
         public static PlayerBoard Instance { get; private set; }
+        public LeaderCard leaderCard { get; private set; }
 
         private bool firstRound = true;
 
@@ -42,18 +43,22 @@ namespace TCGSim
         }
         private void Awake()
         {
-            if (Instance == null)
+            if (Instance == null || Instance == this)
             {
                 Instance = this;
             }
             else if (Instance != this)
             {
-                Destroy(gameObject);
+                Destroy(this.gameObject);
                 return;
             }
         }
         private void OnDestroy()
         {
+            GameManager.OnGameStateChange -= GameManagerOnGameStateChange;
+            GameManager.OnPlayerTurnPhaseChange -= GameManagerOnPlayerTurnPhaseChange;
+            GameManager.OnBattlePhaseChange -= GameManagerOnBattlePhaseChange;
+            Card.CorrectAmountCardsDrawn -= CorrectAmountOfCardDrawn;
             if (Instance == this)
             {
                 Instance = null;
@@ -182,6 +187,7 @@ namespace TCGSim
                             card.cardData.cardVisibility = CardVisibility.BOTH;
                             card.UpdateParent();
                             SendCardToDB(card);
+                            leaderCard = card.GetComponent<LeaderCard>();
                         }
                         else
                         {
@@ -366,9 +372,8 @@ namespace TCGSim
 
         public void CreateStartingLife()
         {
-            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-            if (leader == null) { return; }
-            for (int i = 0; i < leader.life; i++)
+            if (leaderCard == null) { return; }
+            for (int i = 0; i < leaderCard.life; i++)
             {
                 AddCardToLife(deckCards[i]);
             }
@@ -463,10 +468,9 @@ namespace TCGSim
                 {
                     handObject.ScaleHandForStartingHand();
                     LoadMulliganKeepButtons();
-                    LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-                    if (leader != null)
+                    if (leaderCard != null)
                     {
-                        await ServerCon.Instance.UpdateMyLeaderCardAtEnemy(leader.cardData.customCardID);
+                        await ServerCon.Instance.UpdateMyLeaderCardAtEnemy(leaderCard.cardData.customCardID);
 
                     }
                 }
@@ -485,9 +489,10 @@ namespace TCGSim
         {
             ChatManager.Instance.AddMessage("Enemy turn!");
         }
-        private void HandleMatchLost()
+        private async void HandleMatchLost()
         {
             ChatManager.Instance.AddMessage("You lost the match!");
+            await ServerCon.Instance.EnemyWon();
             GameBoard.Instance.GameLost();
         }
         private void HandleMatchWon()
@@ -551,11 +556,10 @@ namespace TCGSim
                     card.SendCardToServer();
                 }
             }
-            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-            if (leader.rested)
+            if (leaderCard.rested)
             {
-                leader.Restand(true, false);
-                leader.SendCardToServer();
+                leaderCard.Restand(true, false);
+                leaderCard.SendCardToServer();
             }
             if (stageObject.transform.childCount != 0)
             {
@@ -720,22 +724,12 @@ namespace TCGSim
                         break;
                 }
             }
-            switch (attacker.cardData.cardType)
-            {
-                case CardType.CHARACTER:
-                    attacker.GetComponent<CharacterCard>().RemoveAttackLine();
-                    break;
-                case CardType.LEADER:
-                    attacker.GetComponent<LeaderCard>().RemoveAttackLine();
-                    break;
-            }
             SendBattleHasEnded(attacker.cardData.customCardID, attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE, attacker, attacked);
         }
         private void HandleEndOfBattleStep()
         {
-            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-            if (leader.life >= 0)
+            if (leaderCard.life >= 0)
             {
                 GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
             }
@@ -744,11 +738,14 @@ namespace TCGSim
                 GameManager.Instance.ChangeGameState(GameState.MATCHLOST);
             }
         }
-        private void HandleNoBattle()
+        private async void HandleNoBattle()
         {
             if (GameManager.Instance.currentState == GameState.PLAYERPHASE)
             {
-                endOfTurnBtn.gameObject.SetActive(true);
+                await UnityMainThreadDispatcher.RunOnMainThread(() =>
+                {
+                    endOfTurnBtn.gameObject.SetActive(true);
+                }); 
             }
         }
         private async void SendBattleHasEnded(string attackerID, string attackedID)
@@ -788,17 +785,15 @@ namespace TCGSim
         }
         private void MakeLeaderAttackActive()
         {
-            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
             if (!firstRound)
             {
-                leader.CardCanAttack();
+                leaderCard.CardCanAttack();
             }
         }
 
         private void DeactivateAttackOnLeader()
         {
-            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-            leader.CardCannotAttack();
+            leaderCard.CardCannotAttack();
         }
 
         private void DeactivateDraggableHandCards()
@@ -843,10 +838,9 @@ namespace TCGSim
             });
             UnityMainThreadDispatcher.Enqueue(() =>
             {
-                LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-                if (leader.cardData.customCardID == attackedCardID)
+                if (leaderCard.cardData.customCardID == attackedCardID)
                 {
-                    attackedCard = leader;
+                    attackedCard = leaderCard;
                 }
                 else
                 {
@@ -865,11 +859,17 @@ namespace TCGSim
         }
         private void TakeLife()
         {
-            Card topLife = lifeObject.lifeCards.Last();
-            AddCardToHandFromLife(topLife, true, true);
-            LeaderCard leader = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-            ChatManager.Instance.AddMessage("Enemy successfully damaged your leader! Taking " + 1 + " life!");
-            leader.ReduceLife(1);
+            if (lifeObject.lifeCards.Count > 0)
+            {
+                Card topLife = lifeObject.lifeCards.Last();
+                AddCardToHandFromLife(topLife, true, true);
+                ChatManager.Instance.AddMessage("Enemy successfully damaged your leader! Taking " + 1 + " life!");
+            }
+            else
+            {
+                ChatManager.Instance.AddMessage("Enemy successfully took down you leader!");
+            }
+            leaderCard.ReduceLife(1);
         }
         private void TrashCharacter(Card card)
         {

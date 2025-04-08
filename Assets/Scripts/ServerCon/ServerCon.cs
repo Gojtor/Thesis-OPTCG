@@ -207,6 +207,18 @@ namespace TCGSim
                 GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE);
             });
 
+            connection.On<string>("YouWon", (message) =>
+            {
+                Debug.Log(message);
+                GameManager.Instance.ChangeGameState(GameState.MATCHWON);
+            });
+
+            connection.On<string>("YouLost", (message) =>
+            {
+                Debug.Log(message);
+                GameManager.Instance.ChangeGameState(GameState.MATCHLOST);
+            });
+
             await connection.StartAsync();
             Debug.Log("WebSocket connection is succesfull!");
         }
@@ -340,6 +352,16 @@ namespace TCGSim
         public async Task BattleEnded(string attackerID, string attackedID)
         {
             await connection.InvokeAsync<string>("BattleEnded", gameID, attackerID, attackedID);
+        }
+
+        public async Task EnemyWon()
+        {
+            await connection.InvokeAsync<string>("EnemyWon", gameID);
+        }
+
+        public async Task EnemyLost()
+        {
+            await connection.InvokeAsync<string>("EnemyLost", gameID);
         }
 
         private async void OnApplicationQuit()
