@@ -34,7 +34,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7851087141817053214
 MonoBehaviour:
@@ -49,4 +49,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chatMessagePrefab: {fileID: 8003438272047512974, guid: c3013df51d479e14ba143ed78ecb4d63, type: 3}
-  chatContent: {fileID: 3793846331525045291, guid: 50ed94e1cf49683418f9c5a7f3dee034, type: 3}

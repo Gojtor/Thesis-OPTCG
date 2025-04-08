@@ -272,6 +272,18 @@ public abstract class Board : MonoBehaviour
             case "TrashArea":
                 return trashObject.gameObject;
             default:
+                if (leaderObject.transform.GetChild(0).name == parentName)
+                {
+                    return leaderObject.transform.GetChild(0).gameObject;
+                }
+                for (int i = 0; i < characterAreaObject.transform.childCount; i++)
+                {
+                    Transform card = characterAreaObject.transform.GetChild(i);
+                    if (card.name == parentName)
+                    {
+                        return card.gameObject;
+                    }
+                }
                 return this.gameObject;
 
         }   

@@ -1,17 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TCGSim.CardResources;
 using TCGSim.CardScripts;
-using Unity.Collections.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 namespace TCGSim
 {
@@ -268,7 +262,6 @@ namespace TCGSim
                 card.SetCardActive();
                 card.ChangeDraggable(true);
                 card.UpdateParent();
-                card.SendCardToServer();
             }
             else
             {
@@ -277,6 +270,7 @@ namespace TCGSim
                 card.SetCardActive();
                 card.ChangeDraggable(true);
                 card.UpdateParent();
+                card.SendCardToServer();
             }
         }
         public void MoveStageFromHandToStageArea(Card card)
@@ -482,23 +476,57 @@ namespace TCGSim
         {
             UnityMainThreadDispatcher.Enqueue(() =>
             {
+                DisableEnemyDonPlusEffectInMyTurn();
                 GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.REFRESHPHASE);
             });
+
+        }
+
+        public void DisableEnemyDonPlusEffectInMyTurn()
+        {
+            LeaderCard enemyLeader = EnemyBoard.Instance.leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+            enemyLeader.ResetPlusPower();
+            enemyLeader.HidePlusPowerOnCard();
+            for (int i = 0; i < EnemyBoard.Instance.characterAreaObject.transform.childCount; i++)
+            {
+                Card card = EnemyBoard.Instance.characterAreaObject.transform.GetChild(0).gameObject.GetComponent<Card>();
+                if (card != null)
+                {
+                    card.ResetPlusPower();
+                    card.HidePlusPowerOnCard();
+                }
+            }
         }
         private void HandleEnemyPhase()
         {
+            foreach (DonCard donCard in donInCostArea)
+            {
+                Card donParentCard = donCard.transform.parent.GetComponent<Card>();
+                if (donParentCard != null)
+                {
+                    donParentCard.ResetPlusPower();
+                    donParentCard.HidePlusPowerOnCard();
+                }
+            }
             ChatManager.Instance.AddMessage("Enemy turn!");
         }
         private async void HandleMatchLost()
         {
             ChatManager.Instance.AddMessage("You lost the match!");
             await ServerCon.Instance.EnemyWon();
-            GameBoard.Instance.GameLost();
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                GameBoard.Instance.GameLost();
+            });
         }
-        private void HandleMatchWon()
+        private async void HandleMatchWon()
         {
             ChatManager.Instance.AddMessage("You won the game!");
-            GameBoard.Instance.GameWon();
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                GameBoard.Instance.GameWon();
+            });
+            
         }
 
 
@@ -546,6 +574,17 @@ namespace TCGSim
                     donCard.ChangeDraggable(true);
                     donCard.RestandDon();
                     donCard.SendCardToServer();
+                }
+                else
+                {
+                    Card donParentCard = donCard.transform.parent.GetComponent<Card>();
+                    if (donParentCard != null)
+                    {
+                        donParentCard.ResetPlusPower();
+                        donParentCard.HidePlusPowerOnCard();
+                        MoveDonFromDeckToCostArea(donCard);
+                        donCard.SendCardToServer();
+                    }
                 }
             }
             foreach (CharacterCard card in characterAreaCards)
@@ -670,7 +709,7 @@ namespace TCGSim
             attacker.Rest();
             attacker.SendCardToServer();
             endOfTurnBtn.gameObject.SetActive(false);
-            await ServerCon.Instance.AttackedEnemyCard(attackerID, attackedID, attacker.cardData.power);
+            await ServerCon.Instance.AttackedEnemyCard(attackerID, attackedID, attacker.cardData.power + attacker.plusPower);
         }
         private void HandleBlockStep(Card attacker, Card attacked)
         {
@@ -678,6 +717,8 @@ namespace TCGSim
             string attackedID = attacked.cardData.customCardID;
             ChatManager.Instance.AddMessage("The enemy attacked your card: " + attackedID + " with the following card: " + attackerID);
             ChatManager.Instance.AddMessage("Select a blocker or click on no block button!");
+            List<CharacterCard> useableBlockers = CheckForBlockers();
+            MakeBlockersActiveForBlocking(useableBlockers, attacker);
             if (noBlockBtn != null)
             {
                 noBlockBtn.onClick.AddListener(() => NoBlockTrigger(attacker, attacked));
@@ -697,22 +738,123 @@ namespace TCGSim
             }
 
         }
+
+        private List<CharacterCard> CheckForBlockers()
+        {
+            List<CharacterCard> activeBlockersOnField = new List<CharacterCard>();
+            foreach (CharacterCard card in characterAreaCards)
+            {
+                if (card.cardData.effect.ToLower().Contains("blocker") && !card.rested)
+                {
+                    activeBlockersOnField.Add(card);
+                }
+            }
+            return activeBlockersOnField;
+        }
+
+        private void MakeBlockersActiveForBlocking(List<CharacterCard> useableBlockers, Card attacker)
+        {
+            foreach (CharacterCard card in useableBlockers)
+            {
+                card.SetAttacker(attacker);
+                card.CardClickedWithLeftMouseForBlocking += BlockerCard_CardClickedWithLeftMouse;
+                card.MakeBordedForThisCard();
+            }
+        }
+
+        private void DectiveBlockersForBlocking(List<CharacterCard> useableBlockers)
+        {
+            foreach (CharacterCard card in useableBlockers)
+            {
+                card.CardClickedWithLeftMouseForBlocking -= BlockerCard_CardClickedWithLeftMouse;
+                card.RemoveBorderForThisCard();
+            }
+        }
+
+        private void BlockerCard_CardClickedWithLeftMouse(Card attacker, Card blocker)
+        {
+            blocker.Rest();
+            blocker.SendCardToServer();
+            blocker.GetComponent<CharacterCard>().CardClickedWithLeftMouseForBlocking -= BlockerCard_CardClickedWithLeftMouse;
+            blocker.GetComponent<CharacterCard>().RemoveBorderForThisCard();
+            switch (attacker.cardData.cardType)
+            {
+                case CardType.CHARACTER:
+                    attacker.GetComponent<CharacterCard>().RemoveAttackLine();
+                    attacker.GetComponent<CharacterCard>().DrawAttackLine(blocker);
+                    break;
+                case CardType.LEADER:
+                    attacker.GetComponent<LeaderCard>().RemoveAttackLine();
+                    attacker.GetComponent<LeaderCard>().DrawAttackLine(blocker);
+                    break;
+                default:
+                    break;
+            }
+            GameManager.Instance.ChangeBattlePhase(BattlePhases.COUNTERSTEP, attacker, blocker);
+        }
+
         private void HandleCounterStep(Card attacker, Card attacked)
         {
+            DectiveBlockersForBlocking(CheckForBlockers());
             ChatManager.Instance.AddMessage("Select cards you want to counter with or click on no more counter button!");
             noBlockBtn.gameObject.SetActive(false);
             noBlockBtn.onClick.RemoveAllListeners();
+            List<Card> counterCards = GetCardsWithCounterFromHand();
+            MakeCounterCardsActiveForCountering(counterCards, attacked);
             if (noMoreCounterBtn != null)
             {
                 noMoreCounterBtn.onClick.AddListener(() => NoMoreCounterTrigger(attacker, attacked));
             }
             noMoreCounterBtn.gameObject.SetActive(true);
         }
+
+        private List<Card> GetCardsWithCounterFromHand()
+        {
+            List<Card> cardsWithCounter = new List<Card>();
+            foreach (Card card in handObject.hand)
+            {
+                if (card.cardData.counter != 0)
+                {
+                    cardsWithCounter.Add(card);
+                }
+            }
+            return cardsWithCounter;
+        }
+
+        private void MakeCounterCardsActiveForCountering(List<Card> counterCards, Card attacked)
+        {
+            foreach (Card card in counterCards)
+            {
+                card.SetAttacked(attacked);
+                card.CardClickedWithLeftMouseForCountering += Card_CardClickedWithLeftMouseForCountering;
+                card.MakeBordedForThisCard();
+            }
+        }
+
+        private void DectiveCounterCardsForCountering(List<Card> counterCards)
+        {
+            foreach (Card card in counterCards)
+            {
+                card.CardClickedWithLeftMouseForCountering -= Card_CardClickedWithLeftMouseForCountering;
+                card.RemoveBorderForThisCard();
+            }
+        }
+        private void Card_CardClickedWithLeftMouseForCountering(Card attacked, Card counterCard)
+        {
+            counterCard.CardClickedWithLeftMouseForCountering -= Card_CardClickedWithLeftMouseForCountering;
+            counterCard.RemoveBorderForThisCard();
+            MoveCardToTrash(counterCard);
+            attacked.AddToPlusPower(counterCard.cardData.counter);
+            attacked.MakeOrUpdatePlusPowerSeenOnCard();
+        }
+
         private void HandleDamageStep(Card attacker, Card attacked)
         {
+            DectiveCounterCardsForCountering(GetCardsWithCounterFromHand());
+            attacked.ResetCanvasOverrideSorting();
             noMoreCounterBtn.gameObject.SetActive(false);
             noMoreCounterBtn.onClick.RemoveAllListeners();
-            if (attacked.cardData.power <= attacker.cardData.power)
+            if (attacked.cardData.power + attacked.plusPower <= attacker.cardData.power + attacker.plusPower)
             {
                 switch (attacked.cardData.cardType)
                 {
@@ -724,6 +866,7 @@ namespace TCGSim
                         break;
                 }
             }
+            attacked.ResetPlusPower();
             SendBattleHasEnded(attacker.cardData.customCardID, attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE, attacker, attacked);
         }
@@ -745,7 +888,7 @@ namespace TCGSim
                 await UnityMainThreadDispatcher.RunOnMainThread(() =>
                 {
                     endOfTurnBtn.gameObject.SetActive(true);
-                }); 
+                });
             }
         }
         private async void SendBattleHasEnded(string attackerID, string attackedID)
@@ -873,9 +1016,20 @@ namespace TCGSim
         }
         private void TrashCharacter(Card card)
         {
+            if (card.hasDonAttached)
+            {
+                for (int i = 0; i < card.transform.childCount; i++)
+                {
+                    Card donCard = card.transform.GetChild(i).gameObject.GetComponent<Card>();
+                    if (donCard != null)
+                    {
+                        MoveDonFromDeckToCostArea(donCard);
+                        donCard.Rest();
+                    }
+                }
+            }
             MoveCardToTrash(card);
             ChatManager.Instance.AddMessage("Enemy successfully damaged your character! Trashing character!");
-
         }
     }
 }

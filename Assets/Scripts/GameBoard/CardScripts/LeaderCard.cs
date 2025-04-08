@@ -46,23 +46,29 @@ namespace TCGSim
             CheckCardVisibility();
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public override void OnPointerClick(PointerEventData eventData)
         {
-
+            
         }
         public void OnPointerDown(PointerEventData eventData)
         {
             if (canAttack)
             {
+                lineRenderer.startColor = Color.black;
+                lineRenderer.endColor = Color.black;
                 lineRenderer.enabled = true;
+                lineRenderer.sortingOrder = 4;
                 drawing = true;
-                Debug.Log("Drawing start");
                 startMousePos = this.gameObject.transform.position;
             }
         }
 
         public override void LoadDataFromCardData(CardData cardData)
         {
+            if (this.originalPower == -1)
+            {
+                this.originalPower = cardData.power;
+            }
             this.cardData = cardData;
             this.cardData.cardVisibility = CardVisibility.BOTH;
             this.life = this.cardData.cost;
@@ -103,8 +109,10 @@ namespace TCGSim
         }
         public void DrawAttackLine(Card endPoint)
         {
+            lineRenderer.startColor = Color.red;
+            lineRenderer.endColor = Color.red;
             this.EnableCanvasOverrideSorting();
-            lineRenderer.sortingOrder = 1;
+            lineRenderer.sortingOrder = 4;
             lineRenderer.enabled = true;
             lineRenderer.SetPosition(0, this.gameObject.transform.position);
             lineRenderer.SetPosition(1, endPoint.gameObject.transform.position);

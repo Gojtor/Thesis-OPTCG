@@ -7,7 +7,6 @@ using TCGSim.CardResources;
 using TCGSim.CardScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEngine.GraphicsBuffer;
 
 public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -15,7 +14,10 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     private Vector2 mousePos;
     private Vector2 startMousePos;
     private bool drawing = false;
+    private Card attacker;
     public event Action<Card> CardAttacks;
+    public event Action<Card,Card> CardClickedWithLeftMouseForBlocking;
+    public event Action<Card> CardClickedWithRightMouse;
 
     // Start is called before the first frame update
     void Start()
@@ -43,23 +45,40 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
         CheckCardVisibility();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public override void OnPointerClick(PointerEventData eventData)
     {
-
+        base.OnPointerClick(eventData);
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            if (attacker != null && GameManager.Instance.currentBattlePhase==BattlePhases.BLOCKSTEP)
+            {
+                CardClickedWithLeftMouseForBlocking?.Invoke(attacker, this);
+            } 
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            CardClickedWithRightMouse?.Invoke(this);
+        }
     }
     public void OnPointerDown(PointerEventData eventData)
     {
         if (this.cardData.active && canAttack)
         {
+            lineRenderer.startColor = Color.black;
+            lineRenderer.endColor = Color.black;
             lineRenderer.enabled = true;
+            lineRenderer.sortingOrder = 4;
             drawing = true;
-            Debug.Log("Drawing start");
             startMousePos = this.gameObject.transform.position;
         }
     }
 
     public override void LoadDataFromCardData(CardData cardData)
     {
+        if (this.originalPower == -1)
+        {
+            this.originalPower = cardData.power;
+        }
         this.cardData = cardData;
     }
 
@@ -98,8 +117,10 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     }
     public void DrawAttackLine(Card endPoint)
     {
+        lineRenderer.startColor = Color.red;
+        lineRenderer.endColor = Color.red;
         this.EnableCanvasOverrideSorting();
-        lineRenderer.sortingOrder = 1;
+        lineRenderer.sortingOrder = 4;
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, this.gameObject.transform.position);
         lineRenderer.SetPosition(1, endPoint.gameObject.transform.position);
@@ -120,5 +141,10 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
                 RemoveAttackLine();
             });
         }
+    }
+
+    public void SetAttacker(Card attacker)
+    {
+        this.attacker = attacker;
     }
 }

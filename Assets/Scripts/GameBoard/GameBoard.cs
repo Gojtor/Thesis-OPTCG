@@ -132,6 +132,7 @@ namespace TCGSim
             GameObject chatView = Instantiate(chatViewPrefab, this.gameObject.transform);
             ChatManager chatManager = Instantiate(chatManagerPrefab, this.gameObject.transform).GetComponent<ChatManager>();
             chatManager.SetChatContent(chatView.transform.GetChild(0).GetChild(0).gameObject.GetComponent<CanvasGroup>());
+            
             switch (GameManager.Instance.currentState)
             {
                 case GameState.CONNECTING:
@@ -143,6 +144,7 @@ namespace TCGSim
                     await ServerCon.Instance.CreateGroupInSocket(gameCustomID, playerName);
                     connecting.SetActive(false);
                     waitingForOpp = Instantiate(waitingForOpponentPrefab, this.gameObject.transform);
+                    ChatManager.Instance.AddMessage("Game created with the following ID: "+gameCustomID+" . Waiting for an opponent to join!");
                     Debug.Log("Waiting For Opponent!");
                     await ServerCon.Instance.WaitForEnemyToConnect();
                     break;
