@@ -63,6 +63,9 @@ public abstract class Board : MonoBehaviour
     public GameObject noBlockBtnPrefab { get; protected set; }
 
     [SerializeField]
+    public GameObject cancelBtnPrefab { get; protected set; }
+
+    [SerializeField]
     public GameObject noMoreCounterBtnPrefab { get; protected set; }
     #endregion
 
@@ -85,7 +88,7 @@ public abstract class Board : MonoBehaviour
     public Button endOfTurnBtn { get; protected set; }
     public Button noBlockBtn { get; protected set; }
     public Button noMoreCounterBtn { get; protected set; }
-    public Button testBtn { get; protected set; }
+    public Button cancelBtn { get; protected set; }
 
     public CharacterArea characterAreaObject { get; protected set; }
     #endregion
@@ -160,7 +163,7 @@ public abstract class Board : MonoBehaviour
     public virtual void InitPrefabs(GameObject handPrefab, GameObject characterAreaPrefab, GameObject costAreaPrefab, GameObject stageAreaPrefab,
         GameObject deckPrefab, GameObject leaderPrefab, GameObject trashPrefab, GameObject cardPrefab, GameObject lifePrefab,
         GameObject keepBtnPrefab, GameObject mulliganBtnPrefab, GameObject donDeckPrefab, GameObject donPrefab, GameObject endOfTurnBtnPrefab,
-        GameObject noBlockBtnPrefab, GameObject noMoreCounterBtnPrefab)
+        GameObject noBlockBtnPrefab, GameObject cancelBtnPrefab, GameObject noMoreCounterBtnPrefab)
     {
         this.handPrefab = handPrefab;
         this.characterAreaPrefab = characterAreaPrefab;
@@ -177,6 +180,7 @@ public abstract class Board : MonoBehaviour
         this.donPrefab = donPrefab;
         this.endOfTurnBtnPrefab = endOfTurnBtnPrefab;
         this.noBlockBtnPrefab = noBlockBtnPrefab;
+        this.cancelBtnPrefab = cancelBtnPrefab;
         this.noMoreCounterBtnPrefab = noMoreCounterBtnPrefab;
     }
 

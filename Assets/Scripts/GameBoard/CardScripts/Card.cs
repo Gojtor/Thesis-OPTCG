@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TCGSim.CardResources;
 using TMPro;
 using UnityEngine;
@@ -7,10 +9,11 @@ using UnityEngine.UI;
 
 namespace TCGSim.CardScripts
 {
-    public abstract class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler, IPointerClickHandler
+    public abstract class Card : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         //Card Data
         public CardData cardData { get; protected set; } = new CardData();
+        public List<Effects> effects { get; protected set; }
 
         //Variables for unity handling
         private CanvasGroup canvasGroup;
@@ -27,10 +30,12 @@ namespace TCGSim.CardScripts
         protected static int onBeginDragCounter { get; set; } = 0;
         public static event Action CorrectAmountCardsDrawn;
         public event Action<Card, Card> CardClickedWithLeftMouseForCountering;
+        public Action<Card> onCardClicked { get; protected set; }
         protected Card attacked;
         public int plusPower { get; protected set; } = 0;
         protected GameObject border;
         protected GameObject powerText;
+        public bool targetForOnPlay { get; protected set; } = false;
         //Init variables
         private Hand hand = null;
 
@@ -56,7 +61,7 @@ namespace TCGSim.CardScripts
 
         private void GameManager_OnGameStateChange(GameState state)
         {
-            if(state==GameState.MATCHWON || state == GameState.MATCHLOST)
+            if (state == GameState.MATCHWON || state == GameState.MATCHLOST)
             {
                 this.RemoveBorderForThisCard();
             }
@@ -90,12 +95,14 @@ namespace TCGSim.CardScripts
             canvasGroup.blocksRaycasts = false;
             this.transform.SetParent(this.transform.parent.parent);
             canvasGroup.alpha = .8f;
+            this.EnableCanvasOverrideSortingOnDraggingCard();
             //Debug.Log("OnBeginDrag");
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
             if (!draggable) { return; }
+            this.ResetCanvasOverrideSorting();
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
             if (objectAtDragEnd == null)
             {
@@ -122,17 +129,17 @@ namespace TCGSim.CardScripts
                     canvasGroup.alpha = 1f; //100% opacity
                     break;
                 case CardType.DON:
-                    if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
-                    {
-                        SnapCardBackToParentPos();
-                    }
                     Card cardAtEnd = objectAtDragEnd.gameObject.GetComponent<Card>();
                     if (cardAtEnd != null && cardAtEnd.transform.parent.parent.GetComponent<PlayerBoard>() != null
-                        && ((cardAtEnd.GetComponent<CharacterCard>()!=null && cardAtEnd.transform.parent.GetComponent<CharacterArea>() != null) || 
-                        (cardAtEnd.GetComponent<LeaderCard>()!=null && cardAtEnd.transform.parent == PlayerBoard.Instance.leaderObject.transform)))
+                        && ((cardAtEnd.GetComponent<CharacterCard>() != null && cardAtEnd.transform.parent.GetComponent<CharacterArea>() != null) ||
+                        (cardAtEnd.GetComponent<LeaderCard>() != null && cardAtEnd.transform.parent == PlayerBoard.Instance.leaderObject.transform)))
                     {
                         AttachDon(objectAtDragEnd.gameObject.GetComponent<Card>(), this);
                         this.SendCardToServer();
+                    }
+                    else if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
+                    {
+                        SnapCardBackToParentPos();
                     }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f; //100% opacity
@@ -176,28 +183,42 @@ namespace TCGSim.CardScripts
 
         }
 
-        private void AttachDon(Card toCard, Card donCard)
+        public async void AttachDon(Card toCard, Card donCard)
         {
-            toCard.EnableCanvasOverrideSorting();
-            Canvas thisCardCanvas = donCard.GetComponent<Canvas>();
-            thisCardCanvas.overrideSorting = true;
-            thisCardCanvas.sortingOrder = 1;
-            toCard.GetComponent<LineRenderer>().sortingOrder = 4;
-            donCard.transform.SetParent(toCard.transform);
-            donCard.transform.position = donCard.transform.parent.position;
-            donCard.transform.Translate(0, -30, 0);
-            donCard.SetCardNotActive();
-            donCard.draggable = false;
-            donCard.UpdateParent();
-            toCard.AddToPlusPower(1000);
-            toCard.MakeOrUpdatePlusPowerSeenOnCard();
-            toCard.ChangeDonAttached(true);
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                toCard.EnableCanvasOverrideSorting();
+                Canvas thisCardCanvas = donCard.GetComponent<Canvas>();
+                thisCardCanvas.overrideSorting = true;
+                thisCardCanvas.sortingOrder = 1;
+                toCard.GetComponent<LineRenderer>().sortingOrder = 4;
+                donCard.transform.SetParent(toCard.transform);
+                donCard.transform.position = donCard.transform.parent.position;
+                if (toCard.transform.parent.parent == EnemyBoard.Instance.transform)
+                {
+                    donCard.transform.rotation = Quaternion.Euler(0, 0, 180);
+                }
+                else
+                {
+                    donCard.transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+                donCard.transform.Translate(0, -30, 0);
+                donCard.SetCardNotActive();
+                donCard.draggable = false;
+                donCard.UpdateParent();
+                toCard.AddToPlusPower(1000);
+                toCard.MakeOrUpdatePlusPowerSeenOnCard();
+                toCard.ChangeDonAttached(true);
+            });
         }
 
         public async void SendCardToServer()
         {
-            await ServerCon.Instance.UpdateCardAtInGameStateDB(this);
-            await ServerCon.Instance.UpdateMyCardAtEnemy(this.cardData.customCardID);
+            await UnityMainThreadDispatcher.RunOnMainThread(async () =>
+            {
+                await ServerCon.Instance.UpdateCardAtInGameStateDB(this);
+                await ServerCon.Instance.UpdateMyCardAtEnemy(this.cardData.customCardID);
+            });
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -211,6 +232,19 @@ namespace TCGSim.CardScripts
         {
             if (!draggable) { return; }
             //Debug.Log("OnDrop");
+        }
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (isImgLoaded && this.cardData.cardType!=CardType.DON && GameManager.Instance.currentState!=GameState.STARTINGPHASE)
+            {
+                Sprite currentSprite = cardImage.sprite;
+                GameBoard.Instance.SetCardMagnifierActiveWithImage(currentSprite);
+            }        
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            GameBoard.Instance.HideCardMagnifier();
         }
 
         public void FlipCard()
@@ -276,6 +310,10 @@ namespace TCGSim.CardScripts
         public virtual void LoadDataFromCardData(CardData cardData)
         {
             this.cardData = cardData;
+            if (this.cardData.effect != "")
+            {
+                PopulateEffects(this.cardData.effect);
+            }
         }
         public void SetCardVisibility(CardVisibility visibility)
         {
@@ -301,29 +339,32 @@ namespace TCGSim.CardScripts
 
         public void UpdateEnemyCardAfterDataLoad()
         {
-            this.transform.SetParent(EnemyBoard.Instance.GetParentByNameString(this.cardData.currentParent).transform);
-            if (this.GetComponent<DonCard>() != null && (this.transform.parent.gameObject.GetComponent<CharacterCard>() != null || this.transform.parent.gameObject.GetComponent<LeaderCard>() != null))
+            GameObject parentObj = EnemyBoard.Instance.GetParentByNameString(this.cardData.currentParent);
+            Card parentCard = parentObj.GetComponent<Card>();
+            if (this.GetComponent<DonCard>() != null && parentCard != null)
             {
-                Card parentCard = this.transform.parent.gameObject.GetComponent<Card>();
-                AttachDon(parentCard,this);
+                AttachDon(parentCard, this);
             }
             else
             {
+                this.transform.SetParent(parentObj.transform);
                 this.transform.position = this.transform.parent.position;
                 this.draggable = false;
-                if (this.transform.parent!=EnemyBoard.Instance.lifeObject.transform)
+                if (this.transform.parent != EnemyBoard.Instance.lifeObject.transform)
                 {
                     this.transform.rotation = Quaternion.Euler(0, 0, 180);
                 }
-                if(this.GetComponent<DonCard>() != null && this.transform.parent != EnemyBoard.Instance.donDeckObject.transform)
+                if (this.GetComponent<DonCard>() != null && this.transform.parent != EnemyBoard.Instance.donDeckObject.transform)
                 {
                     if (this.cardData.active)
                     {
                         this.GetComponent<DonCard>().EnemyRestandDon();
+                        this.ResetCanvasOverrideSorting();
                     }
                     else
                     {
                         this.GetComponent<DonCard>().EnemyRestDon();
+                        this.ResetCanvasOverrideSorting();
                     }
                 }
                 if (this.transform.parent == EnemyBoard.Instance.trashObject.transform)
@@ -439,23 +480,38 @@ namespace TCGSim.CardScripts
             }
         }
 
-        public void MakeBordedForThisCard()
+        public async void MakeBorderForThisCard()
         {
-            border = new GameObject("Outline");
-            border.transform.SetParent(this.gameObject.transform);
-            Image borderIMG = border.AddComponent<Image>();
-            RectTransform rectTransform = border.GetComponent<RectTransform>();
-            border.transform.position = this.transform.position;
-            rectTransform.sizeDelta = new Vector2(110, 150);
-            borderIMG.color = Color.green;
-            Outline borderOutline = border.AddComponent<Outline>();
-            borderOutline.enabled = true;
-            borderOutline.effectColor = Color.green;
-            borderOutline.effectDistance = new Vector2(10, 10);
-            Canvas canvas = border.AddComponent<Canvas>();
-            canvas.overrideSorting = true;
-            canvas.sortingOrder = 2;
-            EnableCanvasOverrideSorting();
+            if (border != null)
+            {
+                RemoveBorderForThisCard();
+            }
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                border = new GameObject("Outline");
+                border.transform.SetParent(this.gameObject.transform);
+                Image borderIMG = border.AddComponent<Image>();
+                RectTransform rectTransform = border.GetComponent<RectTransform>();
+                border.transform.position = this.transform.position;
+                if (this.rested)
+                {
+                    border.transform.rotation = Quaternion.Euler(0, 0, 90);
+                }
+                else
+                {
+                    border.transform.rotation = Quaternion.Euler(0, 0, 0);
+                }
+                rectTransform.sizeDelta = new Vector2(110, 150);
+                borderIMG.color = Color.green;
+                Outline borderOutline = border.AddComponent<Outline>();
+                borderOutline.enabled = true;
+                borderOutline.effectColor = Color.green;
+                borderOutline.effectDistance = new Vector2(5, 5);
+                Canvas canvas = border.AddComponent<Canvas>();
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = 2;
+                EnableCanvasOverrideSorting();
+            });
         }
 
         public async void RemoveBorderForThisCard()
@@ -465,28 +521,49 @@ namespace TCGSim.CardScripts
                 if (border != null)
                 {
                     Destroy(border);
+                    Debug.Log("Destroyed border on this card: " + this.cardData.customCardID);
                 }
                 ResetCanvasOverrideSorting();
             });
         }
 
-        public void ResetCanvasOverrideSorting()
+        public async void ResetCanvasOverrideSorting()
         {
-            if (this != null && (!hasDonAttached || GameManager.Instance.currentState!=GameState.MATCHWON || GameManager.Instance.currentState!=GameState.MATCHLOST))
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
-                Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
-                thisCardCanvas.overrideSorting = false;
-            }
+                if (this != null && (!hasDonAttached || GameManager.Instance.currentState == GameState.MATCHWON || GameManager.Instance.currentState == GameState.MATCHLOST))
+                {
+                    Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
+                    thisCardCanvas.overrideSorting = false;
+                }
+            });
+
         }
 
-        public void EnableCanvasOverrideSorting()
+        public async void EnableCanvasOverrideSorting()
         {
-            if (this != null)
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
-                Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
-                thisCardCanvas.overrideSorting = true;
-                thisCardCanvas.sortingOrder = 3;
-            }
+                if (this != null)
+                {
+                    Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
+                    thisCardCanvas.overrideSorting = true;
+                    thisCardCanvas.sortingOrder = 3;
+                }
+            });
+        }
+
+        public async void EnableCanvasOverrideSortingOnDraggingCard()
+        {
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                if (this != null)
+                {
+                    Canvas thisCardCanvas = this.gameObject.GetComponent<Canvas>();
+                    thisCardCanvas.overrideSorting = true;
+                    thisCardCanvas.sortingOrder = 5;
+                }
+            });
         }
 
         public void SetAttacked(Card card)
@@ -494,8 +571,23 @@ namespace TCGSim.CardScripts
             this.attacked = card;
         }
 
+        public void SetClickAction(Action<Card> onClick)
+        {
+            onCardClicked = onClick;
+        }
+
+        public void ClearClickAction()
+        {
+            onCardClicked = null;
+        }
+
         public virtual void OnPointerClick(PointerEventData eventData)
         {
+            if (onCardClicked != null)
+            {
+                onCardClicked.Invoke(this);
+                return;
+            }
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 if (attacked != null && GameManager.Instance.currentBattlePhase == BattlePhases.COUNTERSTEP)
@@ -509,37 +601,41 @@ namespace TCGSim.CardScripts
             }
         }
 
-        public void MakeOrUpdatePlusPowerSeenOnCard()
+        public async void MakeOrUpdatePlusPowerSeenOnCard()
         {
-            if (powerText == null)
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
-                powerText = new GameObject("PowerTextContainer");
-                powerText.transform.SetParent(this.gameObject.transform);
-                Image backgroundImage = powerText.AddComponent<Image>();
-                backgroundImage.color = Color.white;
-                RectTransform containerRect = powerText.GetComponent<RectTransform>();
-                containerRect.sizeDelta = new Vector2(100, 30);
-                powerText.transform.position = powerText.transform.parent.position;
-                GameObject text = new GameObject("PowerText");
-                text.transform.SetParent(powerText.transform);
-                TextMeshProUGUI textMeshProUGUI = text.AddComponent<TextMeshProUGUI>();
-                textMeshProUGUI.text = "+" + plusPower;
-                RectTransform textRect = text.GetComponent<RectTransform>();
-                textRect.sizeDelta = new Vector2(100, 30);
-                textMeshProUGUI.enableAutoSizing = true;
-                textMeshProUGUI.color = Color.black;
-                textMeshProUGUI.horizontalAlignment = HorizontalAlignmentOptions.Center;
-                textMeshProUGUI.verticalAlignment = VerticalAlignmentOptions.Middle;
-                text.transform.position = text.transform.parent.position;
-                Canvas canvas = powerText.AddComponent<Canvas>();
-                canvas.overrideSorting = true;
-                canvas.sortingOrder = 4;
-                EnableCanvasOverrideSorting();
-            }
-            else
-            {
-                powerText.transform.GetComponentInChildren<TextMeshProUGUI>().text = "+" + plusPower;
-            }
+                if (powerText == null)
+                {
+
+                    powerText = new GameObject("PowerTextContainer");
+                    powerText.transform.SetParent(this.gameObject.transform);
+                    Image backgroundImage = powerText.AddComponent<Image>();
+                    backgroundImage.color = Color.white;
+                    RectTransform containerRect = powerText.GetComponent<RectTransform>();
+                    containerRect.sizeDelta = new Vector2(100, 30);
+                    powerText.transform.position = powerText.transform.parent.position;
+                    GameObject text = new GameObject("PowerText");
+                    text.transform.SetParent(powerText.transform);
+                    TextMeshProUGUI textMeshProUGUI = text.AddComponent<TextMeshProUGUI>();
+                    textMeshProUGUI.text = "+" + plusPower;
+                    RectTransform textRect = text.GetComponent<RectTransform>();
+                    textRect.sizeDelta = new Vector2(100, 30);
+                    textMeshProUGUI.enableAutoSizing = true;
+                    textMeshProUGUI.color = Color.black;
+                    textMeshProUGUI.horizontalAlignment = HorizontalAlignmentOptions.Center;
+                    textMeshProUGUI.verticalAlignment = VerticalAlignmentOptions.Middle;
+                    text.transform.position = text.transform.parent.position;
+                    Canvas canvas = powerText.AddComponent<Canvas>();
+                    canvas.overrideSorting = true;
+                    canvas.sortingOrder = 4;
+                    EnableCanvasOverrideSorting();
+                }
+                else
+                {
+                    powerText.transform.GetComponentInChildren<TextMeshProUGUI>().text = "+" + plusPower;
+                }
+            });
         }
 
         public async void HidePlusPowerOnCard()
@@ -551,6 +647,7 @@ namespace TCGSim.CardScripts
                     Destroy(powerText);
                 }
             });
+            ResetCanvasOverrideSorting();
         }
 
         public void AddToPlusPower(int power)
@@ -567,5 +664,51 @@ namespace TCGSim.CardScripts
         {
             hasDonAttached = b;
         }
+
+        public void ResetAttackedCardAfterCounter()
+        {
+            this.attacked.ResetPlusPower();
+            this.attacked.HidePlusPowerOnCard();
+        }
+
+        public void SetRested(bool rested)
+        {
+            this.rested = rested;
+        }
+
+        public int GetAttachedDonCount()
+        {
+            int donCounter = 0;
+
+            for (int i = 0; i < this.transform.childCount; i++)
+            {
+                DonCard possibleDon = this.transform.GetChild(i).gameObject.GetComponent<DonCard>();
+                if (possibleDon != null)
+                {
+                    donCounter++;
+                }
+            }
+
+            return donCounter;
+        }
+
+        public void IsTargetForOnPlayEffect(bool target)
+        {
+            this.targetForOnPlay = target;
+            if (target)
+            {
+                this.MakeBorderForThisCard();
+            }
+            else
+            {
+                this.RemoveBorderForThisCard();
+            }
+        }
+
+        public void PopulateEffects(string cardEffects)
+        {
+            this.effects = StringToEffectsParser.Parser(cardEffects);
+        }
+
     }
 }

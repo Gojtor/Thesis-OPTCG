@@ -48,11 +48,11 @@ namespace TCGSim
 
         public override void OnPointerClick(PointerEventData eventData)
         {
-            
+            base.OnPointerClick(eventData);
         }
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (canAttack)
+            if (canAttack && GameManager.Instance.currentBattlePhase==BattlePhases.NOBATTLE)
             {
                 lineRenderer.startColor = Color.black;
                 lineRenderer.endColor = Color.black;
@@ -95,7 +95,7 @@ namespace TCGSim
         public void CardCanAttack()
         {
             canAttack = true;
-            this.MakeBordedForThisCard();
+            this.MakeBorderForThisCard();
         }
 
         public void CardCannotAttack()

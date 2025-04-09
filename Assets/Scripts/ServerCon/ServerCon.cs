@@ -201,10 +201,15 @@ namespace TCGSim
                 await MyCardIsAttacked(cardThatAttacksID, attackedCard, power);
             });
 
-            connection.On<string>("BattleEnded", (message) =>
+            connection.On<string, string>("AddPlusPowerToCardFromCounter",  (toCardID, counterCardID) =>
+            {
+                AddPlusPowerToCardFromCounter(toCardID,counterCardID);
+            });
+
+            connection.On<string,string>("BattleEnded", (message,attackedCardID) =>
             {
                 Debug.Log(message);
-                GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE);
+                PlayerBoard.Instance.ResetAttackedCardBeforeEndOfBattle(attackedCardID);
             });
 
             connection.On<string>("YouWon", (message) =>
@@ -335,6 +340,11 @@ namespace TCGSim
             Debug.Log("Card: " + cardThatAttacksID + " with this power: " + power + " attacked this card: " + attackedCard);
             await PlayerBoard.Instance.EnemyAttacked(cardThatAttacksID, attackedCard);
         }
+        public void AddPlusPowerToCardFromCounter(string toCardID, string counterCardID)
+        {
+            Debug.Log("Enemy used counter card: " + counterCardID);
+            EnemyBoard.Instance.AddCounterPower(toCardID, counterCardID);
+        }
 
         public async Task ChangeEnemyGameStateToPlayerPhase(string customCardID)
         {
@@ -347,6 +357,10 @@ namespace TCGSim
         public async Task AttackedEnemyCard(string cardThatAttacksID, string attackedCard, int power)
         {
             await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard, power);
+        }
+        public async Task AddPlusPowerFromCounterToEnemy(string toCardID, string counterCardID)
+        {
+            await connection.InvokeAsync<string>("AddPlusPowerFromCounter", gameID, toCardID,counterCardID);
         }
 
         public async Task BattleEnded(string attackerID, string attackedID)

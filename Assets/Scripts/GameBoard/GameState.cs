@@ -9,6 +9,7 @@ namespace TCGSim
     public enum GameState
     {
        MAINMENU,
+       INGAMEMENU,
        CONNECTING,
        WAITINGFOROPPONENT,
        STARTINGPHASE,

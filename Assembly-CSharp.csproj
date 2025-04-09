@@ -95,6 +95,7 @@
     <Compile Include="Assets\Scripts\GameBoard\Board.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
     <Compile Include="Assets\Scripts\GameBoard\UnityMainThreadDispatcher.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\CardScripts\Effects\CardEffects.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Assets\Scripts\GameBoard\CardData\CardData.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\CardScripts\Effects\Effects.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Assets\Scripts\GameBoard\EnemyBoard.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\CardScripts\Effects\EffectTriggerTypes.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardData\Colors.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
@@ -148,6 +151,7 @@
     <Compile Include="Assets\Scripts\ServerCon\ServerCon.cs" />
     <Compile Include="Assets\Scripts\GameBoard\BattlePhases.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
+    <Compile Include="Assets\Scripts\GameBoard\CardScripts\Effects\StringToEffectParser.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\DonCard.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardData\Attributes.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\LeaderCard.cs" />

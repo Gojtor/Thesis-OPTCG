@@ -76,6 +76,9 @@ namespace TCGSim
         public GameObject noMoreCounterBtnPrefab;
 
         [SerializeField]
+        public GameObject cancelBtnPrefab;
+
+        [SerializeField]
         public GameObject chatManagerPrefab;
 
         [SerializeField]
@@ -98,10 +101,35 @@ namespace TCGSim
 
         [SerializeField]
         public GameObject matchLostPrefab;
+
+        [SerializeField]
+        public GameObject cardMagnifierPrefab;
+
+        [SerializeField]
+        public GameObject menuBtnPrefab;
+
+        [SerializeField]
+        public GameObject menuPanelPrefab;
+
+        [SerializeField]
+        public GameObject concedePrefab;
+
+        [SerializeField]
+        public GameObject backToMainInMenuPrefab;
+
+        [SerializeField]
+        public GameObject resumeGamePrefab;
         #endregion
 
         private GameObject waitingForOpp;
         private GameObject connecting;
+        private Button menuBtn;
+        private GameObject menuPanel;
+        private Button concedeBtn;
+        private Button backToMainBtn;
+        private Button resumeBtn;
+        private GameState beforeMenuState;
+        public Image cardMagnifier { get; private set; }
         public string playerName { get; private set; }
         public string enemyName { get; private set; }
 
@@ -132,7 +160,8 @@ namespace TCGSim
             GameObject chatView = Instantiate(chatViewPrefab, this.gameObject.transform);
             ChatManager chatManager = Instantiate(chatManagerPrefab, this.gameObject.transform).GetComponent<ChatManager>();
             chatManager.SetChatContent(chatView.transform.GetChild(0).GetChild(0).gameObject.GetComponent<CanvasGroup>());
-            
+            CreateMenu();
+
             switch (GameManager.Instance.currentState)
             {
                 case GameState.CONNECTING:
@@ -170,6 +199,8 @@ namespace TCGSim
                 {
                     waitingForOpp.SetActive(false);
                 }
+                cardMagnifier = Instantiate(cardMagnifierPrefab, this.gameObject.transform).GetComponent<Image>();
+                cardMagnifier.gameObject.SetActive(false);
                 GameManager.Instance.ChangeGameState(GameState.STARTINGPHASE);
             });
         }
@@ -183,14 +214,31 @@ namespace TCGSim
             EnemyBoard enemyBoard = enemyBoardObj.GetComponent<EnemyBoard>();
             PlayerBoard playerBoard = playerBoardObj.GetComponent<PlayerBoard>();
             playerBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
-                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, noMoreCounterBtnPrefab);
+                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
             enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
-                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, noMoreCounterBtnPrefab);
+                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
             playerBoard.Init("PLAYERBOARD", gameCustomID, playerName);
             enemyBoard.Init("ENEMYBOARD", gameCustomID,enemyName);
             playerBoard.gameObject.transform.Translate(0, -255, 0);
             enemyBoard.gameObject.transform.Translate(0, 255, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
+        }
+
+        private async void CreateMenu()
+        {
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                menuBtn = Instantiate(menuBtnPrefab, this.gameObject.transform).GetComponent<Button>();
+                menuBtn.onClick.AddListener(MenuBtnClick);
+                menuPanel = Instantiate(menuPanelPrefab, this.gameObject.transform);
+                concedeBtn = Instantiate(concedePrefab, menuPanel.gameObject.transform).GetComponent<Button>();
+                backToMainBtn = Instantiate(backToMainInMenuPrefab, menuPanel.gameObject.transform).GetComponent<Button>();
+                resumeBtn = Instantiate(resumeGamePrefab, menuPanel.gameObject.transform).GetComponent<Button>();
+                concedeBtn.onClick.AddListener(Concede);
+                backToMainBtn.onClick.AddListener(BackToMainMenu);
+                resumeBtn.onClick.AddListener(ResumeGame);
+                menuPanel.SetActive(false);
+            });
         }
         public void GameWithIDAlreadyExist()
         {
@@ -269,6 +317,44 @@ namespace TCGSim
         public void SetEnemyName(string name)
         {
             this.enemyName = name;
+        }
+
+        public void SetCardMagnifierActiveWithImage(Sprite sprite)
+        {
+            Image magnifiedImg = cardMagnifier.transform.GetChild(0).gameObject.GetComponent<Image>();
+            cardMagnifier.gameObject.SetActive(true);
+            magnifiedImg.sprite = sprite;
+        }
+
+        public void HideCardMagnifier()
+        {
+            cardMagnifier.gameObject.SetActive(false);
+        }
+
+        public void MenuBtnClick()
+        {
+            menuPanel.SetActive(true);
+            menuPanel.transform.SetAsLastSibling();
+            menuBtn.gameObject.SetActive(false);
+            beforeMenuState = GameManager.Instance.currentState;
+            GameManager.Instance.ChangeGameState(GameState.INGAMEMENU);
+        }
+
+        public async void Concede()
+        {
+            await ServerCon.Instance.EnemyWon();
+            UnityMainThreadDispatcher.Enqueue(() =>
+            {
+                menuPanel.SetActive(false);
+                this.GameLost();
+            });
+        }
+
+        public void ResumeGame()
+        {
+            menuPanel.SetActive(false);
+            menuBtn.gameObject.SetActive(true);
+            GameManager.Instance.ChangeGameState(beforeMenuState);
         }
     }
 }

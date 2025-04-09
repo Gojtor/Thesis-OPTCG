@@ -35,16 +35,8 @@ namespace TCGSim
 
             switch (gameState)
             {
-                case GameState.CONNECTING:
-                    break;
-                case GameState.WAITINGFOROPPONENT:
-                    break;
-                case GameState.STARTINGPHASE:
-                    break;
                 case GameState.PLAYERPHASE:
                     ChatManager.Instance.AddMessage("Its your turn!");
-                    break;
-                case GameState.ENEMYPHASE:
                     break;
                 default:
                     break;
@@ -56,21 +48,6 @@ namespace TCGSim
         public void ChangePlayerTurnPhase(PlayerTurnPhases turnPhase)
         {
             currentPlayerTurnPhase = turnPhase;
-
-            switch (turnPhase)
-            {
-                case PlayerTurnPhases.REFRESHPHASE:
-                    break;
-                case PlayerTurnPhases.DRAWPHASE:
-                    break;
-                case PlayerTurnPhases.DONPHASE:
-                    break;
-                case PlayerTurnPhases.MAINPHASE:
-                    break;
-                case PlayerTurnPhases.ENDPHASE:
-                    break;
-            }
-
             OnPlayerTurnPhaseChange?.Invoke(turnPhase);
         }
 

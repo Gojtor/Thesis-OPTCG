@@ -62,7 +62,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (this.cardData.active && canAttack)
+        if (this.cardData.active && canAttack && !targetForOnPlay)
         {
             lineRenderer.startColor = Color.black;
             lineRenderer.endColor = Color.black;
@@ -80,6 +80,10 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
             this.originalPower = cardData.power;
         }
         this.cardData = cardData;
+        if (this.cardData.effect.Contains("[On Play] Give up to 2 rested DON!! cards to your Leader or 1 of your Characters."))
+        {
+            PopulateEffects(this.cardData.effect);
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -103,7 +107,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     public void CardCanAttack()
     {
         canAttack = true;
-        this.MakeBordedForThisCard();
+        this.MakeBorderForThisCard();
     }
 
     public void CardCannotAttack()

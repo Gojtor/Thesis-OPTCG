@@ -86,6 +86,28 @@ namespace TCGSim
             }
         }
 
+        public void AddCounterPower(string toCardID, string counterCardID)
+        {
+            UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                LeaderCard leaderCard = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+                Card counterCard = cards.Where(x => x.cardData.customCardID == counterCardID).Single();
+                int counterCardCounterValue = counterCard.cardData.counter;
+                if (leaderCard.cardData.customCardID == toCardID)
+                {
+                    leaderCard.AddToPlusPower(counterCardCounterValue);
+                    leaderCard.MakeOrUpdatePlusPowerSeenOnCard();
+                }
+                else
+                {
+                    Card characterCard = cards.Where(x => x.cardData.customCardID == toCardID).Single();
+                    characterCard.AddToPlusPower(counterCardCounterValue);
+                    characterCard.MakeOrUpdatePlusPowerSeenOnCard();
+                }
+            });
+           
+        }
+
         public async Task UpdateBoardFromGameDB()
         {
             UnityMainThreadDispatcher.Enqueue(() =>

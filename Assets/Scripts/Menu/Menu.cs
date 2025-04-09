@@ -39,6 +39,12 @@ namespace TCGSim
         [SerializeField]
         private GameObject connectToGameBtnPrefab;
 
+        [SerializeField]
+        private GameObject quitGameBtnPrefab;
+
+        [SerializeField]
+        private GameObject backBtnPrefab;
+
         private GameObject defaultPaneObject;
         private Button createGameBtn;
         private Button connectGameBtn;
@@ -49,6 +55,8 @@ namespace TCGSim
         private TMP_InputField gameIDInputObject;
         private Button startGameBtnObject;
         private Button connectToGameBtnObject;
+        private Button quitGameBtn;
+        private Button backBtn;
 
         private string playerName="Default";
         private string gameID="Default";
@@ -62,15 +70,34 @@ namespace TCGSim
         void Start()
         {
             defaultPaneObject = Instantiate(defaultPanelPrefab, this.gameObject.transform);
-            createGameBtn = Instantiate(createGameBtnPrefab, defaultPaneObject.transform).GetComponent<Button>();
-            connectGameBtn = Instantiate(connectGameBtnPrefab, defaultPaneObject.transform).GetComponent<Button>();
+            createGameBtn = defaultPaneObject.transform.Find("CreateGameBtn").gameObject.GetComponent<Button>();
+            connectGameBtn = defaultPaneObject.transform.Find("ConnectGameBtn").gameObject.GetComponent<Button>();
+            quitGameBtn = defaultPaneObject.transform.Find("QuitGameBtn").gameObject.GetComponent<Button>();
             createGameBtn.onClick.AddListener(CreateGame);
             connectGameBtn.onClick.AddListener(ConnectToGame);
+            quitGameBtn.onClick.AddListener(QuitGame);
+
+            createGamePanelObject = Instantiate(createGamePanelPrefab, this.gameObject.transform);
+            createGamePanelObject.SetActive(false);
+            namePanelObject = createGamePanelObject.transform.Find("NamePanel").gameObject;
+            gameIDPanelObject = createGamePanelObject.transform.Find("GameIDPanel").gameObject;
+            nameInputObject = namePanelObject.transform.Find("NameInput").GetComponent<TMP_InputField>();
+            nameInputObject.onEndEdit.AddListener(UpdatePlayerNameFromInputField);
+            gameIDInputObject = gameIDPanelObject.transform.Find("GameIDInput").GetComponent<TMP_InputField>();
+            gameIDInputObject.onEndEdit.AddListener(UpdateGameIDFromInputField);
+            startGameBtnObject = createGamePanelObject.transform.Find("StartGameBtn").GetComponent<Button>();
+            startGameBtnObject.onClick.AddListener(StartGame);
+            backBtn = this.gameObject.transform.Find("BackBtn").GetComponent<Button>();
+            backBtn.gameObject.SetActive(false);
+            backBtn.transform.SetAsLastSibling();
+            backBtn.onClick.AddListener(BackButtonClick);
+            connectToGameBtnObject = createGamePanelObject.transform.Find("ConnectToGameBtn").GetComponent<Button>();
+            connectToGameBtnObject.onClick.AddListener(Connect);
 
             lineRenderer = this.gameObject.AddComponent<LineRenderer>();
             lineRenderer.startWidth = 0.1f;
             lineRenderer.endWidth = 0.1f;
-            lineRenderer.material = new Material(Shader.Find("Sprites/Default")); // Basic material
+            lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
             lineRenderer.positionCount = 2;
             lineRenderer.useWorldSpace = true;
             lineRenderer.sortingLayerName = "Default";
@@ -99,29 +126,32 @@ namespace TCGSim
         public void CreateGame()
         {
             defaultPaneObject.SetActive(false);
-            createGamePanelObject = Instantiate(createGamePanelPrefab, this.gameObject.transform);
-            namePanelObject = Instantiate(namePanelPrefab, createGamePanelObject.transform);
-            gameIDPanelObject = Instantiate(gameIDPanelPrefab, createGamePanelObject.transform);
-            nameInputObject = Instantiate(nameInputPrefab, namePanelObject.transform).GetComponent<TMP_InputField>();
-            nameInputObject.onEndEdit.AddListener(UpdatePlayerNameFromInputField);
-            gameIDInputObject = Instantiate(gameIDInputPrefab, gameIDPanelObject.transform).GetComponent<TMP_InputField>();
-            gameIDInputObject.onEndEdit.AddListener(UpdateGameIDFromInputField);
-            startGameBtnObject = Instantiate(startGameBtnPrefab, this.gameObject.transform).GetComponent<Button>();
-            startGameBtnObject.onClick.AddListener(StartGame);
+            createGamePanelObject.SetActive(true);
+            startGameBtnObject.gameObject.SetActive(true);
+            connectToGameBtnObject.gameObject.SetActive(false);
+            backBtn.gameObject.SetActive(true);
+            
         }
 
         public void ConnectToGame()
         {
             defaultPaneObject.SetActive(false);
-            createGamePanelObject = Instantiate(createGamePanelPrefab, this.gameObject.transform);
-            namePanelObject = Instantiate(namePanelPrefab, createGamePanelObject.transform);
-            gameIDPanelObject = Instantiate(gameIDPanelPrefab, createGamePanelObject.transform);
-            nameInputObject = Instantiate(nameInputPrefab, namePanelObject.transform).GetComponent<TMP_InputField>();
-            nameInputObject.onEndEdit.AddListener(UpdatePlayerNameFromInputField);
-            gameIDInputObject = Instantiate(gameIDInputPrefab, gameIDPanelObject.transform).GetComponent<TMP_InputField>();
-            gameIDInputObject.onEndEdit.AddListener(UpdateGameIDFromInputField);
-            connectToGameBtnObject = Instantiate(connectToGameBtnPrefab, this.gameObject.transform).GetComponent<Button>();
-            connectToGameBtnObject.onClick.AddListener(Connect);
+            createGamePanelObject.SetActive(true);
+            startGameBtnObject.gameObject.SetActive(false);
+            connectToGameBtnObject.gameObject.SetActive(true);
+            backBtn.gameObject.SetActive(true);
+        }
+
+        public void BackButtonClick()
+        {
+            createGamePanelObject.SetActive(false);
+            defaultPaneObject.SetActive(true);
+            backBtn.gameObject.SetActive(false);
+        }
+
+        public void QuitGame()
+        {
+            Application.Quit();
         }
 
         public void StartGame()
