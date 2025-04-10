@@ -96,6 +96,7 @@ namespace TCGSim
 
         public void Activate(Card card)
         {
+            PlayerBoard.Instance.SetEffectInProgress(true);
             if (passiveEffect) { return; }
             effectCallerCard = card;
             cardsThatCouldAttackBeforeEffect = PlayerBoard.Instance.GetCardsThatCouldAttack();
@@ -199,6 +200,7 @@ namespace TCGSim
             }
             await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
             HideCancelButton();
+            PlayerBoard.Instance.SetEffectInProgress(false);
         }
         private void ShowCancelButton()
         {
@@ -317,6 +319,7 @@ namespace TCGSim
         {
             if (passiveEffect) { return; }
             if (activated && oncePerTurn) { return; }
+            PlayerBoard.Instance.SetEffectInProgress(true);
             activated = true;
             cardsThatCouldAttackBeforeOnPlay = PlayerBoard.Instance.GetCardsThatCouldAttack();
             restedDons = PlayerBoard.Instance.GetRestedDons();
@@ -428,6 +431,7 @@ namespace TCGSim
                 }
             }
             HideCancelButton();
+            PlayerBoard.Instance.SetEffectInProgress(true);
         }
 
         private void ShowCancelButton()

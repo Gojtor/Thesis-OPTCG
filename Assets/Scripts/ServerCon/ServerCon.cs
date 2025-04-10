@@ -25,7 +25,7 @@ namespace TCGSim
         public string gameID { get; private set; }
         public string playerName { get; private set; }
         public bool firstTurnIsMine { get; private set; }
-        private bool enemyFinishedWithStartingHand = false;
+        public bool enemyFinishedWithStartingHand { get; protected set; } = false;
         private bool enemyReceivedAttackDeclaration = false;
 
         private HubConnection connection;

@@ -18,6 +18,12 @@ namespace TCGSim
         private bool havingBlockReq = false;
         private bool overThisBlocking = false;
         private int blockPowerReq = -1;
+        public bool effectInProgress { get; private set; }
+
+        //These are needed to be able to make room for cards to place on character area if its full
+        private Card cardToMoveCharArea;
+        private List<Card> possibleTargetsForRemovinToMakeRoom;
+        private List<Card> cardsThatCouldAttackBeforeRemove;
 
 
         // Start is called before the first frame update
@@ -1236,6 +1242,78 @@ namespace TCGSim
             blockPowerReq = overThis;
             havingBlockReq = true;
             overThisBlocking = true;
+        }
+
+        public void RemoveCardToMakeRoomForNewOne(Card card)
+        {
+            cardToMoveCharArea = card;
+            cardToMoveCharArea.transform.position = leaderCard.transform.position;
+            cardToMoveCharArea.transform.Translate(-150, 0, 0);
+
+            possibleTargetsForRemovinToMakeRoom = GetCharacterAreaCards();
+            cardsThatCouldAttackBeforeRemove = GetCardsThatCouldAttack();
+            cardsThatCouldAttackBeforeRemove.Remove(card);
+
+            foreach (Card cardCanAttack in cardsThatCouldAttackBeforeRemove)
+            {
+                switch (cardCanAttack.cardData.cardType)
+                {
+                    case CardResources.CardType.CHARACTER:
+                        cardCanAttack.GetComponent<CharacterCard>().CardCannotAttack();
+                        break;
+                    case CardResources.CardType.LEADER:
+                        cardCanAttack.GetComponent<LeaderCard>().CardCannotAttack();
+                        break;
+                    default:
+                        UnityEngine.Debug.LogError("Missing card type");
+                        break;
+                }
+            }
+            foreach (Card target in possibleTargetsForRemovinToMakeRoom)
+            {
+                if (target != card)
+                {
+                    target.IsTargetForEffect(true);
+                    target.SetClickAction(OnTargetSelectedForRemoving);
+                }
+            }
+        }
+
+        private void OnTargetSelectedForRemoving(Card target)
+        {
+            target.ClearClickAction();
+            target.IsTargetForEffect(false);
+            MoveCardToTrash(target);
+
+            foreach (Card card in possibleTargetsForRemovinToMakeRoom)
+            {
+                card.ClearClickAction();
+                card.IsTargetForEffect(false);
+            }
+            foreach (Card card in cardsThatCouldAttackBeforeRemove)
+            {
+                switch (card.cardData.cardType)
+                {
+                    case CardResources.CardType.CHARACTER:
+                        card.GetComponent<CharacterCard>().CardCanAttack();
+                        break;
+                    case CardResources.CardType.LEADER:
+                        card.GetComponent<LeaderCard>().CardCanAttack();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            MoveCardFromHandToCharacterArea(cardToMoveCharArea);
+
+            cardToMoveCharArea = null;
+            possibleTargetsForRemovinToMakeRoom = null;
+            cardsThatCouldAttackBeforeRemove = null;
+        }
+
+        public void SetEffectInProgress(bool inProgress)
+        {
+            this.effectInProgress = inProgress;
         }
     }
 }

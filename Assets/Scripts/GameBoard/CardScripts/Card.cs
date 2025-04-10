@@ -72,7 +72,7 @@ namespace TCGSim.CardScripts
 
         public void OnBeginDrag(PointerEventData pointerEventData)
         {
-            if (!draggable) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
             if (needToWatchHowManyDrawn && this.gameObject.transform.parent == fromWhereTheCardNeedsToBeDrawn)
             {
                 onBeginDragCounter++;
@@ -104,7 +104,7 @@ namespace TCGSim.CardScripts
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!draggable) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
             this.ResetCanvasOverrideSorting();
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
             if (objectAtDragEnd == null)
@@ -117,11 +117,18 @@ namespace TCGSim.CardScripts
             switch (this.cardData.cardType)
             {
                 case CardType.CHARACTER:
-                    if (objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform || objectAtDragEnd.transform.childCount == 6
-                        || this.cardData.cost > PlayerBoard.Instance.activeDon || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE)
+                    if ((objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.GetComponent<CharacterCard>()==null) || objectAtDragEnd.transform.parent==PlayerBoard.Instance.handObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE)
                     {
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
+                    }
+                    else if (objectAtDragEnd.transform == PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.childCount >= 5)
+                    {
+                        PlayerBoard.Instance.RemoveCardToMakeRoomForNewOne(this);
+                    }
+                    else if (objectAtDragEnd.transform.GetComponent<CharacterCard>() != null && objectAtDragEnd.transform.parent==PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.parent.childCount >=5)
+                    {
+                        PlayerBoard.Instance.RemoveCardToMakeRoomForNewOne(this);
                     }
                     else
                     {
@@ -227,23 +234,23 @@ namespace TCGSim.CardScripts
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!draggable) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
             this.transform.position = eventData.position;
             //Debug.Log("OnDrag");
         }
 
         public void OnDrop(PointerEventData eventData)
         {
-            if (!draggable) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
             //Debug.Log("OnDrop");
         }
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (isImgLoaded && this.cardData.cardType!=CardType.DON && GameManager.Instance.currentState!=GameState.STARTINGPHASE)
+            if (isImgLoaded && this.cardData.cardType != CardType.DON && GameManager.Instance.currentState != GameState.STARTINGPHASE)
             {
                 Sprite currentSprite = cardImage.sprite;
                 GameBoard.Instance.SetCardMagnifierActiveWithImage(currentSprite);
-            }        
+            }
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -344,7 +351,7 @@ namespace TCGSim.CardScripts
                 {
                     if (effect.triggerType == EffectTriggerTypes.DON)
                     {
-                            effect.cardEffect?.Activate(this);
+                        effect.cardEffect?.Activate(this);
                     }
                 }
             }
