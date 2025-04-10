@@ -72,8 +72,8 @@ namespace TCGSim
             {
                 await ServerCon.Instance.EnemyCantActivateBlockerOver(card.cardData.customCardID, enemyBlockerMinPower);
             }
-            await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
             ChatManager.Instance.AddMessage("Card: " + card.cardData.cardID + " activated its When Attacking effect!");
+            await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
         }
     }
 

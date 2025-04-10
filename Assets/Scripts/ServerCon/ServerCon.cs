@@ -298,7 +298,7 @@ namespace TCGSim
             Debug.Log("Waiting for enemy to finish starting hand");
             while (!enemyFinishedWithStartingHand)
             {
-                await Task.Delay(1000);
+                await Task.Delay(1);
             }
             UnityMainThreadDispatcher.Enqueue(() =>
             {
