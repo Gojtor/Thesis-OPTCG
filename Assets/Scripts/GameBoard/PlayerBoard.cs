@@ -1136,6 +1136,7 @@ namespace TCGSim
                 }
                 if (thereIsWhenAttacking)
                 {
+                    await ServerCon.Instance.ReceivedtAttackDeclaration();
                     await ServerCon.Instance.WaitForEnemyToFinishWhenAttacking();
                 }
                 GameManager.Instance.ChangeBattlePhase(BattlePhases.BLOCKSTEP, cardThatAttacks, attackedCard);

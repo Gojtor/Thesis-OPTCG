@@ -274,9 +274,9 @@ namespace TCGSim
         {
         }
 
-        public async void Activate(Card card)
+        public void Activate(Card card)
         {
-            if (!card.rested && !card.canAttack)
+            if (!card.rested && !card.canAttack && card.transform.parent.parent==PlayerBoard.Instance.transform)
             {
                 switch (card.cardData.cardType)
                 {
@@ -286,13 +286,6 @@ namespace TCGSim
                     default:
                         UnityEngine.Debug.LogError("Missing card type");
                         break;
-                }
-            }
-            foreach(Effects effect in card.effects)
-            {
-                if (effect.triggerType == EffectTriggerTypes.WhenAttacking)
-                {
-                    await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
                 }
             }
         }

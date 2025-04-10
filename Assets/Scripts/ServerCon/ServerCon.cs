@@ -26,6 +26,7 @@ namespace TCGSim
         public string playerName { get; private set; }
         public bool firstTurnIsMine { get; private set; }
         private bool enemyFinishedWithStartingHand = false;
+        private bool enemyReceivedAttackDeclaration = false;
 
         private HubConnection connection;
         private TaskCompletionSource<bool> ConnectionTask;
@@ -243,6 +244,11 @@ namespace TCGSim
                 }
             });
 
+            connection.On<string>("EnemyGotAttackDeclaration", (message) =>
+            {
+                enemyReceivedAttackDeclaration = true;
+            });
+
             await connection.StartAsync();
             Debug.Log("WebSocket connection is succesfull!");
         }
@@ -405,6 +411,11 @@ namespace TCGSim
             await connection.InvokeAsync<string>("BattleEnded", gameID, attackerID, attackedID);
         }
 
+        public async Task ReceivedtAttackDeclaration()
+        {
+            await connection.InvokeAsync<string>("ReceivedtAttackDeclaration", gameID);
+        }
+
         public async Task EnemyWon()
         {
             await connection.InvokeAsync<string>("EnemyWon", gameID);
@@ -422,7 +433,12 @@ namespace TCGSim
 
         public async Task ImDoneWithWhenAttackingEffect()
         {
+            while (!enemyReceivedAttackDeclaration)
+            {
+                await Task.Delay(1000);
+            }
             await connection.InvokeAsync<string>("ImDoneWithWhenAttackingEffect", gameID);
+            enemyReceivedAttackDeclaration = false;
         }
 
         private async void OnApplicationQuit()
