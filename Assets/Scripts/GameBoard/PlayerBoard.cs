@@ -15,6 +15,10 @@ namespace TCGSim
         public LeaderCard leaderCard { get; private set; }
 
         private bool firstRound = true;
+        private bool havingBlockReq = false;
+        private bool overThisBlocking = false;
+        private int blockPowerReq = -1;
+
 
         // Start is called before the first frame update
         private void Start()
@@ -115,17 +119,18 @@ namespace TCGSim
             "4xST01-003",
             "4xST01-004",
             "4xST01-005",
-            "4xST01-006",
             "4xST01-007",
             "4xST01-008",
             "4xST01-009",
             "4xST01-010",
-            "2xST01-012",
-            "2xST01-013",
             "2xST01-014",
             "2xST01-015",
             "2xST01-016",
-            "2xST01-017"};
+            "2xST01-017",
+            "2xST01-013",
+            "4xST01-006",
+            "2xST01-012"
+            };
         }
 
         public Transform getPlayerHand()
@@ -252,16 +257,23 @@ namespace TCGSim
             card.ChangeDraggable(false);
             card.UpdateParent();
             card.SendCardToServer();
-            CheckForOnPlay(card);
+            CheckForEffect(card);
         }
 
-        private async void CheckForOnPlay(Card card)
+        private async void CheckForEffect(Card card)
         {
             if (card.effects != null)
             {
                 foreach (Effects effect in card.effects)
                 {
-                    if (effect.triggerType==EffectTriggerTypes.OnPlay)
+                    if (effect.triggerType == EffectTriggerTypes.OnPlay)
+                    {
+                        await UnityMainThreadDispatcher.RunOnMainThread(() =>
+                        {
+                            effect.cardEffect?.Activate(card);
+                        });
+                    }
+                    if (effect.triggerType == EffectTriggerTypes.Rush)
                     {
                         await UnityMainThreadDispatcher.RunOnMainThread(() =>
                         {
@@ -437,6 +449,9 @@ namespace TCGSim
         }
         public void NoBlockTrigger(Card attacker, Card attacked)
         {
+            blockPowerReq = -1;
+            havingBlockReq = false;
+            overThisBlocking = false;
             GameManager.Instance.ChangeBattlePhase(BattlePhases.COUNTERSTEP, attacker, attacked);
         }
 
@@ -609,6 +624,7 @@ namespace TCGSim
                         donParentCard.HidePlusPowerOnCard();
                         MoveDonFromDeckToCostArea(donCard);
                         donParentCard.ChangeDonAttached(false);
+                        donCard.RestandDon();
                         donCard.ResetCanvasOverrideSorting();
                         donCard.SendCardToServer();
                     }
@@ -730,20 +746,36 @@ namespace TCGSim
 
         private async void HandleAttackDeclaration(Card attacker, Card attacked)
         {
-            string attackerID = attacker.cardData.customCardID;
-            string attackedID = attacked.cardData.customCardID;
-            ChatManager.Instance.AddMessage("You attacked the following card: " + attackedID + " with the following card: " + attackerID);
-            attacker.Rest();
-            attacker.SendCardToServer();
-            endOfTurnBtn.gameObject.SetActive(false);
-            RemoveOtherCardsBorderForBattle();
-            await ServerCon.Instance.AttackedEnemyCard(attackerID, attackedID, attacker.cardData.power + attacker.plusPower);
+            await UnityMainThreadDispatcher.RunOnMainThread(async () =>
+            {
+                string attackerID = attacker.cardData.customCardID;
+                string attackedID = attacked.cardData.customCardID;
+                bool thereIsWhenAttacking = false;
+                ChatManager.Instance.AddMessage("You attacked the following card: " + attackedID + " with the following card: " + attackerID);
+                attacker.Rest();
+                attacker.SetCurrentlyAttacking(true);
+                attacker.SendCardToServer();
+                endOfTurnBtn.gameObject.SetActive(false);
+                RemoveOtherCardsBorderForBattle();
+                if (attacker.effects != null)
+                {
+                    foreach (Effects effect in attacker.effects)
+                    {
+                        if (effect.triggerType == EffectTriggerTypes.WhenAttacking)
+                        {
+                            effect.cardEffect?.Activate(attacker);
+                            thereIsWhenAttacking = true;
+                        }
+                    }
+                }
+                await ServerCon.Instance.AttackedEnemyCard(attackerID, attackedID, attacker.cardData.power + attacker.plusPower, thereIsWhenAttacking);
+            });
         }
 
         public void RemoveOtherCardsBorderForBattle()
         {
             leaderCard.RemoveBorderForThisCard();
-            foreach(Card card in characterAreaCards)
+            foreach (Card card in characterAreaCards)
             {
                 card.RemoveBorderForThisCard();
             }
@@ -783,7 +815,28 @@ namespace TCGSim
             {
                 if (card.cardData.effect.ToLower().Contains("blocker") && !card.rested)
                 {
-                    activeBlockersOnField.Add(card);
+                    if (havingBlockReq && blockPowerReq == -1)
+                    {
+                        break;
+                    }
+                    else if (havingBlockReq && overThisBlocking)
+                    {
+                        if (card.cardData.power < blockPowerReq)
+                        {
+                            activeBlockersOnField.Add(card);
+                        }
+                    }
+                    else if (havingBlockReq && !overThisBlocking)
+                    {
+                        if (card.cardData.power > blockPowerReq)
+                        {
+                            activeBlockersOnField.Add(card);
+                        }
+                    }
+                    else
+                    {
+                        activeBlockersOnField.Add(card);
+                    }
                 }
             }
             return activeBlockersOnField;
@@ -832,6 +885,8 @@ namespace TCGSim
 
         private void HandleCounterStep(Card attacker, Card attacked)
         {
+            this.blockPowerReq = -1;
+            this.havingBlockReq = false;
             DectiveBlockersForBlocking(CheckForBlockers());
             ChatManager.Instance.AddMessage("Select cards you want to counter with or click on no more counter button!");
             noBlockBtn.gameObject.SetActive(false);
@@ -976,7 +1031,7 @@ namespace TCGSim
         }
         private async void SendBattleHasEnded(string attackerID, string attackedID)
         {
-            await ServerCon.Instance.BattleEnded(attackerID, attackerID);
+            await ServerCon.Instance.BattleEnded(attackerID, attackedID);
         }
 
         private void CorrectAmountOfCardDrawn()
@@ -1046,7 +1101,7 @@ namespace TCGSim
             }
         }
 
-        public async Task EnemyAttacked(string attackerCardID, string attackedCardID)
+        public async Task EnemyAttacked(string attackerCardID, string attackedCardID, bool thereIsWhenAttacking)
         {
             Card cardThatAttacks = null;
             Card attackedCard = null;
@@ -1062,7 +1117,7 @@ namespace TCGSim
                     cardThatAttacks = EnemyBoard.Instance.cards.Where(x => x.cardData.customCardID == attackerCardID).Single();
                 }
             });
-            UnityMainThreadDispatcher.Enqueue(() =>
+            UnityMainThreadDispatcher.Enqueue(async () =>
             {
                 if (leaderCard.cardData.customCardID == attackedCardID)
                 {
@@ -1078,6 +1133,10 @@ namespace TCGSim
                             break;
                         }
                     }
+                }
+                if (thereIsWhenAttacking)
+                {
+                    await ServerCon.Instance.WaitForEnemyToFinishWhenAttacking();
                 }
                 GameManager.Instance.ChangeBattlePhase(BattlePhases.BLOCKSTEP, cardThatAttacks, attackedCard);
             });
@@ -1110,7 +1169,7 @@ namespace TCGSim
                         donCardsOfCard.Add(donCard);
                     }
                 }
-                foreach(Card donCard in donCardsOfCard)
+                foreach (Card donCard in donCardsOfCard)
                 {
                     MoveDonFromDeckToCostArea(donCard);
                     donCard.SetCardNotActive();
@@ -1128,9 +1187,9 @@ namespace TCGSim
         public List<Card> GetRestedDons()
         {
             List<Card> restedDons = new List<Card>();
-            foreach(Card donCard in donInCostArea)
+            foreach (Card donCard in donInCostArea)
             {
-                if(donCard.rested && !donCard.cardData.active)
+                if (donCard.rested && !donCard.cardData.active)
                 {
                     restedDons.Add(donCard);
                 }
@@ -1153,6 +1212,29 @@ namespace TCGSim
                 }
             }
             return cardThatCanAttack;
+        }
+
+        public List<Card> GetCharacterAreaCards()
+        {
+            List<Card> characterAreaCard = new List<Card>();
+            foreach (Card card in this.characterAreaCards)
+            {
+                characterAreaCard.Add(card);
+            }
+            return characterAreaCard;
+        }
+
+        public Card GetCurrentLeader()
+        {
+            Card leader = leaderCard;
+            return leader;
+        }
+
+        public void ICantActivateBlockerOverThis(int overThis)
+        {
+            blockPowerReq = overThis;
+            havingBlockReq = true;
+            overThisBlocking = true;
         }
     }
 }

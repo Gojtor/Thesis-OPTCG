@@ -119,6 +119,9 @@ namespace TCGSim
 
         [SerializeField]
         public GameObject resumeGamePrefab;
+
+        [SerializeField]
+        public GameObject backToMainBtnPrefab;
         #endregion
 
         private GameObject waitingForOpp;
@@ -161,7 +164,6 @@ namespace TCGSim
             ChatManager chatManager = Instantiate(chatManagerPrefab, this.gameObject.transform).GetComponent<ChatManager>();
             chatManager.SetChatContent(chatView.transform.GetChild(0).GetChild(0).gameObject.GetComponent<CanvasGroup>());
             CreateMenu();
-
             switch (GameManager.Instance.currentState)
             {
                 case GameState.CONNECTING:
@@ -173,7 +175,7 @@ namespace TCGSim
                     await ServerCon.Instance.CreateGroupInSocket(gameCustomID, playerName);
                     connecting.SetActive(false);
                     waitingForOpp = Instantiate(waitingForOpponentPrefab, this.gameObject.transform);
-                    ChatManager.Instance.AddMessage("Game created with the following ID: "+gameCustomID+" . Waiting for an opponent to join!");
+                    ChatManager.Instance.AddMessage("Game created with the following ID: " + gameCustomID + " . Waiting for an opponent to join!");
                     Debug.Log("Waiting For Opponent!");
                     await ServerCon.Instance.WaitForEnemyToConnect();
                     break;
@@ -193,6 +195,8 @@ namespace TCGSim
         {
             UnityMainThreadDispatcher.Enqueue(() =>
             {
+                menuBtn.interactable = false;
+                concedeBtn.interactable = false;
                 CreateBoards();
                 connecting.SetActive(false);
                 if (waitingForOpp != null)
@@ -218,7 +222,7 @@ namespace TCGSim
             enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
                 cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
             playerBoard.Init("PLAYERBOARD", gameCustomID, playerName);
-            enemyBoard.Init("ENEMYBOARD", gameCustomID,enemyName);
+            enemyBoard.Init("ENEMYBOARD", gameCustomID, enemyName);
             playerBoard.gameObject.transform.Translate(0, -255, 0);
             enemyBoard.gameObject.transform.Translate(0, 255, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
@@ -231,6 +235,9 @@ namespace TCGSim
                 menuBtn = Instantiate(menuBtnPrefab, this.gameObject.transform).GetComponent<Button>();
                 menuBtn.onClick.AddListener(MenuBtnClick);
                 menuPanel = Instantiate(menuPanelPrefab, this.gameObject.transform);
+                Canvas menuPanelCanvas = menuPanel.GetComponent<Canvas>();
+                menuPanelCanvas.overrideSorting = true;
+                menuPanelCanvas.sortingOrder = 6;
                 concedeBtn = Instantiate(concedePrefab, menuPanel.gameObject.transform).GetComponent<Button>();
                 backToMainBtn = Instantiate(backToMainInMenuPrefab, menuPanel.gameObject.transform).GetComponent<Button>();
                 resumeBtn = Instantiate(resumeGamePrefab, menuPanel.gameObject.transform).GetComponent<Button>();
@@ -238,6 +245,7 @@ namespace TCGSim
                 backToMainBtn.onClick.AddListener(BackToMainMenu);
                 resumeBtn.onClick.AddListener(ResumeGame);
                 menuPanel.SetActive(false);
+                concedeBtn.interactable = false;
             });
         }
         public void GameWithIDAlreadyExist()
@@ -262,8 +270,8 @@ namespace TCGSim
         {
             UnityMainThreadDispatcher.Enqueue(() =>
             {
-                GameObject alreadyExist = Instantiate(twoPlayerInGamePrefab, this.gameObject.transform);
-                Button backToMainMenu = alreadyExist.transform.GetChild(0).GetComponent<Button>();
+                GameObject alreadyInGame = Instantiate(twoPlayerInGamePrefab, this.gameObject.transform);
+                Button backToMainMenu = alreadyInGame.transform.GetChild(0).GetComponent<Button>();
                 backToMainMenu.onClick.AddListener(BackToMainMenu);
             });
         }
@@ -271,8 +279,8 @@ namespace TCGSim
         {
             UnityMainThreadDispatcher.Enqueue(() =>
             {
-                GameObject alreadyExist = Instantiate(gameDoesntExistPrefab, this.gameObject.transform);
-                Button backToMainMenu = alreadyExist.transform.GetChild(0).GetComponent<Button>();
+                GameObject doesntExist = Instantiate(gameDoesntExistPrefab, this.gameObject.transform);
+                Button backToMainMenu = doesntExist.transform.GetChild(0).GetComponent<Button>();
                 backToMainMenu.onClick.AddListener(BackToMainMenu);
             });
         }
@@ -281,8 +289,11 @@ namespace TCGSim
         {
             UnityMainThreadDispatcher.Enqueue(() =>
             {
-                GameObject alreadyExist = Instantiate(matchWonPrefab, this.gameObject.transform);
-                Button backToMainMenu = alreadyExist.transform.GetChild(0).GetComponent<Button>();
+                GameObject gameWonPanel = Instantiate(matchWonPrefab, this.gameObject.transform);
+                Button backToMainMenu = Instantiate(backToMainBtnPrefab, gameWonPanel.transform).GetComponent<Button>();
+                Canvas gameWonPanelCanvas = gameWonPanel.GetComponent<Canvas>();
+                gameWonPanelCanvas.overrideSorting = true;
+                gameWonPanelCanvas.sortingOrder = 6;
                 backToMainMenu.onClick.AddListener(BackToMainMenu);
             });
         }
@@ -291,15 +302,21 @@ namespace TCGSim
         {
             UnityMainThreadDispatcher.Enqueue(() =>
             {
-                GameObject alreadyExist = Instantiate(matchLostPrefab, this.gameObject.transform);
-                Button backToMainMenu = alreadyExist.transform.GetChild(0).GetComponent<Button>();
+                GameObject gameLostPanel = Instantiate(matchLostPrefab, this.gameObject.transform);
+                Button backToMainMenu = Instantiate(backToMainBtnPrefab, gameLostPanel.transform).GetComponent<Button>();
+                Canvas gameLostPanelCanvas = gameLostPanel.GetComponent<Canvas>();
+                gameLostPanelCanvas.overrideSorting = true;
+                gameLostPanelCanvas.sortingOrder = 6;
                 backToMainMenu.onClick.AddListener(BackToMainMenu);
             });
         }
 
-        public void BackToMainMenu()
+        public async void BackToMainMenu()
         {
-            SceneManager.LoadScene("Menu");
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                SceneManager.LoadScene("Menu");
+            });
         }
         private void OnDestroy()
         {
@@ -337,7 +354,6 @@ namespace TCGSim
             menuPanel.transform.SetAsLastSibling();
             menuBtn.gameObject.SetActive(false);
             beforeMenuState = GameManager.Instance.currentState;
-            GameManager.Instance.ChangeGameState(GameState.INGAMEMENU);
         }
 
         public async void Concede()
@@ -354,7 +370,16 @@ namespace TCGSim
         {
             menuPanel.SetActive(false);
             menuBtn.gameObject.SetActive(true);
-            GameManager.Instance.ChangeGameState(beforeMenuState);
+        }
+
+        public void SetMenuActive(bool active)
+        {
+            menuBtn.interactable = active;
+        }
+
+        public void SetConcedeActive(bool active)
+        {
+            concedeBtn.interactable = active;
         }
     }
 }

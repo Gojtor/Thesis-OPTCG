@@ -35,7 +35,8 @@ namespace TCGSim.CardScripts
         public int plusPower { get; protected set; } = 0;
         protected GameObject border;
         protected GameObject powerText;
-        public bool targetForOnPlay { get; protected set; } = false;
+        public bool currentlyAttacking { get; protected set; } = false;
+        public bool targetForEffect { get; protected set; } = false;
         //Init variables
         private Hand hand = null;
 
@@ -65,6 +66,8 @@ namespace TCGSim.CardScripts
             {
                 this.RemoveBorderForThisCard();
             }
+            this.ResetPlusPower();
+            this.HidePlusPowerOnCard();
         }
 
         public void OnBeginDrag(PointerEventData pointerEventData)
@@ -205,6 +208,7 @@ namespace TCGSim.CardScripts
                 donCard.transform.Translate(0, -30, 0);
                 donCard.SetCardNotActive();
                 donCard.draggable = false;
+                donCard.rested = true;
                 donCard.UpdateParent();
                 toCard.AddToPlusPower(1000);
                 toCard.MakeOrUpdatePlusPowerSeenOnCard();
@@ -332,6 +336,19 @@ namespace TCGSim.CardScripts
             }
         }
 
+        public void CheckCardForDonEffect()
+        {
+            if (this.effects != null)
+            {
+                foreach (Effects effect in this.effects)
+                {
+                    if (effect.triggerType == EffectTriggerTypes.DON)
+                    {
+                            effect.cardEffect?.Activate(this);
+                    }
+                }
+            }
+        }
         public void UpdateParent()
         {
             this.cardData.currentParent = this.transform.parent.name;
@@ -597,7 +614,16 @@ namespace TCGSim.CardScripts
             }
             else if (eventData.button == PointerEventData.InputButton.Right)
             {
-                //CardClickedWithRightMouse?.Invoke(this);
+                if (this.effects != null)
+                {
+                    foreach (Effects effect in this.effects)
+                    {
+                        if (effect.triggerType == EffectTriggerTypes.ActivateMain)
+                        {
+                            effect.cardEffect?.Activate(this);
+                        }
+                    }
+                }
             }
         }
 
@@ -647,7 +673,6 @@ namespace TCGSim.CardScripts
                     Destroy(powerText);
                 }
             });
-            ResetCanvasOverrideSorting();
         }
 
         public void AddToPlusPower(int power)
@@ -678,6 +703,7 @@ namespace TCGSim.CardScripts
 
         public int GetAttachedDonCount()
         {
+            if (this == null) { return -1; }
             int donCounter = 0;
 
             for (int i = 0; i < this.transform.childCount; i++)
@@ -692,9 +718,9 @@ namespace TCGSim.CardScripts
             return donCounter;
         }
 
-        public void IsTargetForOnPlayEffect(bool target)
+        public void IsTargetForEffect(bool target)
         {
-            this.targetForOnPlay = target;
+            this.targetForEffect = target;
             if (target)
             {
                 this.MakeBorderForThisCard();
@@ -708,6 +734,11 @@ namespace TCGSim.CardScripts
         public void PopulateEffects(string cardEffects)
         {
             this.effects = StringToEffectsParser.Parser(cardEffects);
+        }
+
+        public void SetCurrentlyAttacking(bool attacking)
+        {
+            this.currentlyAttacking = attacking;
         }
 
     }

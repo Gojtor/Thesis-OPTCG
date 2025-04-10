@@ -149,6 +149,7 @@ MonoBehaviour:
   concedePrefab: {fileID: 1905677174799774388, guid: 3780dca6f772ba04398fa24bba185e4b, type: 3}
   backToMainInMenuPrefab: {fileID: 7631845474133296882, guid: af4fbd5fd7112e741a331a8b94ae6d53, type: 3}
   resumeGamePrefab: {fileID: 4197402094736043957, guid: a923b4a298c8d7245becf2bec01587e4, type: 3}
+  backToMainBtnPrefab: {fileID: 4629827492737772210, guid: 0dd743c3c7c2e0a4eb5d4cdaaf7e85de, type: 3}
 --- !u!1 &7425409318985540678
 GameObject:
   m_ObjectHideFlags: 0

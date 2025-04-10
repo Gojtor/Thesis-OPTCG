@@ -104,8 +104,27 @@ namespace TCGSim
                     characterCard.AddToPlusPower(counterCardCounterValue);
                     characterCard.MakeOrUpdatePlusPowerSeenOnCard();
                 }
+            });  
+        }
+
+        public void AddPlusPowerToCard(string fromCardID,string toCardID,int plusPower)
+        {
+            UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                LeaderCard leaderCard = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
+                Card fromCard = cards.Where(x => x.cardData.customCardID == fromCardID).Single();
+                if (leaderCard.cardData.customCardID == toCardID)
+                {
+                    leaderCard.AddToPlusPower(plusPower);
+                    leaderCard.MakeOrUpdatePlusPowerSeenOnCard();
+                }
+                else
+                {
+                    Card characterCard = cards.Where(x => x.cardData.customCardID == toCardID).Single();
+                    characterCard.AddToPlusPower(plusPower);
+                    characterCard.MakeOrUpdatePlusPowerSeenOnCard();
+                }
             });
-           
         }
 
         public async Task UpdateBoardFromGameDB()

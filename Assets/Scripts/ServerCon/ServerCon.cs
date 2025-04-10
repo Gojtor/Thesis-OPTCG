@@ -32,6 +32,7 @@ namespace TCGSim
         private TaskCompletionSource<bool> EnemyConnectionTask;
         private TaskCompletionSource<bool> AddingToGroupTask;
         private TaskCompletionSource<bool> GameGroupCreatedTask;
+        private TaskCompletionSource<bool> EnemyDoneWithWhenAttacking;
 
         // Start is called before the first frame update
         void Start()
@@ -196,9 +197,9 @@ namespace TCGSim
                 });
             });
 
-            connection.On<string, string, int>("MyCardIsAttacked", async (cardThatAttacksID, attackedCard, power) =>
+            connection.On<string, string, int, bool>("MyCardIsAttacked", async (cardThatAttacksID, attackedCard, power, thereIsWhenAttacking) =>
             {
-                await MyCardIsAttacked(cardThatAttacksID, attackedCard, power);
+                await MyCardIsAttacked(cardThatAttacksID, attackedCard, power, thereIsWhenAttacking);
             });
 
             connection.On<string, string>("AddPlusPowerToCardFromCounter",  (toCardID, counterCardID) =>
@@ -222,6 +223,24 @@ namespace TCGSim
             {
                 Debug.Log(message);
                 GameManager.Instance.ChangeGameState(GameState.MATCHLOST);
+            });
+
+            connection.On<string,string,int>("AddPlusPowerToCardFromEffectForThisTurn", (fromCardID, toCardID, plusPower) =>
+            {
+                EnemyBoard.Instance.AddPlusPowerToCard(fromCardID,toCardID,plusPower);
+            });
+
+            connection.On<string, int>("ICantActivateBlockerOverThis", (effectInvoker, overThis) =>
+            {
+                PlayerBoard.Instance.ICantActivateBlockerOverThis(overThis);
+            });
+
+            connection.On<string>("EnemyDoneWithWhenAttackingEffect", (effectInvoker) =>
+            {
+                if (EnemyDoneWithWhenAttacking != null)
+                {
+                    EnemyDoneWithWhenAttacking.TrySetResult(true);
+                }
             });
 
             await connection.StartAsync();
@@ -257,6 +276,15 @@ namespace TCGSim
             await EnemyConnectionTask.Task; // Wait here until a message is received
             Debug.Log("Enemy connected");
             await connection.InvokeAsync<string>("ReAssureEnemyConnected", gameID, playerName);
+        }
+
+        public async Task WaitForEnemyToFinishWhenAttacking()
+        {
+            Debug.Log("Waiting for enemy to finish when attacking");
+            EnemyDoneWithWhenAttacking = new TaskCompletionSource<bool>();
+            await EnemyDoneWithWhenAttacking.Task; // Wait here until a message is received
+            EnemyDoneWithWhenAttacking.TrySetResult(false);
+            Debug.Log("Enemy finished when attacking effect");
         }
 
         public async Task WaitForEnemyToFinishStartingHand()
@@ -323,6 +351,11 @@ namespace TCGSim
             Debug.Log("UpdateEnemyBoard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
             await EnemyBoard.Instance.UpdateBoardFromGameDB();
             enemyFinishedWithStartingHand = true;
+            await UnityMainThreadDispatcher.RunOnMainThread(() => 
+            {
+                GameBoard.Instance.SetConcedeActive(true);
+                GameBoard.Instance.SetMenuActive(true);
+            });
         }
 
         public async Task UpdateEnemyCard(string customCardID)
@@ -335,15 +368,19 @@ namespace TCGSim
             Debug.Log("UpdateEnemyLeaderCard called! Enemy name: " + EnemyBoard.Instance.playerName + "! My name: " + PlayerBoard.Instance.playerName);
             EnemyBoard.Instance.CreateOrUpdateLeaderCardFromGameDB(customCardID);
         }
-        public async Task MyCardIsAttacked(string cardThatAttacksID, string attackedCard, int power)
+        public async Task MyCardIsAttacked(string cardThatAttacksID, string attackedCard, int power, bool thereIsWhenAttacking)
         {
             Debug.Log("Card: " + cardThatAttacksID + " with this power: " + power + " attacked this card: " + attackedCard);
-            await PlayerBoard.Instance.EnemyAttacked(cardThatAttacksID, attackedCard);
+            await PlayerBoard.Instance.EnemyAttacked(cardThatAttacksID, attackedCard, thereIsWhenAttacking);
         }
         public void AddPlusPowerToCardFromCounter(string toCardID, string counterCardID)
         {
             Debug.Log("Enemy used counter card: " + counterCardID);
             EnemyBoard.Instance.AddCounterPower(toCardID, counterCardID);
+        }
+        public async Task AddPlusPowerToCardFromEffectForThisTurn(string fromCardID,string toCardID, int plusPower)
+        {
+            await connection.InvokeAsync<string>("AddPlusPowerToCardFromEffectForThisTurn", gameID,fromCardID, toCardID, plusPower);
         }
 
         public async Task ChangeEnemyGameStateToPlayerPhase(string customCardID)
@@ -354,9 +391,9 @@ namespace TCGSim
         {
             await connection.InvokeAsync<string>("UpdateMyLeaderCardAtEnemy", gameID, customCardID);
         }
-        public async Task AttackedEnemyCard(string cardThatAttacksID, string attackedCard, int power)
+        public async Task AttackedEnemyCard(string cardThatAttacksID, string attackedCard, int power, bool thereIsWhenAttacking)
         {
-            await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard, power);
+            await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard, power,thereIsWhenAttacking);
         }
         public async Task AddPlusPowerFromCounterToEnemy(string toCardID, string counterCardID)
         {
@@ -376,6 +413,16 @@ namespace TCGSim
         public async Task EnemyLost()
         {
             await connection.InvokeAsync<string>("EnemyLost", gameID);
+        }
+
+        public async Task EnemyCantActivateBlockerOver(string effectInvokerID,int overThis)
+        {
+            await connection.InvokeAsync<string>("EnemyCantActivateBlockerOver", gameID,effectInvokerID, overThis);
+        }
+
+        public async Task ImDoneWithWhenAttackingEffect()
+        {
+            await connection.InvokeAsync<string>("ImDoneWithWhenAttackingEffect", gameID);
         }
 
         private async void OnApplicationQuit()

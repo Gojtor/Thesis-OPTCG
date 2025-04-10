@@ -44,6 +44,7 @@ namespace TCGSim
                 lineRenderer.SetPosition(1, new Vector3(mousePos.x, mousePos.y, 0f));
             }
             CheckCardVisibility();
+            CheckCardForDonEffect();
         }
 
         public override void OnPointerClick(PointerEventData eventData)
@@ -72,6 +73,10 @@ namespace TCGSim
             this.cardData = cardData;
             this.cardData.cardVisibility = CardVisibility.BOTH;
             this.life = this.cardData.cost;
+            if (effects == null)
+            {
+                PopulateEffects(this.cardData.effect);
+            }
         }
 
         public void OnPointerUp(PointerEventData eventData)
@@ -137,6 +142,7 @@ namespace TCGSim
                 await UnityMainThreadDispatcher.RunOnMainThread(() =>
                 {
                     RemoveAttackLine();
+                    SetCurrentlyAttacking(false);
                 });
             }
         }

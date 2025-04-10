@@ -9,6 +9,7 @@ namespace TCGSim
 {
     public enum EffectTriggerTypes
     {
+        NOEFFECT,
         [EnumMember(Value = "On Play")]
         OnPlay,
         [EnumMember(Value = "On K.O.")]
@@ -17,6 +18,8 @@ namespace TCGSim
         WhenAttacking,
         [EnumMember(Value = "Activate: Main")]
         ActivateMain,
+        [EnumMember(Value = "RUSH")]
+        Rush,
         [EnumMember(Value = "DON!!")]
         DON
     }
