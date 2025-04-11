@@ -123,6 +123,10 @@ jobs:
               mkdir -p release
               mkdir -p release/game
               cp -r build/WebGL/* release/game/
+
+          - name: "Move the folder to release/game"
+            run: 
+              sudo mv build/WebGL/WebGLWebGL/* release/game/;
               
           # - uses: actions/upload-artifact@v4.3.3
           #   with:
