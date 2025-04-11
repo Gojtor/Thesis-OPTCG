@@ -72,7 +72,7 @@ namespace TCGSim.CardScripts
 
         public void OnBeginDrag(PointerEventData pointerEventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
             if (needToWatchHowManyDrawn && this.gameObject.transform.parent == fromWhereTheCardNeedsToBeDrawn)
             {
                 onBeginDragCounter++;
@@ -104,7 +104,7 @@ namespace TCGSim.CardScripts
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
             this.ResetCanvasOverrideSorting();
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
             if (objectAtDragEnd == null)
@@ -160,6 +160,21 @@ namespace TCGSim.CardScripts
                     {
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
+                    }
+                    else if (objectAtDragEnd.transform.GetComponent<StageCard>()!=null && objectAtDragEnd.transform.GetComponent<StageCard>().transform.parent == PlayerBoard.Instance.stageObject.transform)
+                    {
+                        if(this.cardData.cost <= PlayerBoard.Instance.activeDon)
+                        {
+                            Card currentStage = objectAtDragEnd.transform.GetComponent<StageCard>();
+                            PlayerBoard.Instance.MoveCardToTrash(currentStage);
+                            PlayerBoard.Instance.RestDons(this.cardData.cost);
+                            PlayerBoard.Instance.MoveStageFromHandToStageArea(this);
+                        }
+                        else
+                        {
+                            SnapCardBackToParentPos();
+                            Debug.Log("Cannot play the card!");
+                        }
                     }
                     else
                     {
@@ -234,14 +249,14 @@ namespace TCGSim.CardScripts
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
             this.transform.position = eventData.position;
             //Debug.Log("OnDrag");
         }
 
         public void OnDrop(PointerEventData eventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || !PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
             //Debug.Log("OnDrop");
         }
         public void OnPointerEnter(PointerEventData eventData)

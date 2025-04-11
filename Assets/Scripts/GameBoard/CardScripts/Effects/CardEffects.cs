@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using TCGSim.CardResources;
 using TCGSim.CardScripts;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -293,6 +296,145 @@ namespace TCGSim
         }
     }
 
+    public class RestStageGivePowerToType : ICardEffects
+    {
+        int upTo;
+        int plusPower;
+        string subType;
+        bool passiveEffect = false;
+
+        private List<Card> possibleTargets = new List<Card>();
+        private List<Card> cardsThatCouldAttackBeforeOnPlay = new List<Card>();
+        private List<Card> selectedTargets = new List<Card>();
+        private Card effectCaller;
+        public RestStageGivePowerToType(int upTo, int plusPower, string subType, bool passiveEffect)
+        {
+            this.upTo = upTo;
+            this.plusPower = plusPower;
+            this.subType = subType;
+            this.passiveEffect = passiveEffect;
+        }
+
+        public void Activate(Card card)
+        {
+            if (!card.rested)
+            {
+                effectCaller = card;
+                card.Rest();
+                PlayerBoard.Instance.SetEffectInProgress(true);
+                cardsThatCouldAttackBeforeOnPlay = PlayerBoard.Instance.GetCardsThatCouldAttack();
+                possibleTargets = PlayerBoard.Instance.GetCharacterAreaCards();
+                possibleTargets.Add(PlayerBoard.Instance.leaderCard);
+                if (possibleTargets.Count == 0) { return; }
+                foreach (Card cardCanAttack in cardsThatCouldAttackBeforeOnPlay)
+                {
+                    switch (cardCanAttack.cardData.cardType)
+                    {
+                        case CardResources.CardType.CHARACTER:
+                            cardCanAttack.GetComponent<CharacterCard>().CardCannotAttack();
+                            break;
+                        case CardResources.CardType.LEADER:
+                            cardCanAttack.GetComponent<LeaderCard>().CardCannotAttack();
+                            break;
+                        default:
+                            UnityEngine.Debug.LogError("Missing card type");
+                            break;
+                    }
+                }
+                ShowCancelButton();
+                foreach (Card target in possibleTargets)
+                {
+                    target.IsTargetForEffect(true);
+                    target.SetClickAction(OnTargetSelected);
+                }
+            }
+        }
+
+        private void OnTargetSelected(Card target)
+        {
+            if (selectedTargets.Count<upTo)
+            {
+                if (!EnumUtils.GetEnumMemberValue(target.cardData.characterType).ToString().Contains(subType))
+                {
+                    ChatManager.Instance.AddMessage("The target: "+target.cardData.customCardID+" for effect is not the correct sub type!");
+                }
+                else
+                {
+                    selectedTargets.Add(target);
+                    target.IsTargetForEffect(false);
+                    target.ClearClickAction();
+                }    
+            }
+            if (selectedTargets.Count == upTo)
+            {
+                CompleteEffect();
+            }
+        }
+
+        private async void CompleteEffect()
+        {
+            foreach (Card card in selectedTargets)
+            {
+                await UnityMainThreadDispatcher.RunOnMainThread(async () =>
+                {
+                    card.AddToPlusPower(plusPower);
+                    card.MakeOrUpdatePlusPowerSeenOnCard();
+                    await ServerCon.Instance.AddPlusPowerToCardFromEffectForThisTurn(effectCaller.cardData.customCardID, card.cardData.customCardID, plusPower);
+                });
+            }
+            Cleanup();
+        }
+
+        private void CancelEffect()
+        {
+            CompleteEffect();
+            Cleanup();
+        }
+
+        private void Cleanup()
+        {
+            foreach (Card card in possibleTargets)
+            {
+                card.ClearClickAction();
+                card.IsTargetForEffect(false);
+            }
+            foreach (Card card in cardsThatCouldAttackBeforeOnPlay)
+            {
+                switch (card.cardData.cardType)
+                {
+                    case CardResources.CardType.CHARACTER:
+                        card.GetComponent<CharacterCard>().CardCanAttack();
+                        break;
+                    case CardResources.CardType.LEADER:
+                        card.GetComponent<LeaderCard>().CardCanAttack();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            HideCancelButton();
+            PlayerBoard.Instance.SetEffectInProgress(false);
+        }
+
+        private void ShowCancelButton()
+        {
+            PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(false);
+            Button cancelButton = PlayerBoard.Instance.cancelBtn;
+            cancelButton.gameObject.SetActive(true);
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.onClick.AddListener(CancelEffect);
+        }
+
+        private void HideCancelButton()
+        {
+            Button cancelButton = PlayerBoard.Instance.cancelBtn;
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.gameObject.SetActive(false);
+            PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(true);
+        }
+
+    }
+
     public class GiveUpToRestedDonToLeaderOrCharacter : ICardEffects
     {
         int upTo;
@@ -431,9 +573,8 @@ namespace TCGSim
                 }
             }
             HideCancelButton();
-            PlayerBoard.Instance.SetEffectInProgress(true);
+            PlayerBoard.Instance.SetEffectInProgress(false);
         }
-
         private void ShowCancelButton()
         {
             PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(false);
@@ -449,6 +590,24 @@ namespace TCGSim
             cancelButton.onClick.RemoveAllListeners();
             cancelButton.gameObject.SetActive(false);
             PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(true);
+        }
+    }
+
+    public static class EnumUtils
+    {
+        public static string GetEnumMemberValue<T>(T enumValue) where T : Enum
+        {
+            var memberInfo = typeof(T).GetMember(enumValue.ToString()).FirstOrDefault();
+            if (memberInfo != null)
+            {
+                var attribute = memberInfo.GetCustomAttribute<EnumMemberAttribute>();
+                if (attribute != null)
+                {
+                    return attribute.Value;
+                }
+            }
+
+            return enumValue.ToString();
         }
     }
 }

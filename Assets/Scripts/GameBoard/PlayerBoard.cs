@@ -318,6 +318,7 @@ namespace TCGSim
         {
             card.SetCardVisibility(CardResources.CardVisibility.BOTH);
             handObject.RemoveCardFromHand(card, this.stageObject.transform);
+            card.transform.position = card.transform.parent.position;
             card.SetCardActive();
             card.ChangeDraggable(false);
             card.UpdateParent();

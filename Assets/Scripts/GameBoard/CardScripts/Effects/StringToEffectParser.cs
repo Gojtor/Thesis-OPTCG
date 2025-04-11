@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TCGSim.CardResources;
 using Unity.VisualScripting;
 
 namespace TCGSim
@@ -69,7 +70,29 @@ namespace TCGSim
                         }
                      );
                 }
+            }
 
+            if (Regex.IsMatch(effectText, @"\[(.+)\]\s+You may rest this Stage: Up to (\d+)\s+{(.+)}\s+type Leader or Character card on your field gains \+(\d+)\s+power during this turn\."))
+            {
+                var match = Regex.Match(effectText, @"\[(.+)\]\s+You may rest this Stage: Up to (\d+)\s+{(.+)}\s+type Leader or Character card on your field gains \+(\d+)\s+power during this turn\.");
+                if (match.Success)
+                {
+                    string effectType = Convert.ToString(match.Groups[1].Value);
+                    int upTo = int.Parse(match.Groups[2].Value);
+                    string subType = Convert.ToString(match.Groups[3].Value);
+                    int plusPower = int.Parse(match.Groups[4].Value);
+                    EffectTriggerTypes? effectTrigger = effectType.FromEnumMemberValue<EffectTriggerTypes>();
+
+                    if (effectTrigger == EffectTriggerTypes.NOEFFECT) { return null; }
+
+                    effects.Add(
+                        new Effects
+                        {
+                            triggerType = (EffectTriggerTypes) effectTrigger,
+                            cardEffect = new RestStageGivePowerToType(upTo, plusPower, subType, false)
+                        }
+                     );
+                }
             }
 
             if (Regex.IsMatch(effectText, @"\[(.+)\]\s+Give this Leader or (\d+) of your Characters up to (\d+) rested DON!! card\."))
