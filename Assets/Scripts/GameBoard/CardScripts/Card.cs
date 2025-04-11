@@ -37,6 +37,9 @@ namespace TCGSim.CardScripts
         protected GameObject powerText;
         public bool currentlyAttacking { get; protected set; } = false;
         public bool targetForEffect { get; protected set; } = false;
+
+        private List<Effects> whenAttackingEffectsAddedByOtherCards = new List<Effects>();
+
         //Init variables
         private Hand hand = null;
 
@@ -49,7 +52,7 @@ namespace TCGSim.CardScripts
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
         private void Awake()
@@ -147,7 +150,8 @@ namespace TCGSim.CardScripts
                         AttachDon(objectAtDragEnd.gameObject.GetComponent<Card>(), this);
                         this.SendCardToServer();
                     }
-                    else if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null)
+                    else if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE 
+                        || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null || objectAtDragEnd.gameObject.GetComponent<CharacterCard>()!=null)
                     {
                         SnapCardBackToParentPos();
                     }
@@ -186,15 +190,31 @@ namespace TCGSim.CardScripts
                     break;
                 case CardType.EVENT:
                     Debug.Log("OnEndDrag called on: " + this.GetType().Name + " | Object Name: " + this.gameObject.name);
-                    if (objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE || this.cardData.cost > PlayerBoard.Instance.activeDon)
+                    if ((objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.GetComponent<CharacterCard>() == null) || objectAtDragEnd.transform.parent == PlayerBoard.Instance.handObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE)
                     {
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
                     }
                     else
                     {
-                        PlayerBoard.Instance.RestDons(this.cardData.cost);
-                        PlayerBoard.Instance.MoveCardToTrash(this);
+                        bool effectActivated = false;
+                        if (this.effects != null)
+                        {
+                            foreach (Effects effect in effects)
+                            {
+                                if (effect.triggerType == EffectTriggerTypes.Main)
+                                {
+                                    PlayerBoard.Instance.RestDons(this.cardData.cost);
+                                    effect.cardEffect?.Activate(this);
+                                    effectActivated = true;
+                                }
+                            }
+                        }
+                        if(!effectActivated)
+                        {
+                            PlayerBoard.Instance.MoveCardToTrash(this);
+                            PlayerBoard.Instance.RestDons(this.cardData.cost);
+                        }  
                     }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
@@ -629,7 +649,7 @@ namespace TCGSim.CardScripts
             }
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                if (attacked != null && GameManager.Instance.currentBattlePhase == BattlePhases.COUNTERSTEP)
+                if (attacked != null && GameManager.Instance.currentBattlePhase == BattlePhases.COUNTERSTEP && this.cardData.cardType!=CardType.EVENT)
                 {
                     this.CardClickedWithLeftMouseForCountering?.Invoke(attacked, this);
                 }
@@ -761,6 +781,23 @@ namespace TCGSim.CardScripts
         public void SetCurrentlyAttacking(bool attacking)
         {
             this.currentlyAttacking = attacking;
+        }
+
+        public void AddWhenAttackingEffectToCard(Effects effect)
+        {
+            this.effects.Add(effect);
+            whenAttackingEffectsAddedByOtherCards.Add(effect);
+        }
+        protected void CheckAddedWhenAttackingEffects()
+        {
+            if (whenAttackingEffectsAddedByOtherCards.Count > 0 && GameManager.Instance.currentState==GameState.ENEMYPHASE)
+            {
+                foreach (Effects effect in whenAttackingEffectsAddedByOtherCards)
+                {
+                    effects.Remove(effect);
+                }
+                whenAttackingEffectsAddedByOtherCards = new List<Effects>();
+            }
         }
 
     }

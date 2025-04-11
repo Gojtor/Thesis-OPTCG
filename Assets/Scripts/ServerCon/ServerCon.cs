@@ -204,9 +204,9 @@ namespace TCGSim
                 await MyCardIsAttacked(cardThatAttacksID, attackedCard, power, thereIsWhenAttacking);
             });
 
-            connection.On<string, string>("AddPlusPowerToCardFromCounter",  (toCardID, counterCardID) =>
+            connection.On<string, string, int>("AddPlusPowerToCardFromCounter",  (toCardID, counterCardID, counterValue) =>
             {
-                AddPlusPowerToCardFromCounter(toCardID,counterCardID);
+                AddPlusPowerToCardFromCounter(toCardID,counterCardID, counterValue);
             });
 
             connection.On<string,string>("BattleEnded", (message,attackedCardID) =>
@@ -248,6 +248,11 @@ namespace TCGSim
             connection.On<string>("EnemyGotAttackDeclaration", (message) =>
             {
                 enemyReceivedAttackDeclaration = true;
+            });
+
+            connection.On<string,string,string>("KoThisCard", (message,koThisCardID,effectCallerID) =>
+            {
+                PlayerBoard.Instance.KoThisCard(koThisCardID, effectCallerID);
             });
 
             await connection.StartAsync();
@@ -380,10 +385,10 @@ namespace TCGSim
             Debug.Log("Card: " + cardThatAttacksID + " with this power: " + power + " attacked this card: " + attackedCard);
             await PlayerBoard.Instance.EnemyAttacked(cardThatAttacksID, attackedCard, thereIsWhenAttacking);
         }
-        public void AddPlusPowerToCardFromCounter(string toCardID, string counterCardID)
+        public void AddPlusPowerToCardFromCounter(string toCardID, string counterCardID, int counterValue)
         {
             Debug.Log("Enemy used counter card: " + counterCardID);
-            EnemyBoard.Instance.AddCounterPower(toCardID, counterCardID);
+            EnemyBoard.Instance.AddCounterPower(toCardID, counterCardID,counterValue);
         }
         public async Task AddPlusPowerToCardFromEffectForThisTurn(string fromCardID,string toCardID, int plusPower)
         {
@@ -402,9 +407,9 @@ namespace TCGSim
         {
             await connection.InvokeAsync<string>("AttackedEnemyCard", gameID, cardThatAttacksID, attackedCard, power,thereIsWhenAttacking);
         }
-        public async Task AddPlusPowerFromCounterToEnemy(string toCardID, string counterCardID)
+        public async Task AddPlusPowerFromCounterToEnemy(string toCardID, string counterCardID, int counterValue)
         {
-            await connection.InvokeAsync<string>("AddPlusPowerFromCounter", gameID, toCardID,counterCardID);
+            await connection.InvokeAsync<string>("AddPlusPowerFromCounter", gameID, toCardID,counterCardID, counterValue);
         }
 
         public async Task BattleEnded(string attackerID, string attackedID)
@@ -425,6 +430,11 @@ namespace TCGSim
         public async Task EnemyLost()
         {
             await connection.InvokeAsync<string>("EnemyLost", gameID);
+        }
+
+        public async Task KoThisCard(string koThisID, string effectCallerID)
+        {
+            await connection.InvokeAsync<string>("KoThisCard", gameID, koThisID, effectCallerID);
         }
 
         public async Task EnemyCantActivateBlockerOver(string effectInvokerID,int overThis)

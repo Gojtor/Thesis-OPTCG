@@ -46,7 +46,7 @@ namespace TCGSim
                 {
                     thisEffectActive = false;
                 }
-                
+
             }
             else if (thisEffectActive && !card.hasDonAttached)
             {
@@ -77,6 +77,135 @@ namespace TCGSim
             }
             ChatManager.Instance.AddMessage("Card: " + card.cardData.cardID + " activated its When Attacking effect!");
             await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
+        }
+    }
+
+    public class SelectSubTypeCardCannotBeBlocked : ICardEffects
+    {
+        int upTo;
+        bool activated = false;
+        private List<Card> possibleTargets = new List<Card>();
+        private List<Card> selectedTargets = new List<Card>();
+        private List<Card> cardsThatCouldAttackBeforeEffect = new List<Card>();
+        private Card effectCallerCard;
+        public SelectSubTypeCardCannotBeBlocked(int upTo)
+        {
+            this.upTo = upTo;
+        }
+
+        public void Activate(Card card)
+        {
+            PlayerBoard.Instance.SetEffectInProgress(true);
+            if (activated) { return; }
+            effectCallerCard = card;
+            cardsThatCouldAttackBeforeEffect = PlayerBoard.Instance.GetCardsThatCouldAttack();
+            possibleTargets = PlayerBoard.Instance.GetCharacterAreaCards();
+            possibleTargets.Add(PlayerBoard.Instance.leaderCard);
+            if (possibleTargets.Count == 0) { return; }
+            card.transform.position = PlayerBoard.Instance.leaderCard.transform.position;
+            card.transform.Translate(-150, 0, 0);
+            ShowCancelButton();
+            foreach (Card cardCanAttack in cardsThatCouldAttackBeforeEffect)
+            {
+                switch (cardCanAttack.cardData.cardType)
+                {
+                    case CardResources.CardType.CHARACTER:
+                        cardCanAttack.GetComponent<CharacterCard>().CardCannotAttack();
+                        break;
+                    case CardResources.CardType.LEADER:
+                        cardCanAttack.GetComponent<LeaderCard>().CardCannotAttack();
+                        break;
+                    default:
+                        UnityEngine.Debug.LogError("Missing card type");
+                        break;
+                }
+            }
+            foreach (Card target in possibleTargets)
+            {
+                if (target != card)
+                {
+                    target.IsTargetForEffect(true);
+                    target.SetClickAction(OnTargetSelected);
+                }
+            }
+        }
+
+        private void OnTargetSelected(Card target)
+        {
+            if (selectedTargets.Count < upTo)
+            {
+                selectedTargets.Add(target);
+                target.ClearClickAction();
+                target.IsTargetForEffect(false);
+            }
+            if (selectedTargets.Count == upTo)
+            {
+                CompleteEffect();
+            }
+        }
+
+        private void CompleteEffect()
+        {
+            foreach (Card card in selectedTargets)
+            {
+                card.AddWhenAttackingEffectToCard(
+                        new Effects
+                        {
+                            triggerType = EffectTriggerTypes.WhenAttacking,
+                            cardEffect = new WhenAttackingEnemyCantBlockOver(0, -1, false)
+                        }
+                );
+            }
+            Cleanup();
+        }
+
+        private void CancelEffect()
+        {
+            CompleteEffect();
+            Cleanup();
+        }
+
+        private void Cleanup()
+        {
+            foreach (Card card in possibleTargets)
+            {
+                card.ClearClickAction();
+                card.IsTargetForEffect(false);
+            }
+            foreach (Card card in cardsThatCouldAttackBeforeEffect)
+            {
+                switch (card.cardData.cardType)
+                {
+                    case CardResources.CardType.CHARACTER:
+                        card.GetComponent<CharacterCard>().CardCanAttack();
+                        break;
+                    case CardResources.CardType.LEADER:
+                        card.GetComponent<LeaderCard>().CardCanAttack();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            HideCancelButton();
+            PlayerBoard.Instance.SetEffectInProgress(false);
+            PlayerBoard.Instance.MoveCardToTrash(effectCallerCard);
+            activated = true;
+        }
+        private void ShowCancelButton()
+        {
+            PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(false);
+            Button cancelButton = PlayerBoard.Instance.cancelBtn;
+            cancelButton.gameObject.SetActive(true);
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.onClick.AddListener(CancelEffect);
+        }
+
+        private void HideCancelButton()
+        {
+            PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(true);
+            Button cancelButton = PlayerBoard.Instance.cancelBtn;
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.gameObject.SetActive(false);
         }
     }
 
@@ -281,7 +410,7 @@ namespace TCGSim
 
         public void Activate(Card card)
         {
-            if (!card.rested && !card.canAttack && card.transform.parent.parent==PlayerBoard.Instance.transform)
+            if (!card.rested && !card.canAttack && card.transform.parent.parent == PlayerBoard.Instance.transform)
             {
                 switch (card.cardData.cardType)
                 {
@@ -294,6 +423,167 @@ namespace TCGSim
                 }
             }
         }
+    }
+
+    public class KoEnemyBasedOnPowerOrLess : ICardEffects
+    {
+        int upTo;
+        int powerOrLess;
+        bool activated = false;
+
+        private List<Card> possibleTargets = new List<Card>();
+        private List<Card> cardsThatCouldAttackBeforeOnPlay = new List<Card>();
+        private List<Card> selectedTargets = new List<Card>();
+        private Card effectCaller;
+
+        public KoEnemyBasedOnPowerOrLess(int upTo, int powerOrLess)
+        {
+            this.upTo = upTo;
+            this.powerOrLess = powerOrLess;
+        }
+
+        public void Activate(Card card)
+        {
+            if (GameManager.Instance.currentPlayerTurnPhase == PlayerTurnPhases.MAINPHASE && !activated)
+            {
+                PlayerBoard.Instance.SetEffectInProgress(true);
+                cardsThatCouldAttackBeforeOnPlay = PlayerBoard.Instance.GetCardsThatCouldAttack();
+                possibleTargets = EnemyBoard.Instance.GetCharacterAreaCardsUnderThisPower(powerOrLess);
+                effectCaller = card;
+                if (possibleTargets.Count == 0) { return; }
+                card.transform.position = PlayerBoard.Instance.leaderCard.transform.position;
+                card.transform.Translate(-150, 0, 0);
+                foreach (Card cardCanAttack in cardsThatCouldAttackBeforeOnPlay)
+                {
+                    switch (cardCanAttack.cardData.cardType)
+                    {
+                        case CardResources.CardType.CHARACTER:
+                            cardCanAttack.GetComponent<CharacterCard>().CardCannotAttack();
+                            break;
+                        case CardResources.CardType.LEADER:
+                            cardCanAttack.GetComponent<LeaderCard>().CardCannotAttack();
+                            break;
+                        default:
+                            UnityEngine.Debug.LogError("Missing card type");
+                            break;
+                    }
+                }
+                ShowCancelButton();
+                foreach (Card target in possibleTargets)
+                {
+                    target.IsTargetForEffect(true);
+                    target.SetClickAction(OnTargetSelected);
+                }
+            }
+        }
+
+        private void OnTargetSelected(Card target)
+        {
+            if (selectedTargets.Count < upTo)
+            {
+                selectedTargets.Add(target);
+                target.IsTargetForEffect(false);
+                target.ClearClickAction();
+            }
+            if (selectedTargets.Count == upTo)
+            {
+                CompleteEffect();
+            }
+        }
+
+        private async void CompleteEffect()
+        {
+            foreach (Card card in selectedTargets)
+            {
+                await UnityMainThreadDispatcher.RunOnMainThread(async () =>
+                {
+                    await ServerCon.Instance.KoThisCard(card.cardData.customCardID, effectCaller.cardData.customCardID);
+                });
+            }
+            Cleanup();
+        }
+
+        private void CancelEffect()
+        {
+            CompleteEffect();
+            Cleanup();
+        }
+
+        private void Cleanup()
+        {
+            foreach (Card card in possibleTargets)
+            {
+                card.ClearClickAction();
+                card.IsTargetForEffect(false);
+            }
+            foreach (Card card in cardsThatCouldAttackBeforeOnPlay)
+            {
+                switch (card.cardData.cardType)
+                {
+                    case CardResources.CardType.CHARACTER:
+                        card.GetComponent<CharacterCard>().CardCanAttack();
+                        break;
+                    case CardResources.CardType.LEADER:
+                        card.GetComponent<LeaderCard>().CardCanAttack();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            HideCancelButton();
+            PlayerBoard.Instance.SetEffectInProgress(false);
+            PlayerBoard.Instance.MoveCardToTrash(effectCaller);
+            activated = true;
+        }
+
+        private void ShowCancelButton()
+        {
+            PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(false);
+            Button cancelButton = PlayerBoard.Instance.cancelBtn;
+            cancelButton.gameObject.SetActive(true);
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.onClick.AddListener(CancelEffect);
+        }
+
+        private void HideCancelButton()
+        {
+            Button cancelButton = PlayerBoard.Instance.cancelBtn;
+            cancelButton.onClick.RemoveAllListeners();
+            cancelButton.gameObject.SetActive(false);
+            PlayerBoard.Instance.endOfTurnBtn.gameObject.SetActive(true);
+        }
+
+    }
+
+    public class EventGiveCounter : ICardEffects
+    {
+        int upTo;
+        int counterPower;
+        bool activated = false;
+        public EventGiveCounter(int upTo, int counterPower)
+        {
+            this.upTo = upTo;
+            this.counterPower = counterPower;
+        }
+
+        public void Activate(Card card)
+        {
+            if (PlayerBoard.Instance.activeDon >= card.cardData.cost && GameManager.Instance.currentBattlePhase == BattlePhases.COUNTERSTEP && !activated)
+            {
+                card.IsTargetForEffect(true);
+                card.SetClickAction(OnCounterClicked);
+            }
+        }
+
+        public void OnCounterClicked(Card card)
+        {
+            activated = true;
+            card.ClearClickAction();
+            card.RemoveBorderForThisCard();
+            PlayerBoard.Instance.MoveCardToTrash(card);
+            PlayerBoard.Instance.GiveCounterToCurrentlyAttackedCard(card, counterPower);
+        }
+
     }
 
     public class RestStageGivePowerToType : ICardEffects
@@ -352,18 +642,18 @@ namespace TCGSim
 
         private void OnTargetSelected(Card target)
         {
-            if (selectedTargets.Count<upTo)
+            if (selectedTargets.Count < upTo)
             {
                 if (!EnumUtils.GetEnumMemberValue(target.cardData.characterType).ToString().Contains(subType))
                 {
-                    ChatManager.Instance.AddMessage("The target: "+target.cardData.customCardID+" for effect is not the correct sub type!");
+                    ChatManager.Instance.AddMessage("The target: " + target.cardData.customCardID + " for effect is not the correct sub type!");
                 }
                 else
                 {
                     selectedTargets.Add(target);
                     target.IsTargetForEffect(false);
                     target.ClearClickAction();
-                }    
+                }
             }
             if (selectedTargets.Count == upTo)
             {

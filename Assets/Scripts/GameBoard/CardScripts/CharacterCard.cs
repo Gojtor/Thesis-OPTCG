@@ -44,6 +44,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
         }
         CheckCardVisibility();
         CheckCardForDonEffect();
+        CheckAddedWhenAttackingEffects();
     }
 
     public override void OnPointerClick(PointerEventData eventData)

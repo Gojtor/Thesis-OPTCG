@@ -20,7 +20,11 @@ namespace TCGSim
         ActivateMain,
         [EnumMember(Value = "RUSH")]
         Rush,
+        [EnumMember(Value = "Main")]
+        Main,
         [EnumMember(Value = "DON!!")]
-        DON
+        DON,
+        [EnumMember(Value = "Counter")]
+        Counter
     }
 }

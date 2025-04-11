@@ -88,10 +88,87 @@ namespace TCGSim
                     effects.Add(
                         new Effects
                         {
-                            triggerType = (EffectTriggerTypes) effectTrigger,
+                            triggerType = (EffectTriggerTypes)effectTrigger,
                             cardEffect = new RestStageGivePowerToType(upTo, plusPower, subType, false)
                         }
                      );
+                }
+            }
+
+            if (Regex.IsMatch(effectText, @"\[(.+)\]\s+Up to (\d+)\s+of your Leader or Character cards gains \+(\d+)\s+power during this battle."))
+            {
+                var match = Regex.Match(effectText, @"\[(.+)\]\s+Up to (\d+)\s+of your Leader or Character cards gains \+(\d+)\s+power during this battle.");
+                if (match.Success)
+                {
+                    string effectType = Convert.ToString(match.Groups[1].Value);
+                    int upTo = int.Parse(match.Groups[2].Value);
+                    int plusPower = int.Parse(match.Groups[3].Value);
+                    EffectTriggerTypes? effectTrigger = effectType.FromEnumMemberValue<EffectTriggerTypes>();
+
+                    if (effectTrigger == EffectTriggerTypes.NOEFFECT) { return null; }
+
+                    if (effectTrigger == EffectTriggerTypes.Counter)
+                    {
+
+                        effects.Add(
+                            new Effects
+                            {
+                                triggerType = (EffectTriggerTypes)effectTrigger,
+                                cardEffect = new EventGiveCounter(upTo, plusPower)
+                            }
+                         );
+                    }
+                }
+            }
+
+            if (Regex.IsMatch(effectText, @"\[(.+)\]\s+K.O. up to (\d+)\s+of your opponent's Characters with (\d+)\s+power or less\."))
+            {
+                var match = Regex.Match(effectText, @"\[(.+)\]\s+K.O. up to (\d+)\s+of your opponent's Characters with (\d+)\s+power or less\.");
+                if (match.Success)
+                {
+                    string effectType = Convert.ToString(match.Groups[1].Value);
+                    int upTo = int.Parse(match.Groups[2].Value);
+                    int powerOrLess = int.Parse(match.Groups[3].Value);
+                    EffectTriggerTypes? effectTrigger = effectType.FromEnumMemberValue<EffectTriggerTypes>();
+
+                    if (effectTrigger == EffectTriggerTypes.NOEFFECT) { return null; }
+
+                    if (effectTrigger == EffectTriggerTypes.Main)
+                    {
+
+                        effects.Add(
+                            new Effects
+                            {
+                                triggerType = (EffectTriggerTypes)effectTrigger,
+                                cardEffect = new KoEnemyBasedOnPowerOrLess(upTo, powerOrLess)
+                            }
+                         );
+                    }
+                }
+            }
+
+            if (Regex.IsMatch(effectText, @"\[(.+)\]\s+Select up to (\d+)\s+of your {(.+)}\s+type Leader or Character cards\. Your opponent cannot activate \[Blocker\] if that Leader or Character attacks during this turn\."))
+            {
+                var match = Regex.Match(effectText, @"\[(.+)\]\s+Select up to (\d+)\s+of your {(.+)}\s+type Leader or Character cards\. Your opponent cannot activate \[Blocker\] if that Leader or Character attacks during this turn\.");
+                if (match.Success)
+                {
+                    string effectType = Convert.ToString(match.Groups[1].Value);
+                    int upTo = int.Parse(match.Groups[2].Value);
+                    string subType = Convert.ToString(match.Groups[3].Value);
+                    EffectTriggerTypes? effectTrigger = effectType.FromEnumMemberValue<EffectTriggerTypes>();
+
+                    if (effectTrigger == EffectTriggerTypes.NOEFFECT) { return null; }
+
+                    if (effectTrigger == EffectTriggerTypes.Main)
+                    {
+                        effects.Add(
+                            new Effects
+                            {
+                                triggerType = (EffectTriggerTypes)effectTrigger,
+                                cardEffect = new SelectSubTypeCardCannotBeBlocked(upTo)
+                            }
+                         );
+                    }
                 }
             }
 
@@ -284,7 +361,7 @@ namespace TCGSim
                                 donRequirement = int.Parse(insideMatch.Groups[1].Value);
                                 effectType = Convert.ToString(insideMatch.Groups[2].Value).Split(']')[0];
                                 effectTrigger = effectType.FromEnumMemberValue<EffectTriggerTypes>();
-                                invokedEffectText = Convert.ToString(insideMatch.Groups[2].Value).Split(']')[1]+"] "+ Convert.ToString(insideMatch.Groups[3].Value);
+                                invokedEffectText = Convert.ToString(insideMatch.Groups[2].Value).Split(']')[1] + "] " + Convert.ToString(insideMatch.Groups[3].Value);
                             }
                             if (splittedSecondEffect.Length == 3)
                             {
@@ -324,7 +401,7 @@ namespace TCGSim
                                     break;
                             }
                         }
-                    } 
+                    }
                 }
             }
 
