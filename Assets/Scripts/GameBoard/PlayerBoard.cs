@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TCGSim.CardResources;
 using TCGSim.CardScripts;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace TCGSim
@@ -25,6 +26,7 @@ namespace TCGSim
         private Card cardToMoveCharArea;
         private List<Card> possibleTargetsForRemovinToMakeRoom;
         private List<Card> cardsThatCouldAttackBeforeRemove;
+        public bool enemyFinishedStartingHand { get; private set; } = false;
 
 
         // Start is called before the first frame update
@@ -880,7 +882,7 @@ namespace TCGSim
             {
                 card.SetAttacker(attacker);
                 card.CardClickedWithLeftMouseForBlocking += BlockerCard_CardClickedWithLeftMouse;
-                card.MakeBorderForThisCard();
+                card.MakeBorderForThisCard(Color.yellow,"block");
             }
         }
 
@@ -964,7 +966,7 @@ namespace TCGSim
             {
                 card.SetAttacked(attacked);
                 card.CardClickedWithLeftMouseForCountering += Card_CardClickedWithLeftMouseForCountering;
-                card.MakeBorderForThisCard();
+                card.MakeBorderForThisCard(Color.green,"counter");
             }
         }
 
@@ -1055,13 +1057,13 @@ namespace TCGSim
         {
             if (leaderCard.canAttack)
             {
-                leaderCard.MakeBorderForThisCard();
+                leaderCard.MakeBorderForThisCard(Color.green,"attack");
             }
             foreach (Card card in characterAreaCards)
             {
                 if (card.canAttack)
                 {
-                    card.MakeBorderForThisCard();
+                    card.MakeBorderForThisCard(Color.green, "attack");
                 }
             }
         }
@@ -1376,6 +1378,11 @@ namespace TCGSim
                     break;
                 }
             }
+        }
+
+        public void SetEnemyFinishedStartingHand(bool finished)
+        {
+            this.enemyFinishedStartingHand = finished;
         }
     }
 }

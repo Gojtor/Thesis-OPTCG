@@ -109,7 +109,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
     public void CardCanAttack()
     {
         canAttack = true;
-        this.MakeBorderForThisCard();
+        this.MakeBorderForThisCard(Color.green,"attack");
     }
 
     public void CardCannotAttack()
@@ -126,7 +126,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
         lineRenderer.startColor = Color.red;
         lineRenderer.endColor = Color.red;
         this.EnableCanvasOverrideSorting();
-        lineRenderer.sortingOrder = 4;
+        lineRenderer.sortingOrder = 6;
         lineRenderer.enabled = true;
         lineRenderer.SetPosition(0, this.gameObject.transform.position);
         lineRenderer.SetPosition(1, endPoint.gameObject.transform.position);

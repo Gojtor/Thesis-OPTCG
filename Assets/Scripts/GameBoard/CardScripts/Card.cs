@@ -52,7 +52,7 @@ namespace TCGSim.CardScripts
         // Update is called once per frame
         void Update()
         {
-            
+
         }
 
         private void Awake()
@@ -61,6 +61,11 @@ namespace TCGSim.CardScripts
             hand = this.GetComponentInParent<Hand>();
             cardImage = this.gameObject.GetComponent<Image>();
             GameManager.OnGameStateChange += GameManager_OnGameStateChange;
+        }
+
+        private void OnDestroy()
+        {
+            ClearClickAction();
         }
 
         private void GameManager_OnGameStateChange(GameState state)
@@ -75,7 +80,7 @@ namespace TCGSim.CardScripts
 
         public void OnBeginDrag(PointerEventData pointerEventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress || !PlayerBoard.Instance.enemyFinishedStartingHand) { return; }
             if (needToWatchHowManyDrawn && this.gameObject.transform.parent == fromWhereTheCardNeedsToBeDrawn)
             {
                 onBeginDragCounter++;
@@ -107,7 +112,7 @@ namespace TCGSim.CardScripts
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress || !PlayerBoard.Instance.enemyFinishedStartingHand) { return; }
             this.ResetCanvasOverrideSorting();
             GameObject objectAtDragEnd = eventData.pointerEnter; // Which this object landed on
             if (objectAtDragEnd == null)
@@ -120,7 +125,7 @@ namespace TCGSim.CardScripts
             switch (this.cardData.cardType)
             {
                 case CardType.CHARACTER:
-                    if ((objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.GetComponent<CharacterCard>()==null) || objectAtDragEnd.transform.parent==PlayerBoard.Instance.handObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE)
+                    if ((objectAtDragEnd.transform != PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.GetComponent<CharacterCard>() == null) || objectAtDragEnd.transform.parent == PlayerBoard.Instance.handObject.transform || this.cardData.cost > PlayerBoard.Instance.activeDon || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE)
                     {
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
@@ -129,7 +134,7 @@ namespace TCGSim.CardScripts
                     {
                         PlayerBoard.Instance.RemoveCardToMakeRoomForNewOne(this);
                     }
-                    else if (objectAtDragEnd.transform.GetComponent<CharacterCard>() != null && objectAtDragEnd.transform.parent==PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.parent.childCount >=5)
+                    else if (objectAtDragEnd.transform.GetComponent<CharacterCard>() != null && objectAtDragEnd.transform.parent == PlayerBoard.Instance.characterAreaObject.transform && objectAtDragEnd.transform.parent.childCount >= 5)
                     {
                         PlayerBoard.Instance.RemoveCardToMakeRoomForNewOne(this);
                     }
@@ -150,8 +155,8 @@ namespace TCGSim.CardScripts
                         AttachDon(objectAtDragEnd.gameObject.GetComponent<Card>(), this);
                         this.SendCardToServer();
                     }
-                    else if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE 
-                        || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null || objectAtDragEnd.gameObject.GetComponent<CharacterCard>()!=null)
+                    else if (objectAtDragEnd.transform != PlayerBoard.Instance.costAreaObject.transform || GameManager.Instance.currentPlayerTurnPhase != PlayerTurnPhases.MAINPHASE
+                        || objectAtDragEnd.gameObject.GetComponent<DonCard>() != null || objectAtDragEnd.gameObject.GetComponent<CharacterCard>() != null)
                     {
                         SnapCardBackToParentPos();
                     }
@@ -165,9 +170,9 @@ namespace TCGSim.CardScripts
                         SnapCardBackToParentPos();
                         Debug.Log("Cannot play the card!");
                     }
-                    else if (objectAtDragEnd.transform.GetComponent<StageCard>()!=null && objectAtDragEnd.transform.GetComponent<StageCard>().transform.parent == PlayerBoard.Instance.stageObject.transform)
+                    else if (objectAtDragEnd.transform.GetComponent<StageCard>() != null && objectAtDragEnd.transform.GetComponent<StageCard>().transform.parent == PlayerBoard.Instance.stageObject.transform)
                     {
-                        if(this.cardData.cost <= PlayerBoard.Instance.activeDon)
+                        if (this.cardData.cost <= PlayerBoard.Instance.activeDon)
                         {
                             Card currentStage = objectAtDragEnd.transform.GetComponent<StageCard>();
                             PlayerBoard.Instance.MoveCardToTrash(currentStage);
@@ -210,11 +215,11 @@ namespace TCGSim.CardScripts
                                 }
                             }
                         }
-                        if(!effectActivated)
+                        if (!effectActivated)
                         {
                             PlayerBoard.Instance.MoveCardToTrash(this);
                             PlayerBoard.Instance.RestDons(this.cardData.cost);
-                        }  
+                        }
                     }
                     canvasGroup.blocksRaycasts = true;
                     canvasGroup.alpha = 1f;
@@ -269,14 +274,14 @@ namespace TCGSim.CardScripts
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress || !PlayerBoard.Instance.enemyFinishedStartingHand) { return; }
             this.transform.position = eventData.position;
             //Debug.Log("OnDrag");
         }
 
         public void OnDrop(PointerEventData eventData)
         {
-            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress) { return; }
+            if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress || !PlayerBoard.Instance.enemyFinishedStartingHand) { return; }
             //Debug.Log("OnDrop");
         }
         public void OnPointerEnter(PointerEventData eventData)
@@ -539,7 +544,7 @@ namespace TCGSim.CardScripts
             }
         }
 
-        public async void MakeBorderForThisCard()
+        public async void MakeBorderForThisCard(Color colorOfBorder, string borderType)
         {
             if (border != null)
             {
@@ -547,29 +552,79 @@ namespace TCGSim.CardScripts
             }
             await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
-                border = new GameObject("Outline");
-                border.transform.SetParent(this.gameObject.transform);
-                Image borderIMG = border.AddComponent<Image>();
-                RectTransform rectTransform = border.GetComponent<RectTransform>();
-                border.transform.position = this.transform.position;
-                if (this.rested)
+                switch (borderType)
                 {
-                    border.transform.rotation = Quaternion.Euler(0, 0, 90);
+                    case "attack":
+                        border = new GameObject("Outline");
+                        border.transform.SetParent(this.gameObject.transform);
+                        Image attackborderIMG = border.AddComponent<Image>();
+                        attackborderIMG.sprite = Resources.Load<Sprite>("BoardImages/attackArrow");
+                        RectTransform attackRectTransform = border.GetComponent<RectTransform>();
+                        border.transform.position = this.transform.position;
+                        border.transform.Translate(0, 10, 0);
+                        if (this.rested)
+                        {
+                            border.transform.rotation = Quaternion.Euler(0, 0, 90);
+                        }
+                        else
+                        {
+                            border.transform.rotation = Quaternion.Euler(0, 0, 0);
+                        }
+                        attackRectTransform.sizeDelta = new Vector2(150, 200);
+                        attackborderIMG.color = Color.red;
+                        Canvas attackcanvas = border.AddComponent<Canvas>();
+                        attackcanvas.overrideSorting = true;
+                        attackcanvas.sortingOrder = 2;
+                        EnableCanvasOverrideSorting();
+                        break;
+                    case "blocker":
+                        border = new GameObject("Outline");
+                        border.transform.SetParent(this.gameObject.transform);
+                        Image blockerborderIMG = border.AddComponent<Image>();
+                        blockerborderIMG.sprite = Resources.Load<Sprite>("BoardImages/blockRect");
+                        RectTransform blockerRectTransform = border.GetComponent<RectTransform>();
+                        border.transform.position = this.transform.position;
+                        if (this.rested)
+                        {
+                            border.transform.rotation = Quaternion.Euler(0, 0, 90);
+                        }
+                        else
+                        {
+                            border.transform.rotation = Quaternion.Euler(0, 0, 0);
+                        }
+                        blockerRectTransform.sizeDelta = new Vector2(150, 180);
+                        blockerborderIMG.color = Color.yellow;
+                        Canvas blockercanvas = border.AddComponent<Canvas>();
+                        blockercanvas.overrideSorting = true;
+                        blockercanvas.sortingOrder = 2;
+                        EnableCanvasOverrideSorting();
+                        break;
+                    default:
+                        border = new GameObject("Outline");
+                        border.transform.SetParent(this.gameObject.transform);
+                        Image borderIMG = border.AddComponent<Image>();
+                        RectTransform rectTransform = border.GetComponent<RectTransform>();
+                        border.transform.position = this.transform.position;
+                        if (this.rested)
+                        {
+                            border.transform.rotation = Quaternion.Euler(0, 0, 90);
+                        }
+                        else
+                        {
+                            border.transform.rotation = Quaternion.Euler(0, 0, 0);
+                        }
+                        rectTransform.sizeDelta = new Vector2(110, 150);
+                        borderIMG.color = colorOfBorder;
+                        Outline borderOutline = border.AddComponent<Outline>();
+                        borderOutline.enabled = true;
+                        borderOutline.effectColor = colorOfBorder;
+                        borderOutline.effectDistance = new Vector2(5, 5);
+                        Canvas canvas = border.AddComponent<Canvas>();
+                        canvas.overrideSorting = true;
+                        canvas.sortingOrder = 2;
+                        EnableCanvasOverrideSorting();
+                        break;
                 }
-                else
-                {
-                    border.transform.rotation = Quaternion.Euler(0, 0, 0);
-                }
-                rectTransform.sizeDelta = new Vector2(110, 150);
-                borderIMG.color = Color.green;
-                Outline borderOutline = border.AddComponent<Outline>();
-                borderOutline.enabled = true;
-                borderOutline.effectColor = Color.green;
-                borderOutline.effectDistance = new Vector2(5, 5);
-                Canvas canvas = border.AddComponent<Canvas>();
-                canvas.overrideSorting = true;
-                canvas.sortingOrder = 2;
-                EnableCanvasOverrideSorting();
             });
         }
 
@@ -649,7 +704,7 @@ namespace TCGSim.CardScripts
             }
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                if (attacked != null && GameManager.Instance.currentBattlePhase == BattlePhases.COUNTERSTEP && this.cardData.cardType!=CardType.EVENT)
+                if (attacked != null && GameManager.Instance.currentBattlePhase == BattlePhases.COUNTERSTEP && this.cardData.cardType != CardType.EVENT)
                 {
                     this.CardClickedWithLeftMouseForCountering?.Invoke(attacked, this);
                 }
@@ -765,7 +820,7 @@ namespace TCGSim.CardScripts
             this.targetForEffect = target;
             if (target)
             {
-                this.MakeBorderForThisCard();
+                this.MakeBorderForThisCard(Color.blue, "target");
             }
             else
             {
@@ -790,7 +845,7 @@ namespace TCGSim.CardScripts
         }
         protected void CheckAddedWhenAttackingEffects()
         {
-            if (whenAttackingEffectsAddedByOtherCards.Count > 0 && GameManager.Instance.currentState==GameState.ENEMYPHASE)
+            if (whenAttackingEffectsAddedByOtherCards.Count > 0 && GameManager.Instance.currentState == GameState.ENEMYPHASE)
             {
                 foreach (Effects effect in whenAttackingEffectsAddedByOtherCards)
                 {

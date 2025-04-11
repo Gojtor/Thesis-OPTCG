@@ -367,6 +367,7 @@ namespace TCGSim
             {
                 GameBoard.Instance.SetConcedeActive(true);
                 GameBoard.Instance.SetMenuActive(true);
+                PlayerBoard.Instance.SetEnemyFinishedStartingHand(true);
             });
         }
 
