@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Net.Http;
 using System.Threading;
+using static System.Net.WebRequestMethods;
 
 namespace TCGSim
 {
@@ -21,7 +22,7 @@ namespace TCGSim
     {
         public static ServerCon Instance { get; private set; }
         public string url { get; private set; }
-        public string serverUrl { get; } = "http://localhost:5000";
+        public string serverUrl { get;} = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "http://localhost:5000";
         public string gameID { get; private set; }
         public string playerName { get; private set; }
         public bool firstTurnIsMine { get; private set; }
@@ -474,7 +475,7 @@ namespace TCGSim
         }
         public async Task<CardData> GetCardByCardID(string cardID)
         {
-            string url = "http://localhost:5000/api/TCG/GetCardByCardID/";
+            string url = serverUrl+"/api/TCG/GetCardByCardID/";
             using (UnityWebRequest request = UnityWebRequest.Get(url + cardID))
             {
                 var operation = request.SendWebRequest();
@@ -504,7 +505,7 @@ namespace TCGSim
         public async Task AddCardToInGameStateDB(Card card)
         {
             CardData cardData = card.cardData;
-            string url = "http://localhost:5000/api/TCG/SetCardToGameDB";
+            string url = serverUrl+"/api/TCG/SetCardToGameDB";
             string json = JsonConvert.SerializeObject(cardData);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -531,7 +532,7 @@ namespace TCGSim
         public async Task UpdateCardAtInGameStateDB(Card card)
         {
             CardData cardData = card.cardData;
-            string url = "http://localhost:5000/api/TCG/UpdateCardInGameDB";
+            string url = serverUrl+"/api/TCG/UpdateCardInGameDB";
             string json = JsonConvert.SerializeObject(cardData);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
 
@@ -557,7 +558,7 @@ namespace TCGSim
 
         public async Task<List<CardData>> GetAllCardByGameID(string gameID)
         {
-            string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameID?gameCustomID=";
+            string url = serverUrl+"/api/TCG/GetAllCardByFromGameDBByGameID?gameCustomID=";
             //Debug.Log(url + gameID);
             using (UnityWebRequest request = UnityWebRequest.Get(url + gameID))
             {
@@ -587,7 +588,7 @@ namespace TCGSim
         }
         public async Task<List<CardData>> GetAllCardByGameIDAndPlayerName(string gameID, string playerName)
         {
-            string url = "http://localhost:5000/api/TCG/GetAllCardByFromGameDBByGameIDAndPlayer?";
+            string url = serverUrl+"/api/TCG/GetAllCardByFromGameDBByGameIDAndPlayer?";
             //Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName);
             using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName))
             {
@@ -618,7 +619,7 @@ namespace TCGSim
 
         public async Task<CardData> GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(string gameID, string playerName, string customCardID)
         {
-            string url = "http://localhost:5000/api/TCG/GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID?";
+            string url = serverUrl+"/api/TCG/GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID?";
             //Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID);
             using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID))
             {
