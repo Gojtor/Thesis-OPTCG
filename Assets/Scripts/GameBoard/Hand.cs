@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TCGSim.CardResources;
+using TCGSim.CardScripts;
 using UnityEngine;
 using UnityEngine.UI;
 namespace TCGSim
@@ -11,7 +13,7 @@ namespace TCGSim
         [SerializeField]
         private GameObject cardPrefab;
 
-        PlayerBoard playerBoard;
+        Board board;
 
 
         public List<Card> hand { get; private set; } =  new List<Card>();
@@ -27,27 +29,22 @@ namespace TCGSim
             
         }
 
-        public void Init(PlayerBoard playerBoard)
+        public void Init(Board board)
         {
-            this.playerBoard = playerBoard;
+            this.board = board;
         }
 
         public void AddCardToHand(Card card)
         {
             card.transform.SetParent(this.transform);
-            switch (playerBoard.boardName)
-            {
-                case ("PLAYERBOARD"):
-                    card.SetCardVisibility(CardVisibility.PLAYERBOARD);
-                    break;
-                case ("ENEMYBOARD"):
-                    card.SetCardVisibility(CardVisibility.ENEMYBOARD);
-                    break;
-                default:
-                    card.SetCardVisibility(CardVisibility.NONE);
-                    break;
-            }
+            card.SetCardVisibility(CardVisibility.PLAYERBOARD);
             hand.Add(card);      
+        }
+
+        public void RemoveCardFromHand(Card card, Transform gameObject)
+        {
+            card.transform.SetParent(gameObject);
+            hand.Remove(card);
         }
 
         public void ScaleHandForStartingHand()

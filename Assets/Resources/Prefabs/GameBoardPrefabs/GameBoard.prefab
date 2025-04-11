@@ -18,7 +18,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &8451692183053255135
 RectTransform:
@@ -115,9 +115,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f694024cd3b4827479faf6fdf8ed7d8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBoardPrefab: {fileID: 7984872905386199763, guid: 500548173fc02814fbe41b8c0c519109, type: 3}
-  enemyBoardPrefab: {fileID: 7984872905386199763, guid: 70b115310d5848b43bb2d95573d68bc1, type: 3}
-  serverConPrefab: {fileID: 7153841188973620447, guid: 3641ed60aeb54d3449f155596520498e, type: 3}
+  boardPrefab: {fileID: 7984872905386199763, guid: a97d0671c1030fe41b39ffdb828652b5, type: 3}
+  handPrefab: {fileID: 5508881749739418912, guid: c08c74ae91351e845b085ee247ee627c, type: 3}
+  characterAreaPrefab: {fileID: 7937610380201536275, guid: 80f1c228b22daf941b9f0395d772ef2f, type: 3}
+  costAreaPrefab: {fileID: 1764002961645323186, guid: dc2f74180ef03cb409ad9a8f5cd85df5, type: 3}
+  stageAreaPrefab: {fileID: 2642037041779862817, guid: 2616c79f9162e7d4f9df3aaa07b6242a, type: 3}
+  deckPrefab: {fileID: 4586796782769669121, guid: bdaabc4dc5e0ccc4681aed62db9f6c23, type: 3}
+  leaderPrefab: {fileID: 1066554976586399952, guid: 13522b0d54d2ed442ad52b5f8ea55291, type: 3}
+  trashPrefab: {fileID: 6516324358082533196, guid: 2f0af6eabb4f4d3459f00e81c921b2ed, type: 3}
+  cardPrefab: {fileID: 4947900133005985141, guid: b9086539ec95e654b9fd0f2990ecb293, type: 3}
+  lifePrefab: {fileID: 8743403551607725840, guid: 24e93ac1ae5085b41976e916befb0083, type: 3}
+  keepBtnPrefab: {fileID: 8968290511196942242, guid: 8e2cd715418e26644a50b34121595252, type: 3}
+  mulliganBtnPrefab: {fileID: 6787231950402081636, guid: 80f0748181aac2f4985bdb2f85823d7b, type: 3}
+  donDeckPrefab: {fileID: 6784264972249257697, guid: 3ca26c00972629e448ca1123152fa5b6, type: 3}
+  donPrefab: {fileID: 4947900133005985141, guid: 1e3016a665ae4634a8870b8d5616d18b, type: 3}
+  waitingForOpponentPrefab: {fileID: 1790130609298053966, guid: 4fef1ee17ad3c654c9b199a34e77919e, type: 3}
+  connectingPrefab: {fileID: 2098526775852076597, guid: 8ccefe64dd86cf04aaff0ae233534c39, type: 3}
+  endOfTurnBtnPrefab: {fileID: 1067700984236907855, guid: fd98d19f980b95f46b7242bc0303de76, type: 3}
+  noBlockBtnPrefab: {fileID: 1067700984236907855, guid: 0ea4e8560c166fd4eabbb96c26b51f86, type: 3}
+  noMoreCounterBtnPrefab: {fileID: 1067700984236907855, guid: a795fc64b7f99434384d91b917f00228, type: 3}
+  cancelBtnPrefab: {fileID: 1067700984236907855, guid: 57b2b25a3d3936445bee944c244e46ec, type: 3}
+  chatManagerPrefab: {fileID: 318156613135273951, guid: 3e559dde99eec3d49b7652974fbc37d3, type: 3}
+  chatViewPrefab: {fileID: 7929732396435257826, guid: 5942e91e6ee85b14d89e34f867e84470, type: 3}
+  gameAlreadyExistPrefab: {fileID: 3918970886372085481, guid: 7c25e06e8cad1b54fbd3bc51199d3b67, type: 3}
+  playerAlreadyInGamePrefab: {fileID: 2397044123511737399, guid: 243a00fedab91cd4b9242f766cd811d2, type: 3}
+  twoPlayerInGamePrefab: {fileID: 2397044123511737399, guid: bdd77ceac0d598242af33de6c3ef5fc1, type: 3}
+  gameDoesntExistPrefab: {fileID: 3918970886372085481, guid: ffe25045f6177a84aa4e7bd32e46ab65, type: 3}
+  matchWonPrefab: {fileID: 2397044123511737399, guid: 87db70f9a1f65e947b708dc3a5e9fa62, type: 3}
+  matchLostPrefab: {fileID: 2397044123511737399, guid: f2823eccfc33ffb44a06b62582369714, type: 3}
+  cardMagnifierPrefab: {fileID: 8141204488856429208, guid: e7bae24ef1b36ff4788cadb3fddb63ab, type: 3}
+  menuBtnPrefab: {fileID: 6191022180093407614, guid: b7ef9b355f48cde43b4a16248ff03c66, type: 3}
+  menuPanelPrefab: {fileID: 8741479642873257524, guid: 8fb568c294c798d41be37c059f9cfda2, type: 3}
+  concedePrefab: {fileID: 1905677174799774388, guid: 3780dca6f772ba04398fa24bba185e4b, type: 3}
+  backToMainInMenuPrefab: {fileID: 7631845474133296882, guid: af4fbd5fd7112e741a331a8b94ae6d53, type: 3}
+  resumeGamePrefab: {fileID: 4197402094736043957, guid: a923b4a298c8d7245becf2bec01587e4, type: 3}
+  backToMainBtnPrefab: {fileID: 4629827492737772210, guid: 0dd743c3c7c2e0a4eb5d4cdaaf7e85de, type: 3}
 --- !u!1 &7425409318985540678
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,11 +165,11 @@ GameObject:
   - component: {fileID: 7910649784244168238}
   - component: {fileID: 774922896619175308}
   m_Layer: 5
-  m_Name: Board
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &2182639606483145481
 RectTransform:

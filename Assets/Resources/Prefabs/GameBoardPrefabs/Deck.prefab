@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 6125752076583189155}
   - component: {fileID: 8512634647315764426}
   m_Layer: 5
-  m_Name: PlayerDeck
+  m_Name: Deck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!224 &7751545345201296630
 RectTransform:

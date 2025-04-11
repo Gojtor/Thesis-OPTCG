@@ -5,6 +5,7 @@
         CHARACTER,
         EVENT,
         STAGE,
-        LEADER
+        LEADER,
+        DON
     }
 }
