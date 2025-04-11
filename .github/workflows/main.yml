@@ -118,6 +118,12 @@ jobs:
               targetPlatform: ${{ matrix.targetPlatform }}
               buildMethod: BuildCommand.PerformBuild
               buildName: WebGL
+          - name: Copy WebGL build to release folder
+            run: |
+              mkdir -p release
+              mkdir -p release/game
+              cp -r build/WebGL/* release/game/
+              
           # - uses: actions/upload-artifact@v4.3.3
           #   with:
           #     name: Build-${{ matrix.targetPlatform }}
