@@ -42,7 +42,6 @@ jobs:
           retention-days: 1
 
   build:
-    if: contains(github.ref, 'master')
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
@@ -74,7 +73,6 @@ jobs:
 
 
   buildForWindows:
-    if: contains(github.ref, 'master')
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: windows-latest
     strategy:
@@ -106,7 +104,6 @@ jobs:
           retention-days: 1
 
   buildForWebGL:
-        if: contains(github.ref, 'master')
         name: Build for ${{ matrix.targetPlatform }}
         runs-on: ubuntu-latest
         strategy:
