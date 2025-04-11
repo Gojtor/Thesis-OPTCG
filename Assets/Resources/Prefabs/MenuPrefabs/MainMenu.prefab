@@ -74,12 +74,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -124,3 +124,5 @@ MonoBehaviour:
   gameIDInputPrefab: {fileID: 3889108782865021788, guid: 0f8a045156b1fa742bc577a9405834a7, type: 3}
   startGameBtnPrefab: {fileID: 6449795144490536490, guid: 8208b06415dbe5a4487eece1e17b35c7, type: 3}
   connectToGameBtnPrefab: {fileID: 3760271903897634264, guid: 05ab32766047edd409692695cdc48c92, type: 3}
+  quitGameBtnPrefab: {fileID: 0}
+  backBtnPrefab: {fileID: 0}
