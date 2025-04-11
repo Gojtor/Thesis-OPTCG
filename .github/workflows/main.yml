@@ -97,6 +97,8 @@ jobs:
 
   buildForWebGL:
         name: Build for ${{ matrix.targetPlatform }}
+        permissions:
+          contents: write
         runs-on: ubuntu-latest
         strategy:
           fail-fast: false
