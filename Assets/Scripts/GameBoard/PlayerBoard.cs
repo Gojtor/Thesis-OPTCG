@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using TCGSim.CardResources;
 using TCGSim.CardScripts;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace TCGSim
@@ -19,11 +20,13 @@ namespace TCGSim
         private bool overThisBlocking = false;
         private int blockPowerReq = -1;
         public bool effectInProgress { get; private set; }
+        public Card currentlyAttackedCard { get; private set; }
 
         //These are needed to be able to make room for cards to place on character area if its full
         private Card cardToMoveCharArea;
         private List<Card> possibleTargetsForRemovinToMakeRoom;
         private List<Card> cardsThatCouldAttackBeforeRemove;
+        public bool enemyFinishedStartingHand { get; private set; } = false;
 
 
         // Start is called before the first frame update
@@ -121,6 +124,7 @@ namespace TCGSim
             {
             "2xST01-011",
             "1xST01-001",
+            "2xST01-014",
             "4xST01-002",
             "4xST01-003",
             "4xST01-004",
@@ -129,7 +133,6 @@ namespace TCGSim
             "4xST01-008",
             "4xST01-009",
             "4xST01-010",
-            "2xST01-014",
             "2xST01-015",
             "2xST01-016",
             "2xST01-017",
@@ -332,6 +335,8 @@ namespace TCGSim
             {
                 card.transform.SetParent(this.trashObject.transform);
             }
+            card.RemoveBorderForThisCard();
+            card.HidePlusPowerOnCard();
             card.SetCardNotActive();
             card.ChangeDraggable(false);
             card.UpdateParent();
@@ -466,6 +471,21 @@ namespace TCGSim
         {
             await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
+                foreach (Card cardInHand in handObject.hand)
+                {
+                    if (cardInHand.effects != null)
+                    {
+                        foreach (Effects effect in cardInHand.effects)
+                        {
+                            if (effect.triggerType == EffectTriggerTypes.Counter)
+                            {
+                                cardInHand.IsTargetForEffect(false);
+                                cardInHand.ClearClickAction();
+                                cardInHand.RemoveBorderForThisCard();
+                            }
+                        }
+                    }
+                }
                 GameManager.Instance.ChangeBattlePhase(BattlePhases.DAMAGESTEP, attacker, attacked);
             });
         }
@@ -675,8 +695,14 @@ namespace TCGSim
                 GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.DONPHASE);
             }
         }
-        private void HandleDONPhase()
+        private async void HandleDONPhase()
         {
+            if (deckCards.Count == 0)
+            {
+                await ServerCon.Instance.EnemyWon();
+                ChatManager.Instance.AddMessage("Your deck count has reached zero! You lost!");
+                GameBoard.Instance.GameLost();
+            }
             if (this.activeDon == 10)
             {
                 ChatManager.Instance.AddMessage("You alrady drawn all of your DON!! card. Proceed to your main phase!");
@@ -789,6 +815,7 @@ namespace TCGSim
         }
         private void HandleBlockStep(Card attacker, Card attacked)
         {
+            currentlyAttackedCard = attacked;
             string attackerID = attacker.cardData.customCardID;
             string attackedID = attacked.cardData.customCardID;
             ChatManager.Instance.AddMessage("The enemy attacked your card: " + attackedID + " with the following card: " + attackerID);
@@ -820,7 +847,7 @@ namespace TCGSim
             List<CharacterCard> activeBlockersOnField = new List<CharacterCard>();
             foreach (CharacterCard card in characterAreaCards)
             {
-                if (card.cardData.effect.ToLower().Contains("blocker") && !card.rested)
+                if (card.cardData.effect.Contains("[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)") && !card.rested)
                 {
                     if (havingBlockReq && blockPowerReq == -1)
                     {
@@ -855,7 +882,7 @@ namespace TCGSim
             {
                 card.SetAttacker(attacker);
                 card.CardClickedWithLeftMouseForBlocking += BlockerCard_CardClickedWithLeftMouse;
-                card.MakeBorderForThisCard();
+                card.MakeBorderForThisCard(Color.yellow,"block");
             }
         }
 
@@ -894,6 +921,19 @@ namespace TCGSim
         {
             this.blockPowerReq = -1;
             this.havingBlockReq = false;
+            foreach(Card cardInHand in handObject.hand)
+            {
+                if (cardInHand.effects != null)
+                {
+                    foreach (Effects effect in cardInHand.effects)
+                    {
+                        if (effect.triggerType==EffectTriggerTypes.Counter)
+                        {
+                                effect.cardEffect?.Activate(cardInHand);
+                        }
+                    }
+                }
+            }
             DectiveBlockersForBlocking(CheckForBlockers());
             ChatManager.Instance.AddMessage("Select cards you want to counter with or click on no more counter button!");
             noBlockBtn.gameObject.SetActive(false);
@@ -926,7 +966,7 @@ namespace TCGSim
             {
                 card.SetAttacked(attacked);
                 card.CardClickedWithLeftMouseForCountering += Card_CardClickedWithLeftMouseForCountering;
-                card.MakeBorderForThisCard();
+                card.MakeBorderForThisCard(Color.green,"counter");
             }
         }
 
@@ -947,7 +987,7 @@ namespace TCGSim
                 MoveCardToTrash(counterCard);
                 attacked.AddToPlusPower(counterCard.cardData.counter);
                 attacked.MakeOrUpdatePlusPowerSeenOnCard();
-                await ServerCon.Instance.AddPlusPowerFromCounterToEnemy(attacked.cardData.customCardID, counterCard.cardData.customCardID);
+                await ServerCon.Instance.AddPlusPowerFromCounterToEnemy(attacked.cardData.customCardID, counterCard.cardData.customCardID, counterCard.cardData.counter);
             });
         }
 
@@ -972,6 +1012,7 @@ namespace TCGSim
             attacked.HidePlusPowerOnCard();
             SendBattleHasEnded(attacker.cardData.customCardID, attacked.cardData.customCardID);
             GameManager.Instance.ChangeBattlePhase(BattlePhases.ENDOFBATTLE, attacker, attacked);
+            currentlyAttackedCard = null;
         }
 
         public async void ResetAttackedCardBeforeEndOfBattle(string attackedID)
@@ -1016,13 +1057,13 @@ namespace TCGSim
         {
             if (leaderCard.canAttack)
             {
-                leaderCard.MakeBorderForThisCard();
+                leaderCard.MakeBorderForThisCard(Color.green,"attack");
             }
             foreach (Card card in characterAreaCards)
             {
                 if (card.canAttack)
                 {
-                    card.MakeBorderForThisCard();
+                    card.MakeBorderForThisCard(Color.green, "attack");
                 }
             }
         }
@@ -1315,6 +1356,33 @@ namespace TCGSim
         public void SetEffectInProgress(bool inProgress)
         {
             this.effectInProgress = inProgress;
+        }
+
+        public async void GiveCounterToCurrentlyAttackedCard(Card counterGiverCard, int counterPower)
+        {
+            if (currentlyAttackedCard != null && GameManager.Instance.currentBattlePhase==BattlePhases.COUNTERSTEP)
+            {
+                currentlyAttackedCard.AddToPlusPower(counterPower);
+                currentlyAttackedCard.MakeOrUpdatePlusPowerSeenOnCard();
+                await ServerCon.Instance.AddPlusPowerFromCounterToEnemy(currentlyAttackedCard.cardData.customCardID, counterGiverCard.cardData.customCardID,counterPower);
+            }
+        }
+
+        public void KoThisCard(string koThisID, string effectCallerID)
+        {
+            foreach (Card card in characterAreaCards)
+            {
+                if (card.cardData.customCardID == koThisID)
+                {
+                    TrashCharacter(card);
+                    break;
+                }
+            }
+        }
+
+        public void SetEnemyFinishedStartingHand(bool finished)
+        {
+            this.enemyFinishedStartingHand = finished;
         }
     }
 }

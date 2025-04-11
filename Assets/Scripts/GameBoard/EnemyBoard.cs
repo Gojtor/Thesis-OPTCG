@@ -86,22 +86,20 @@ namespace TCGSim
             }
         }
 
-        public void AddCounterPower(string toCardID, string counterCardID)
+        public void AddCounterPower(string toCardID, string counterCardID,int counterValue)
         {
             UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
                 LeaderCard leaderCard = leaderObject.transform.GetChild(0).GetComponent<LeaderCard>();
-                Card counterCard = cards.Where(x => x.cardData.customCardID == counterCardID).Single();
-                int counterCardCounterValue = counterCard.cardData.counter;
                 if (leaderCard.cardData.customCardID == toCardID)
                 {
-                    leaderCard.AddToPlusPower(counterCardCounterValue);
+                    leaderCard.AddToPlusPower(counterValue);
                     leaderCard.MakeOrUpdatePlusPowerSeenOnCard();
                 }
                 else
                 {
                     Card characterCard = cards.Where(x => x.cardData.customCardID == toCardID).Single();
-                    characterCard.AddToPlusPower(counterCardCounterValue);
+                    characterCard.AddToPlusPower(counterValue);
                     characterCard.MakeOrUpdatePlusPowerSeenOnCard();
                 }
             });  
@@ -125,6 +123,19 @@ namespace TCGSim
                     characterCard.MakeOrUpdatePlusPowerSeenOnCard();
                 }
             });
+        }
+
+        public List<Card> GetCharacterAreaCardsUnderThisPower(int underThisPower)
+        {
+            List<Card> cardsUnderGivenPower = new List<Card>();
+            foreach (Card card in cards)
+            {
+                if(card.transform.parent==EnemyBoard.Instance.characterAreaObject.transform && card.cardData.power <= underThisPower)
+                {
+                    cardsUnderGivenPower.Add(card);
+                }
+            }
+            return cardsUnderGivenPower;
         }
 
         public async Task UpdateBoardFromGameDB()
