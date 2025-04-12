@@ -94,6 +94,7 @@
     <Compile Include="Assets\Scripts\GameBoard\CardData\CardVisbility.cs" />
     <Compile Include="Assets\Scripts\GameBoard\Board.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\EnvMapAnimator.cs" />
+    <Compile Include="Assets\Scripts\Menu\DeckBuilder.cs" />
     <Compile Include="Assets\Scripts\GameBoard\UnityMainThreadDispatcher.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\Effects\CardEffects.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardData\Colors.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
+    <Compile Include="Assets\Scripts\Menu\CardButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
@@ -142,6 +144,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardData\CardType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
+    <Compile Include="Assets\Scripts\ServerCon\LoginManager.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\Card.cs" />
     <Compile Include="Assets\Scripts\GameBoard\GameState.cs" />
     <Compile Include="Assets\Scripts\GameBoard\PlayerBoard.cs" />

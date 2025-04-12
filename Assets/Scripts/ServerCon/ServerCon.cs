@@ -658,6 +658,5 @@ namespace TCGSim
             }
 
         }
-
     }
 }

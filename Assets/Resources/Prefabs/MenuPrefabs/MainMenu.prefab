@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f166bd39851d74e47a2263826b396f76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loginRegisterPanelPrefab: {fileID: 5636563940544649250, guid: ba0425b2ff3e1ee4dbf13b51e2c1a0ec, type: 3}
   defaultPanelPrefab: {fileID: 5636563940544649250, guid: 69c935a958aaeaa4492873d591b0d6b3, type: 3}
   createGamePanelPrefab: {fileID: 2214805168975750596, guid: 27205b05cb27c9b42996bea22c0e7228, type: 3}
   createGameBtnPrefab: {fileID: 5908791003472545325, guid: 043febfc45ea9de40acc45e0114855aa, type: 3}
@@ -124,5 +125,9 @@ MonoBehaviour:
   gameIDInputPrefab: {fileID: 3889108782865021788, guid: 0f8a045156b1fa742bc577a9405834a7, type: 3}
   startGameBtnPrefab: {fileID: 6449795144490536490, guid: 8208b06415dbe5a4487eece1e17b35c7, type: 3}
   connectToGameBtnPrefab: {fileID: 3760271903897634264, guid: 05ab32766047edd409692695cdc48c92, type: 3}
-  quitGameBtnPrefab: {fileID: 0}
-  backBtnPrefab: {fileID: 0}
+  quitGameBtnPrefab: {fileID: 3434474156826554790, guid: b5044187cdc01534d9b2b1d34bde58eb, type: 3}
+  backBtnPrefab: {fileID: 9064113548044351031, guid: ee9e13f28f1041743a488e599e1d7cc7, type: 3}
+  loginPanelPrefab: {fileID: 2214805168975750596, guid: 48893630e3360e74e878d5037def72f5, type: 3}
+  registerPanelPrefab: {fileID: 2214805168975750596, guid: 764b2bfd58612d84c878d1e735269fcb, type: 3}
+  loginFailedPrefab: {fileID: 6572098197905557082, guid: dbd053e7eaaa7e94898d53bb833e3f38, type: 3}
+  registerFailedPrefab: {fileID: 6572098197905557082, guid: 07e3448f53e02bd4b9fe6c86a52612b6, type: 3}

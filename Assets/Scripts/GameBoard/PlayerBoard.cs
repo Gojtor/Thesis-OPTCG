@@ -59,6 +59,7 @@ namespace TCGSim
                 Destroy(this.gameObject);
                 return;
             }
+            deckString = GameOptions.decksJson[0];
         }
         private void OnDestroy()
         {
@@ -86,7 +87,6 @@ namespace TCGSim
         public override void LoadBoardElements()
         {
             base.LoadBoardElements();
-            CreateADeck();
         }
 
 
@@ -118,29 +118,6 @@ namespace TCGSim
                 endOfTurnBtn.onClick.AddListener(EndOfTurnTrigger);
             }
         }
-        public void CreateADeck()
-        {
-            deckString = new List<string>
-            {
-            "2xST01-011",
-            "1xST01-001",
-            "2xST01-014",
-            "4xST01-002",
-            "4xST01-003",
-            "4xST01-004",
-            "4xST01-005",
-            "4xST01-007",
-            "4xST01-008",
-            "4xST01-009",
-            "4xST01-010",
-            "2xST01-015",
-            "2xST01-016",
-            "2xST01-017",
-            "2xST01-013",
-            "4xST01-006",
-            "2xST01-012"
-            };
-        }
 
         public Transform getPlayerHand()
         {
@@ -150,7 +127,8 @@ namespace TCGSim
         public async Task<List<Card>> CreateCardsFromDeck()
         {
             List<Card> deck = new List<Card>();
-            foreach (string sameCards in deckString)
+            List<string> splittedDeckString = deckString.Split(',').ToList();
+            foreach (string sameCards in splittedDeckString.Skip(1))
             {
                 string cardNumber = sameCards.Split("x")[1];
                 int count = Convert.ToInt32(sameCards.Split("x")[0]);
@@ -202,6 +180,7 @@ namespace TCGSim
                         else
                         {
                             deck.Add(card);
+                            Shuffle(deck);
                         }
                     });
                 }
@@ -361,7 +340,7 @@ namespace TCGSim
             {
                 PutCardBackToDeck(card);
             }
-            //Shuffle<Card>(deckCards);
+            Shuffle<Card>(deckCards);
             ReassingOrderAfterShuffle();
             CreateStartingHand();
             keepBtn.gameObject.SetActive(false);
@@ -517,11 +496,10 @@ namespace TCGSim
         {
 
             this.LoadBoardElements();
-            //Shuffle<string>(deckString);
             deckCards = await CreateCardsFromDeck();
             UnityMainThreadDispatcher.Enqueue(async () =>
             {
-                //Shuffle<Card>(deckCards);
+                Shuffle<Card>(deckCards);
                 ReassingOrderAfterShuffle();
                 Debug.Log(boardName);
                 CreateStartingHand();

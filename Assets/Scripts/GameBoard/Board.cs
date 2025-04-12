@@ -97,7 +97,7 @@ public abstract class Board : MonoBehaviour
     ///  Cards of the player board (which doesn't stored in another object)
     /// </summary>
     #region Cards
-    public List<string> deckString { get; protected set; }
+    public string deckString { get; protected set; }
     public List<Card> deckCards { get; protected set; } = new List<Card>();
     public List<Card> donCardsInDeck { get; protected set; } = new List<Card>();
     public List<Card> characterAreaCards { get; protected set; } = new List<Card>();
