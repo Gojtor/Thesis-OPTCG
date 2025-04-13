@@ -6,3 +6,5 @@
 /obj
 /Logs
 /Build
+# server config for GitHub Actions WebGL builds
+Assets/Resources/server_config.json
