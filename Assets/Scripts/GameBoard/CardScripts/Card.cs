@@ -577,7 +577,7 @@ namespace TCGSim.CardScripts
                         attackcanvas.sortingOrder = 2;
                         EnableCanvasOverrideSorting();
                         break;
-                    case "blocker":
+                    case "block":
                         border = new GameObject("Outline");
                         border.transform.SetParent(this.gameObject.transform);
                         Image blockerborderIMG = border.AddComponent<Image>();

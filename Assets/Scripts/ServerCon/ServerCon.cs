@@ -478,7 +478,6 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = webRequest.downloadHandler.text;
-                        //Debug.Log(pages[page] + ":\nReceived: " + jsonResponse);
                         CardData card = JsonUtility.FromJson<CardData>(jsonResponse);
                         break;
                 }
@@ -505,7 +504,6 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
-                        //Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<CardData>(jsonResponse);
                 }
                 return null;
@@ -528,9 +526,9 @@ namespace TCGSim
 
                 var operation = request.SendWebRequest();
 
-                while (!operation.isDone) // Wait until the request is done
+                while (!operation.isDone)
                 {
-                    await Task.Yield(); // Let Unity handle the next frame
+                    await Task.Yield();
                 }
 
                 if (request.result != UnityWebRequest.Result.Success)
@@ -555,9 +553,9 @@ namespace TCGSim
 
                 var operation = request.SendWebRequest();
 
-                while (!operation.isDone) // Wait until the request is done
+                while (!operation.isDone)
                 {
-                    await Task.Yield(); // Let Unity handle the next frame
+                    await Task.Yield();
                 }
 
                 if (request.result != UnityWebRequest.Result.Success)
@@ -570,7 +568,6 @@ namespace TCGSim
         public async Task<List<CardData>> GetAllCardByGameID(string gameID)
         {
             string url = serverUrl+"/api/TCG/GetAllCardByFromGameDBByGameID?gameCustomID=";
-            //Debug.Log(url + gameID);
             using (UnityWebRequest request = UnityWebRequest.Get(url + gameID))
             {
                 var operation = request.SendWebRequest();
@@ -589,7 +586,6 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
-                        //Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<List<CardData>>(jsonResponse);
 
                 }
@@ -600,7 +596,6 @@ namespace TCGSim
         public async Task<List<CardData>> GetAllCardByGameIDAndPlayerName(string gameID, string playerName)
         {
             string url = serverUrl+"/api/TCG/GetAllCardByFromGameDBByGameIDAndPlayer?";
-            //Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName);
             using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName))
             {
                 var operation = request.SendWebRequest();
@@ -619,7 +614,6 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
-                        //Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<List<CardData>>(jsonResponse);
 
                 }
@@ -631,7 +625,6 @@ namespace TCGSim
         public async Task<CardData> GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID(string gameID, string playerName, string customCardID)
         {
             string url = serverUrl+"/api/TCG/GetCardByFromGameDBByGameIDAndPlayerAndCustomCardID?";
-            //Debug.Log(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID);
             using (UnityWebRequest request = UnityWebRequest.Get(url + "gameCustomID=" + gameID + "&playerName=" + playerName + "&customCardID=" + customCardID))
             {
                 var operation = request.SendWebRequest();
@@ -650,7 +643,6 @@ namespace TCGSim
                         break;
                     case UnityWebRequest.Result.Success:
                         string jsonResponse = request.downloadHandler.text;
-                        //Debug.Log("Received: " + jsonResponse);
                         return JsonConvert.DeserializeObject<CardData>(jsonResponse);
 
                 }
@@ -658,6 +650,5 @@ namespace TCGSim
             }
 
         }
-
     }
 }

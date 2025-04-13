@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1442725824243123094
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1343285656782491709}
+  - component: {fileID: 3198412979501054529}
+  - component: {fileID: 55660283902522022}
+  - component: {fileID: 1049637810331343143}
+  m_Layer: 5
+  m_Name: DeckBuilder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1343285656782491709
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442725824243123094}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 196, y: -40}
+  m_SizeDelta: {x: 1500, y: 1000}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3198412979501054529
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442725824243123094}
+  m_CullTransparentMesh: 1
+--- !u!114 &55660283902522022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442725824243123094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1049637810331343143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442725824243123094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad48976548a82404abeecc91d81989d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableCardsViewPrefab: {fileID: 3280944148804370985, guid: a352307397b959b4eb74aaa58dd3ecc3, type: 3}
+  selectedCardsViewPrefab: {fileID: 8676051735828197403, guid: 12770ddc1eb639647a61e1ac10576d07, type: 3}
+  imageButtonPrefab: {fileID: 823743192536788693, guid: 8f925099438d96041a8fb124fae47c17, type: 3}
+  cardMagnifierPrefab: {fileID: 8128617549190241322, guid: bc38150f85f94674f9f3bb4be6b302d5, type: 3}
+  selectLeaderPrefab: {fileID: 5468206409355105050, guid: 997a4f7e5ee343f4097f25e7a59d6133, type: 3}
+  selectCardsPrefab: {fileID: 575612829527991869, guid: 5345961b8162aa540b3b79b2d4a4603b, type: 3}
+  userDeckDropDownPrefab: {fileID: 5238850866262649948, guid: 21963b1638ea19747becb59f24763736, type: 3}
+  cardsInSelectedAreaTextPrefab: {fileID: 3293060862478886357, guid: 7bd784428e763ab49af3d2a219d011d4, type: 3}
+  createDeckBtnPrefab: {fileID: 919951239632502, guid: ef6f33f7c667ef24988e76183e4953d5, type: 3}
+  saveDeckBtnPrefab: {fileID: 1591060721478131626, guid: 6d6c3e6351ff55c4db1c699add3221c4, type: 3}
+  deckNameInputPrefab: {fileID: 4919203166457140331, guid: 1a6964bee7f00e0448331c9c87200d4c, type: 3}
+  deleteDeckBtnPrefab: {fileID: 4004300722032172694, guid: 782fc712a5afeb34cb65e1171202c9a3, type: 3}
+  backToMenuBtnPrefab: {fileID: 8376543440936633337, guid: 16bc3f1ec5941144bb405a524d8be734, type: 3}
