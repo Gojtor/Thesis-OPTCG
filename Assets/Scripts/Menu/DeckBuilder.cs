@@ -197,14 +197,6 @@ public class DeckBuilder : MonoBehaviour
     {
         if (newDeckName != null)
         {
-            foreach (TMP_Dropdown.OptionData optionData in userDecksDropDown.options)
-            {
-                if (optionData.text == newDeckName)
-                {
-                    Debug.Log("Already have deck with this name!");
-                    return;
-                }
-            }
             if (selectedCards.Count == 51)
             {
                 int selectedIndex = userDecksDropDown.value;
@@ -532,6 +524,7 @@ public class DeckBuilder : MonoBehaviour
                     Debug.LogError(request.error);
                     break;
                 case UnityWebRequest.Result.ProtocolError:
+                    Debug.Log(cardID);
                     Debug.LogError(request.error);
                     break;
                 case UnityWebRequest.Result.Success:

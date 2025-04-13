@@ -15,6 +15,7 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using static System.Net.WebRequestMethods;
+using Assets.Scripts.ServerCon;
 
 namespace TCGSim
 {
@@ -22,7 +23,7 @@ namespace TCGSim
     {
         public static ServerCon Instance { get; private set; }
         public string url { get; private set; }
-        public string serverUrl { get;} = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "http://localhost:5000";
+        public string serverUrl { get; private set; }
         public string gameID { get; private set; }
         public string playerName { get; private set; }
         public bool firstTurnIsMine { get; private set; }
@@ -64,6 +65,17 @@ namespace TCGSim
             else
             {
                 Instance = this;
+            }
+
+            TextAsset configText = Resources.Load<TextAsset>("server_config");
+            if (configText != null)
+            {
+                ServerSettings config = JsonUtility.FromJson<ServerSettings>(configText.text);
+                serverUrl = config.serverUrl;
+            }
+            else
+            {
+                serverUrl = "http://localhost:5000";
             }
         }
 
