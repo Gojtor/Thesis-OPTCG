@@ -1,4 +1,6 @@
 name: Unity Actions
+env:
+  DB_HOST: "https://gabcsika.picidolgok.hu/"
 
 on:
   pull_request: {}
