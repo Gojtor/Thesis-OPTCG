@@ -423,7 +423,7 @@ public class DeckBuilder : MonoBehaviour
         }
     }
 
-    private async void PopulateScrollViewWithLeaders()
+    private void PopulateScrollViewWithLeaders()
     {
         foreach (Sprite sprite in leaderSprites)
         {
@@ -436,16 +436,16 @@ public class DeckBuilder : MonoBehaviour
             Button btn = newButton.GetComponent<Button>();
             btn.gameObject.name = sprite.name;
             btn.onClick.AddListener(() => OnLeaderClicked(btn));
-            selectedCards.Add(await GetCardByCardID(sprite.name));
         }
     }
 
-    private void OnLeaderClicked(Button btn)
+    private async void OnLeaderClicked(Button btn)
     {
         Debug.Log("Kép kattintva: " + btn.name);
         GameObject newButton = Instantiate(imageButtonPrefab, selectedCardsContent.transform);
         Image img = newButton.GetComponentInChildren<Image>();
         img.sprite = btn.gameObject.GetComponent<Image>().sprite;
+        selectedCards.Add(await GetCardByCardID(img.sprite.name));
         Button newBtn = newButton.GetComponent<Button>();
         newBtn.gameObject.name = img.sprite.name;
         btn.onClick.RemoveAllListeners();
@@ -463,7 +463,9 @@ public class DeckBuilder : MonoBehaviour
             CardData cardData = await GetCardByCardID(sprite.name);
             await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
-                if (cardData.color == leaderData.color)
+                string leaderColor = leaderData.color.ToString();
+                string cardColor = cardData.color.ToString();
+                if (leaderColor.Contains(cardColor))
                 {
                     GameObject newButton = Instantiate(imageButtonPrefab, availableCardsContent.transform);
                     Image img = newButton.GetComponentInChildren<Image>();
