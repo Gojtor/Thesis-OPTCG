@@ -133,3 +133,7 @@ MonoBehaviour:
   deckBuilderPrefab: {fileID: 1442725824243123094, guid: a45a914ea6d1fe148807f01008c69025, type: 3}
   deckBuilderBtnPrefab: {fileID: 5217919920908187074, guid: 42526eaae333c2146b30a8fb09449160, type: 3}
   playerNameTextPrefab: {fileID: 3194460460083728486, guid: 85f3a42414e2a4d47bb3dd6baf6b1b60, type: 3}
+  friendsBtnPrefab: {fileID: 2403823002339706621, guid: 842c977909114c545925b1997c793302, type: 3}
+  friendsPanelPrefab: {fileID: 12464032713906216, guid: 28ed727ed786b274aac6e51ba2e0bd94, type: 3}
+  friendTxtPrefab: {fileID: 6721054385393666756, guid: f9ee2f079aa46dc4ebd1dbc802e7252f, type: 3}
+  requestPrefab: {fileID: 3489025452630188120, guid: 3d6b4cffb401fc94c8702fb16fc7ca02, type: 3}

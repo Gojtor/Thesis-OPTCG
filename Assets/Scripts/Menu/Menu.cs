@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -70,18 +71,31 @@ namespace TCGSim
         [SerializeField]
         private GameObject playerNameTextPrefab;
 
+        [SerializeField]
+        private GameObject friendsBtnPrefab;
+
+        [SerializeField]
+        private GameObject friendsPanelPrefab;
+
+        [SerializeField]
+        private GameObject friendTxtPrefab;
+
+        [SerializeField]
+        private GameObject requestPrefab;
+
         private GameObject loginRegisterPanel;
         private GameObject defaultPaneObject;
         private GameObject loginPanel;
         private GameObject registerPanel;
         private GameObject loginFailed;
         private GameObject registerFailed;
-        private Button createGameBtn;
-        private Button connectGameBtn;
         private GameObject createGamePanelObject;
         private GameObject namePanelObject;
         private GameObject gameIDPanelObject;
-        private TMP_InputField gameIDInputObject;
+        private GameObject friendsPanelObject;
+        private GameObject requestPanel;
+        private GameObject friendListContent;
+        private GameObject requestListContent;
         private Button startGameBtnObject;
         private Button connectToGameBtnObject;
         private Button quitGameBtn;
@@ -94,12 +108,19 @@ namespace TCGSim
         private Button registerBtnInRegister;
         private Button failedBack;
         private Button deckBuilderBtn;
+        private Button createGameBtn;
+        private Button connectGameBtn;
+        private Button friendsBtn;
+        private Button sendFriendReqBtn;
+        private TMP_InputField gameIDInputObject;
         private TMP_InputField nameInputInLogin;
         private TMP_InputField passwordInputInLogin;
         private TMP_InputField nameInputInRegister;
         private TMP_InputField passwordInputInRegister;
+        private TMP_InputField sendFriendReqToInput;
         private TextMeshProUGUI loggedInAsText;
         private TextMeshProUGUI playerNameText;
+        private TextMeshProUGUI friendText;
 
         private DeckBuilder deckBuilder;
         private TMP_Dropdown deckSelectorDropDown;
@@ -109,11 +130,14 @@ namespace TCGSim
         public static event Action registerFail;
         public static event Action logInFail;
         public static event Action backToMenuFromDeckBuilder;
+        public static event Action couldnSendFriendRequest;
 
         private string gameID="Default";
 
         private string userName = "Default";
         private string password = "Default";
+
+        private string sendRequestName;
 
 
         private LineRenderer lineRenderer;
@@ -129,6 +153,7 @@ namespace TCGSim
             registerFail += Menu_registerFail;
             logInFail += Menu_logInFail;
             backToMenuFromDeckBuilder += Menu_backToMenuFromDeckBuilder;
+            couldnSendFriendRequest += Menu_couldnSendFriendRequest;
             LoadDefaultPanel();
         }
 
@@ -154,6 +179,7 @@ namespace TCGSim
             registerFail -= Menu_registerFail;
             logInFail -= Menu_logInFail;
             backToMenuFromDeckBuilder -= Menu_backToMenuFromDeckBuilder;
+            couldnSendFriendRequest -= Menu_couldnSendFriendRequest;
         }
 
         public void LoadLoginRegisterPanel()
@@ -216,9 +242,29 @@ namespace TCGSim
             lineRenderer.sortingLayerName = "Default";
             lineRenderer.sortingOrder = 100;
 
+            friendsBtn = Instantiate(friendsBtnPrefab, defaultPaneObject.transform).GetComponent<Button>();
+            friendsBtn.onClick.AddListener(FriendsButtonClicked);
+
+            friendsPanelObject = Instantiate(friendsPanelPrefab, this.gameObject.transform);
+            friendsPanelObject.gameObject.SetActive(false);
+            GameObject friendListPanel = friendsPanelObject.transform.Find("FriendListPanel").gameObject;
+            GameObject friendListInsidePanel = friendListPanel.transform.Find("FriendList").gameObject;
+            GameObject friendListViewport = friendListInsidePanel.transform.Find("Viewport").gameObject;
+            friendListContent = friendListViewport.transform.Find("Content").gameObject;
+
+            GameObject reqListPanel = friendsPanelObject.transform.Find("FriendRequestsPanel").gameObject;
+            GameObject friendReq = reqListPanel.transform.Find("FriendRequest").gameObject;
+            GameObject reqListViewport = friendReq.transform.Find("Viewport").gameObject;
+            requestListContent = reqListViewport.transform.Find("Content").gameObject;
+
+            GameObject sendReqPanel = friendsPanelObject.transform.Find("SendRequestPanel").gameObject;
+            sendFriendReqToInput = sendReqPanel.transform.Find("SendNameInput").gameObject.GetComponent<TMP_InputField>();
+            sendFriendReqBtn = sendReqPanel.transform.Find("Send").gameObject.GetComponent<Button>();
+            sendFriendReqToInput.onValueChanged.AddListener(OnSendRequestInputChange);
+            sendFriendReqBtn.onClick.AddListener(SendFriendRequest);
+
             defaultPaneObject.SetActive(false);
         }
-
         public void LoadRegisterPanel()
         {
             registerPanel = Instantiate(registerPanelPrefab, this.gameObject.transform);
@@ -401,6 +447,12 @@ namespace TCGSim
             deckBuilder.gameObject.SetActive(false);
         }
 
+
+        private void Menu_couldnSendFriendRequest()
+        {
+            Debug.Log("Couldn't send friend request!");
+        }
+
         private void Menu_logInFail()
         {
             loginFailed.SetActive(true);
@@ -436,6 +488,16 @@ namespace TCGSim
             backToMenuFromDeckBuilder?.Invoke();
         }
 
+        public static void InvokeCouldntSendFriendRequest()
+        {
+            couldnSendFriendRequest?.Invoke();
+        }
+
+        private void OnSendRequestInputChange(string s)
+        {
+            sendRequestName = s;
+        }
+
         public void UpdateDeckSelector()
         {
             List<string> deckNames = new List<string>();
@@ -458,6 +520,7 @@ namespace TCGSim
             loginRegisterPanel.SetActive(false);
             backBtn.gameObject.SetActive(false);
             defaultPaneObject.SetActive(true);
+            friendsBtn.gameObject.SetActive(false);
             System.Random random = new System.Random();
             GameOptions.userName = "Guest"+random.Next(10000, 100000);
             GameOptions.decksJson.Add("ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017");
@@ -467,5 +530,79 @@ namespace TCGSim
             deckBuilder.gameObject.SetActive(false);
         }
 
+        private async void FriendsButtonClicked()
+        {
+            if (friendsPanelObject.activeInHierarchy)
+            {
+                friendsPanelObject.SetActive(false);
+            }
+            else
+            {
+                friendsPanelObject.SetActive(true);
+                nameInputInLogin.text = string.Empty;
+                foreach(Transform child in friendListContent.transform)
+                {
+                    Destroy(child.gameObject);
+                }
+                List<string> friends = await LoginManager.Instance.GetFriends(GameOptions.userName);
+                
+                foreach(string friend in friends)
+                {
+                    friendText = Instantiate(friendTxtPrefab, friendListContent.transform).GetComponent<TextMeshProUGUI>();
+                    friendText.text = friend;
+                    friendText.gameObject.name = friend;
+                }
+
+                List<string> requests = await LoginManager.Instance.GetFriendRequest(GameOptions.userName);
+
+                foreach (Transform child in requestListContent.transform)
+                {
+                    Destroy(child.gameObject);
+                }
+
+                foreach (string req in requests)
+                {
+                    if (req != GameOptions.userName)
+                    {
+                        GameObject requestWindow = Instantiate(requestPrefab, requestListContent.transform);
+                        TextMeshProUGUI reqNameText = requestWindow.transform.Find("ReqName").GetComponent<TextMeshProUGUI>();
+                        reqNameText.text = req;
+                        Button accept = requestWindow.transform.Find("Accept").GetComponent<Button>();
+                        Button decline = requestWindow.transform.Find("Decline").GetComponent<Button>();
+                        accept.onClick.AddListener(() => AcceptFriendRequest(req, requestWindow));
+                        decline.onClick.AddListener(() => DeclineFriendRequest(req, requestWindow));
+                    }
+                }
+
+            }
+
+        }
+
+        private async void AcceptFriendRequest(string fromUser, GameObject reqWindow)
+        {
+            if (GameOptions.userName != null && fromUser != null)
+            {
+                Destroy(reqWindow);
+                await LoginManager.Instance.AcceptFriendRequest(fromUser,GameOptions.userName);
+
+            }
+        }
+
+        private async void DeclineFriendRequest(string fromUser, GameObject reqWindow)
+        {
+            if (GameOptions.userName != null && fromUser != null)
+            {
+                Destroy(reqWindow);
+                await LoginManager.Instance.DeclineFriendRequest(fromUser, GameOptions.userName);
+            }
+        }
+
+        private async void SendFriendRequest()
+        {
+            if (sendRequestName != null)
+            {
+                await LoginManager.Instance.SendFriendRequest(GameOptions.userName,sendRequestName);
+            }
+        }
     }
 }

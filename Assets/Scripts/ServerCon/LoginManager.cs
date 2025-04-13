@@ -15,7 +15,7 @@ namespace Assets.Scripts.ServerCon
     public class LoginManager : MonoBehaviour
     {
         public static LoginManager Instance { get; private set; }
-        public string serverUrl { get; } = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "http://localhost:5000";
+        public string serverUrl { get; private set; }
 
         private void Awake()
         {
@@ -26,6 +26,17 @@ namespace Assets.Scripts.ServerCon
             else
             {
                 Instance = this;
+            }
+
+            TextAsset configText = Resources.Load<TextAsset>("server_config");
+            if (configText != null)
+            {
+                ServerSettings config = JsonUtility.FromJson<ServerSettings>(configText.text);
+                serverUrl = config.serverUrl;
+            }
+            else
+            {
+                serverUrl = "http://localhost:5000";
             }
         }
 
@@ -183,6 +194,161 @@ namespace Assets.Scripts.ServerCon
             {
                 UserName = userName,
                 DeckItemName = deckName
+            };
+
+            string json = JsonConvert.SerializeObject(messageJson);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+            {
+                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                {
+                    await Task.Yield();
+                }
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error: " + request.error);
+                }
+            }
+        }
+
+        public async Task AcceptFriendRequest(string senderName, string toName)
+        {
+            string url = serverUrl + "/api/Account/Friends/AcceptFriendRequest";
+
+            var messageJson = new
+            {
+                SenderName = senderName,
+                ToUserName = toName
+            };
+
+            string json = JsonConvert.SerializeObject(messageJson);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+            {
+                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                {
+                    await Task.Yield();
+                }
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error: " + request.error);
+                }
+            }
+        }
+
+        public async Task SendFriendRequest(string senderName, string toName)
+        {
+            string url = serverUrl + "/api/Account/Friends/AddFriend";
+
+            var messageJson = new
+            {
+                SenderName = senderName,
+                ToUserName = toName
+            };
+
+            string json = JsonConvert.SerializeObject(messageJson);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+            {
+                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                {
+                    await Task.Yield();
+                }
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error: " + request.error);
+                }
+            }
+        }
+
+        public async Task<List<string>> GetFriends(string userName)
+        {
+            string url = serverUrl + "/api/Account/Friends/GetFriends?userName=" + userName;
+            using (UnityWebRequest request = UnityWebRequest.Get(url))
+            {
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                    await Task.Yield();
+
+                switch (request.result)
+                {
+                    case UnityWebRequest.Result.ConnectionError:
+                    case UnityWebRequest.Result.DataProcessingError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.Success:
+                        string jsonResponse = request.downloadHandler.text;
+                        Debug.Log("Received: " + jsonResponse);
+                        return JsonConvert.DeserializeObject<List<string>>(jsonResponse);
+                }
+                return null;
+            }
+        }
+
+        public async Task<List<string>> GetFriendRequest(string userName)
+        {
+            string url = serverUrl + "/api/Account/Friends/GetFriendRequest?userName=" + userName;
+            using (UnityWebRequest request = UnityWebRequest.Get(url))
+            {
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                    await Task.Yield();
+
+                switch (request.result)
+                {
+                    case UnityWebRequest.Result.ConnectionError:
+                    case UnityWebRequest.Result.DataProcessingError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.ProtocolError:
+                        Debug.LogError(request.error);
+                        break;
+                    case UnityWebRequest.Result.Success:
+                        string jsonResponse = request.downloadHandler.text;
+                        Debug.Log("Received: " + jsonResponse);
+                        return JsonConvert.DeserializeObject<List<string>>(jsonResponse);
+                }
+                return null;
+            }
+        }
+
+        public async Task DeclineFriendRequest(string senderName, string toName)
+        {
+            string url = serverUrl + "/api/Account/Friends/DeclineFriendRequest";
+
+            var messageJson = new
+            {
+                SenderName = senderName,
+                ToUserName = toName
             };
 
             string json = JsonConvert.SerializeObject(messageJson);

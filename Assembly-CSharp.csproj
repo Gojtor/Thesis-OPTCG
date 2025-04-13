@@ -131,6 +131,7 @@
     <Compile Include="Assets\Scripts\GameBoard\Chat\ChatMessage.cs" />
     <Compile Include="Assets\Scripts\GameBoard\EnemyBoard.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
+    <Compile Include="Assets\Scripts\ServerCon\ServerSettings.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\Scripts\GameBoard\CardScripts\Effects\EffectTriggerTypes.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />

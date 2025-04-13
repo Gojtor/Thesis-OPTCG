@@ -310,8 +310,17 @@ namespace TCGSim.CardScripts
                 }
                 else
                 {
-                    cardImage.sprite = Resources.Load<Sprite>("Cards/" + cardData.cardID.Split('-')[0] + "/" + cardData.cardID);
-                    isImgLoaded = !isImgLoaded;
+                    if (this.cardData.cardType == CardType.LEADER)
+                    {
+                        cardImage.sprite = Resources.Load<Sprite>("Cards/Leaders/" + cardData.cardID);
+                        isImgLoaded = !isImgLoaded;
+                    }
+                    else
+                    {
+                        cardImage.sprite = Resources.Load<Sprite>("Cards/Cards/" + cardData.cardID);
+                        isImgLoaded = !isImgLoaded;
+                    }
+                    
                 }
             }
             else
