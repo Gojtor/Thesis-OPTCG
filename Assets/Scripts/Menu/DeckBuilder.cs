@@ -40,6 +40,10 @@ public class DeckBuilder : MonoBehaviour
     public GameObject saveDeckBtnPrefab;
     [SerializeField]
     public GameObject deckNameInputPrefab;
+    [SerializeField]
+    public GameObject deleteDeckBtnPrefab;
+    [SerializeField]
+    public GameObject backToMenuBtnPrefab;
 
     private List<CardData> selectedCards = new List<CardData>();
     private GameObject selectedCardsView;
@@ -56,22 +60,30 @@ public class DeckBuilder : MonoBehaviour
     private Dictionary<string, List<CardData>> cardDataDecks;
     private Button createDeckBtn;
     private Button saveDeckBtn;
+    private Button deleteDeckBtn;
+    private Button backToMenuBtn;
     private TMP_InputField deckNameInput;
     private string newDeckName;
 
-    async void Start()
-    {
-        GameOptions.decksJson = await LoginManager.Instance.GetUserDecks("Test123");
+    public static event Action DeckBuilderSetActive;
 
+
+     void Start()
+    {
+        DeckBuilderSetActive += DeckBuilder_DeckBuilderSetActive;
         cardMagnifier = Instantiate(cardMagnifierPrefab, this.gameObject.transform);
         cardMagnifier.SetActive(false);
 
         availableCardsView = Instantiate(availableCardsViewPrefab, this.gameObject.transform);
+        ScrollRect availabelScroll = availableCardsView.GetComponent<ScrollRect>();
+        availabelScroll.horizontalNormalizedPosition = 0f;
         GameObject availableViewport = availableCardsView.transform.Find("Viewport").gameObject;
         availableViewport.AddComponent<HorizontalLayoutGroup>();
         availableCardsContent = availableViewport.transform.Find("AvailableContent").gameObject;
 
         selectedCardsView = Instantiate(selectedCardsViewPrefab, this.gameObject.transform);
+        ScrollRect selectedScroll = selectedCardsView.GetComponent<ScrollRect>();
+        selectedScroll.horizontalNormalizedPosition = 0f;
         GameObject selectedViewport = selectedCardsView.transform.Find("Viewport").gameObject;
         selectedViewport.AddComponent<HorizontalLayoutGroup>();
         selectedCardsContent = selectedViewport.transform.Find("SelectedContent").gameObject;
@@ -85,6 +97,10 @@ public class DeckBuilder : MonoBehaviour
         saveDeckBtn.onClick.AddListener(SaveDeck);
         deckNameInput = Instantiate(deckNameInputPrefab, this.gameObject.transform).GetComponent<TMP_InputField>();
         deckNameInput.onEndEdit.AddListener(UpdateDeckName);
+        deleteDeckBtn = Instantiate(deleteDeckBtnPrefab, this.gameObject.transform).GetComponent<Button>();
+        deleteDeckBtn.onClick.AddListener(DeleteDeck);
+        backToMenuBtn = Instantiate(backToMenuBtnPrefab, this.gameObject.transform).GetComponent<Button>();
+        backToMenuBtn.onClick.AddListener(BackToMenu);
 
         userDecksDropDown = Instantiate(userDeckDropDownPrefab, this.gameObject.transform).GetComponent<TMP_Dropdown>();
         HandleUserDecks();
@@ -96,6 +112,9 @@ public class DeckBuilder : MonoBehaviour
         layoutGroupAvailable.childControlWidth = false;
         layoutGroupAvailable.spacing = 10;
         layoutGroupAvailable.childAlignment = TextAnchor.MiddleCenter;
+        RectOffset tempPaddingAvailable = layoutGroupAvailable.padding;
+        tempPaddingAvailable.left += 20;
+        tempPaddingAvailable.right += 20;
 
         HorizontalLayoutGroup layoutGroupSelected = selectedCardsContent.AddComponent<HorizontalLayoutGroup>();
         layoutGroupSelected.childForceExpandHeight = false;
@@ -104,6 +123,9 @@ public class DeckBuilder : MonoBehaviour
         layoutGroupSelected.childControlWidth = false;
         layoutGroupSelected.spacing = 10;
         layoutGroupSelected.childAlignment = TextAnchor.MiddleCenter;
+        RectOffset tempPaddingSelected = layoutGroupSelected.padding;
+        tempPaddingSelected.left += 20;
+        tempPaddingSelected.right += 20;
 
         selectCardsText = Instantiate(selectCardsPrefab, this.gameObject.transform).GetComponent<TextMeshProUGUI>();
         selectCardsText.gameObject.SetActive(false);
@@ -112,9 +134,66 @@ public class DeckBuilder : MonoBehaviour
         leaderSprites = Resources.LoadAll<Sprite>("Cards/Leaders");
         cardSprites = Resources.LoadAll<Sprite>("Cards/Cards");
         PopulateScrollViewWithLeaders();
+
+        
     }
 
-    private void SaveDeck()
+    private void OnDestroy()
+    {
+        DeckBuilderSetActive -= DeckBuilder_DeckBuilderSetActive;
+    }
+
+    private void DeckBuilder_DeckBuilderSetActive()
+    {
+        int defaultIndex = userDecksDropDown.options.FindIndex(x => x.text == "Default-NoCards");
+        if (defaultIndex != -1)
+        {
+            userDecksDropDown.value = defaultIndex;
+            userDecksDropDown.RefreshShownValue();
+        }
+    }
+
+    public static void InvokeSetActive()
+    {
+        DeckBuilderSetActive?.Invoke();
+    }
+
+    private void BackToMenu()
+    {
+        this.gameObject.SetActive(false);
+        Menu.InvokeBackToMenuFromDeckBuilder();
+    }
+
+    private async void DeleteDeck()
+    {
+        int selectedIndex = userDecksDropDown.value;
+        string currentlySelectedDeck = userDecksDropDown.options[selectedIndex].text;
+        if (currentlySelectedDeck != "Default-NoCards" && currentlySelectedDeck!="ST01-DefaultDeck")
+        {
+            var optionToRemove = userDecksDropDown.options.FirstOrDefault(x => x.text == currentlySelectedDeck);
+
+            if (optionToRemove != null)
+            {
+                cardDataDecks.Remove(currentlySelectedDeck);
+                userDecksDropDown.options.Remove(optionToRemove);
+                userDecksDropDown.RefreshShownValue();
+                string deckToRemove = GameOptions.decksJson.FirstOrDefault(x => x.Split(',')[0] == currentlySelectedDeck);
+                GameOptions.decksJson.Remove(deckToRemove);
+                if (!GameOptions.userName.Contains("Guest"))
+                {
+                    await LoginManager.Instance.RemoveFromUserDeck(GameOptions.userName, currentlySelectedDeck);
+                }
+                int defaultIndex = userDecksDropDown.options.FindIndex(x => x.text == "Default-NoCards");
+                if (defaultIndex != -1)
+                {
+                    userDecksDropDown.value = defaultIndex;
+                    userDecksDropDown.RefreshShownValue();
+                }
+            }
+        }
+    }
+
+    private async void SaveDeck()
     {
         if (newDeckName != null)
         {
@@ -128,13 +207,61 @@ public class DeckBuilder : MonoBehaviour
             }
             if (selectedCards.Count == 51)
             {
-                cardDataDecks.Add(newDeckName, selectedCards);
+                int selectedIndex = userDecksDropDown.value;
+                string currentlySelectedDeck = userDecksDropDown.options[selectedIndex].text;
+                if (cardDataDecks.ContainsKey(newDeckName))
+                {
+                    newDeckName = currentlySelectedDeck + cardDataDecks.Count(x => x.Key.Contains(currentlySelectedDeck));
+                    cardDataDecks.Add(newDeckName, selectedCards);
+                    TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
+                    userDecksDropDown.options.Insert(0, newOption);
+                    userDecksDropDown.value = 0;
+                    userDecksDropDown.RefreshShownValue();
+                }
+                else
+                {
+                    cardDataDecks.Add(newDeckName, selectedCards);
+                    TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
+                    userDecksDropDown.options.Insert(0, newOption);
+                    userDecksDropDown.value = 0;
+                    userDecksDropDown.RefreshShownValue();
+                }
+                string newDeck = newDeckName + CardDataDeckToStringDeck(selectedCards);
+                GameOptions.decksJson.Add(newDeck);
+                if (!GameOptions.userName.Contains("Guest"))
+                { 
+                    await LoginManager.Instance.AddToUserDecks(GameOptions.userName, newDeck);
+                }
             }
             else
             {
                 Debug.Log("You must have 50 cards + a leader in your deck");
             }
         }
+        else
+        {
+            if (selectedCards.Count == 51)
+            {
+                int selectedIndex = userDecksDropDown.value;
+                string currentlySelectedDeck = userDecksDropDown.options[selectedIndex].text;
+                if (cardDataDecks.ContainsKey(currentlySelectedDeck))
+                {
+                    newDeckName = currentlySelectedDeck + cardDataDecks.Count(x => x.Key.Contains(currentlySelectedDeck));
+                    cardDataDecks.Add(newDeckName, selectedCards);
+                    TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
+                    userDecksDropDown.options.Insert(0, newOption);
+                    userDecksDropDown.value = 0;
+                    userDecksDropDown.RefreshShownValue();
+                }
+                string newDeck = newDeckName + CardDataDeckToStringDeck(selectedCards);
+                GameOptions.decksJson.Add(newDeck);
+                if (!GameOptions.userName.Contains("Guest"))
+                {
+                    await LoginManager.Instance.AddToUserDecks(GameOptions.userName, newDeck);
+                }
+            }
+        }
+        newDeckName = "";
     }
 
     private void NewDeckCreation()
@@ -144,16 +271,15 @@ public class DeckBuilder : MonoBehaviour
         UnloadCardsFromAvailableArea();
         UnloadCardsFromSelectedArea();
         PopulateScrollViewWithLeaders();
-        PopulateUserDecksDropDown("New deck", true);
+        TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData("New deck");
+        userDecksDropDown.options.Insert(0, newOption);
+        userDecksDropDown.RefreshShownValue();
+        userDecksDropDown.value = 0;
     }
 
-    private void PopulateUserDecksDropDown(string bonusOption, bool toAdd)
+    private void PopulateUserDecksDropDown()
     {
         List<string> deckNames = new List<string>();
-        if (toAdd)
-        {
-            deckNames.Add(bonusOption);
-        }
         deckNames.Add("Default-NoCards");
         foreach (string deck in cardDataDecks.Keys)
         {
@@ -172,7 +298,7 @@ public class DeckBuilder : MonoBehaviour
     public async void HandleUserDecks()
     {
         cardDataDecks = await StringDeckToCardDataDeck();
-        PopulateUserDecksDropDown("", false);
+        PopulateUserDecksDropDown();
     }
 
     private void OnDropdownChanged(int index)
@@ -181,9 +307,17 @@ public class DeckBuilder : MonoBehaviour
         selectedCards = new List<CardData>();
         UnloadCardsFromSelectedArea();
         UnloadCardsFromAvailableArea();
-        if (cardDataDecks.ContainsKey(selectedValue))
+        if (cardDataDecks.ContainsKey(selectedValue) && cardDataDecks[selectedValue].Count==51)
         {
             LoadDeckToSelectedCards(cardDataDecks[selectedValue]);
+            selectCardsText.gameObject.SetActive(true);
+            selectLeaderText.gameObject.SetActive(false);
+        }
+        else if (!cardDataDecks.ContainsKey(selectedValue) || cardDataDecks[selectedValue].Count == 0)
+        {
+            PopulateScrollViewWithLeaders();
+            selectCardsText.gameObject.SetActive(false);
+            selectLeaderText.gameObject.SetActive(true);
         }
     }
 
@@ -229,7 +363,7 @@ public class DeckBuilder : MonoBehaviour
 
         foreach (var item in sortedSameCardDict)
         {
-            string formatted = $",{item.Key}x{item.Value}";
+            string formatted = $",{item.Value}x{item.Key}";
             deckInString = deckInString + formatted;
         }
         return deckInString;
@@ -238,7 +372,8 @@ public class DeckBuilder : MonoBehaviour
     private void LoadDeckToSelectedCards(List<CardData> cardDataDeck)
     {
         selectedCards = new List<CardData>();
-        foreach (CardData cardData in cardDataDeck)
+        List<CardData> givenDeck = cardDataDeck.OrderBy(x => x.cardID).Reverse().ToList();
+        foreach (CardData cardData in givenDeck)
         {
             selectedCards.Add(cardData);
             GameObject newButton = Instantiate(imageButtonPrefab, selectedCardsContent.transform);
@@ -326,24 +461,27 @@ public class DeckBuilder : MonoBehaviour
         foreach (Sprite sprite in cardSprites)
         {
             CardData cardData = await GetCardByCardID(sprite.name);
-            if (cardData.color == leaderData.color)
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
-                GameObject newButton = Instantiate(imageButtonPrefab, availableCardsContent.transform);
-                Image img = newButton.GetComponentInChildren<Image>();
-                if (img != null)
+                if (cardData.color == leaderData.color)
                 {
-                    img.sprite = sprite;
+                    GameObject newButton = Instantiate(imageButtonPrefab, availableCardsContent.transform);
+                    Image img = newButton.GetComponentInChildren<Image>();
+                    if (img != null)
+                    {
+                        img.sprite = sprite;
+                    }
+                    Button btn = newButton.GetComponent<Button>();
+                    btn.gameObject.name = sprite.name;
+                    btn.onClick.AddListener(() => OnCardsClicked(btn, cardData));
                 }
-                Button btn = newButton.GetComponent<Button>();
-                btn.gameObject.name = sprite.name;
-                btn.onClick.AddListener(() => OnCardsClicked(btn, cardData));
-            }
+            });
         }
     }
 
     private void OnCardsClicked(Button btn, CardData cardData)
     {
-        if (selectedCards.Count > 51)
+        if (selectedCards.Count > 50)
         {
             Debug.Log("Can't add more than 50 card to deck");
             return;
@@ -354,10 +492,11 @@ public class DeckBuilder : MonoBehaviour
             Debug.Log("You already have 4 of these card");
             return;
         }
-        cardsInSelectedAreaText.text = selectedCards.Count + "/51";
         selectedCards.Add(cardData);
+        cardsInSelectedAreaText.text = selectedCards.Count + "/51";
         Debug.Log("Kép kattintva: " + btn.name);
         GameObject newButton = Instantiate(imageButtonPrefab, selectedCardsContent.transform);
+        newButton.transform.SetAsFirstSibling();
         Image img = newButton.GetComponentInChildren<Image>();
         img.sprite = btn.gameObject.GetComponent<Image>().sprite;
         Button newBtn = newButton.GetComponent<Button>();

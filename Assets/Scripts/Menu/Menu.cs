@@ -2,6 +2,7 @@ using Assets.Scripts.ServerCon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -34,9 +35,6 @@ namespace TCGSim
         private GameObject gameIDPanelPrefab;
 
         [SerializeField]
-        private GameObject nameInputPrefab;
-
-        [SerializeField]
         private GameObject gameIDInputPrefab;
 
         [SerializeField]
@@ -63,6 +61,15 @@ namespace TCGSim
         [SerializeField]
         private GameObject registerFailedPrefab;
 
+        [SerializeField]
+        private GameObject deckBuilderPrefab;
+
+        [SerializeField]
+        private GameObject deckBuilderBtnPrefab;
+
+        [SerializeField]
+        private GameObject playerNameTextPrefab;
+
         private GameObject loginRegisterPanel;
         private GameObject defaultPaneObject;
         private GameObject loginPanel;
@@ -74,29 +81,35 @@ namespace TCGSim
         private GameObject createGamePanelObject;
         private GameObject namePanelObject;
         private GameObject gameIDPanelObject;
-        private TMP_InputField nameInputObject;
         private TMP_InputField gameIDInputObject;
         private Button startGameBtnObject;
         private Button connectToGameBtnObject;
         private Button quitGameBtn;
         private Button backBtn;
+        private Button backBtnInLoginRegister;
         private Button loginBtnInLoginRegister;
+        private Button loginGuestBtn;
         private Button registerBtnInLoginRegister;
         private Button loginBtnInLogin;
         private Button registerBtnInRegister;
         private Button failedBack;
+        private Button deckBuilderBtn;
         private TMP_InputField nameInputInLogin;
         private TMP_InputField passwordInputInLogin;
         private TMP_InputField nameInputInRegister;
         private TMP_InputField passwordInputInRegister;
         private TextMeshProUGUI loggedInAsText;
+        private TextMeshProUGUI playerNameText;
+
+        private DeckBuilder deckBuilder;
+        private TMP_Dropdown deckSelectorDropDown;
 
         public static event Action succesFullyRegistered;
         public static event Action succesFullyLoggedIn;
         public static event Action registerFail;
         public static event Action logInFail;
+        public static event Action backToMenuFromDeckBuilder;
 
-        private string playerName="Default";
         private string gameID="Default";
 
         private string userName = "Default";
@@ -115,6 +128,7 @@ namespace TCGSim
             succesFullyRegistered += Menu_succesFullyRegistered;
             registerFail += Menu_registerFail;
             logInFail += Menu_logInFail;
+            backToMenuFromDeckBuilder += Menu_backToMenuFromDeckBuilder;
             LoadDefaultPanel();
         }
 
@@ -137,6 +151,9 @@ namespace TCGSim
         {
             succesFullyLoggedIn -= Menu_succesFullyLoggedIn;
             succesFullyRegistered -= Menu_succesFullyRegistered;
+            registerFail -= Menu_registerFail;
+            logInFail -= Menu_logInFail;
+            backToMenuFromDeckBuilder -= Menu_backToMenuFromDeckBuilder;
         }
 
         public void LoadLoginRegisterPanel()
@@ -144,13 +161,14 @@ namespace TCGSim
             loginRegisterPanel = Instantiate(loginRegisterPanelPrefab, this.gameObject.transform);
             registerBtnInLoginRegister = loginRegisterPanel.transform.Find("RegisterBtn").gameObject.GetComponent<Button>();
             loginBtnInLoginRegister = loginRegisterPanel.transform.Find("LoginBtn").gameObject.GetComponent<Button>();
+            loginGuestBtn = loginRegisterPanel.transform.Find("LoginGuestBtn").gameObject.GetComponent<Button>();
             quitGameBtn = loginRegisterPanel.transform.Find("QuitGameBtn").gameObject.GetComponent<Button>();
             quitGameBtn.onClick.AddListener(QuitGame);
             registerBtnInLoginRegister.onClick.AddListener(SetActiveRegisterPanel);
             loginBtnInLoginRegister.onClick.AddListener(SetActiveLoginPanel);
+            loginGuestBtn.onClick.AddListener(LoginAsGuest);
             LoadLoginPanel();
             LoadRegisterPanel();
-            loginRegisterPanel.SetActive(false);
         }
 
         public void LoadDefaultPanel()
@@ -159,19 +177,27 @@ namespace TCGSim
             createGameBtn = defaultPaneObject.transform.Find("CreateGameBtn").gameObject.GetComponent<Button>();
             connectGameBtn = defaultPaneObject.transform.Find("ConnectGameBtn").gameObject.GetComponent<Button>();
             quitGameBtn = defaultPaneObject.transform.Find("QuitGameBtn").gameObject.GetComponent<Button>();
+            deckBuilderBtn = Instantiate(deckBuilderBtnPrefab, defaultPaneObject.gameObject.transform).GetComponent<Button>();
             createGameBtn.onClick.AddListener(CreateGame);
             connectGameBtn.onClick.AddListener(ConnectToGame);
             quitGameBtn.onClick.AddListener(QuitGame);
+            deckBuilderBtn.onClick.AddListener(OpenDeckBuilder);
             loggedInAsText = defaultPaneObject.transform.Find("LoggedInAs").gameObject.GetComponent<TextMeshProUGUI>();
 
             createGamePanelObject = Instantiate(createGamePanelPrefab, this.gameObject.transform);
             createGamePanelObject.SetActive(false);
+
+            deckSelectorDropDown = createGamePanelObject.transform.Find("DeckSelector").GetComponent<TMP_Dropdown>();
+
             namePanelObject = createGamePanelObject.transform.Find("NamePanel").gameObject;
+
+            playerNameText = Instantiate(playerNameTextPrefab, namePanelObject.gameObject.transform).GetComponent<TextMeshProUGUI>();
+            playerNameText.text = GameOptions.userName;
+
             gameIDPanelObject = createGamePanelObject.transform.Find("GameIDPanel").gameObject;
-            nameInputObject = namePanelObject.transform.Find("NameInput").GetComponent<TMP_InputField>();
-            nameInputObject.onEndEdit.AddListener(UpdatePlayerNameFromInputField);
             gameIDInputObject = gameIDPanelObject.transform.Find("GameIDInput").GetComponent<TMP_InputField>();
             gameIDInputObject.onEndEdit.AddListener(UpdateGameIDFromInputField);
+
             startGameBtnObject = createGamePanelObject.transform.Find("StartGameBtn").GetComponent<Button>();
             startGameBtnObject.onClick.AddListener(StartGame);
             backBtn = this.gameObject.transform.Find("BackBtn").GetComponent<Button>();
@@ -202,8 +228,8 @@ namespace TCGSim
             passwordInputInRegister.onEndEdit.AddListener(UpdatePassword);
             registerBtnInRegister = registerPanel.transform.Find("RegisterBtn").GetComponent<Button>();
             registerBtnInRegister.onClick.AddListener(Register);
-            backBtn = registerPanel.transform.Find("BackBtn").GetComponent<Button>();
-            backBtn.onClick.AddListener(BackButtonClickRegisterOrLogin);
+            backBtnInLoginRegister = registerPanel.transform.Find("BackBtn").GetComponent<Button>();
+            backBtnInLoginRegister.onClick.AddListener(BackButtonClickRegisterOrLogin);
             registerPanel.SetActive(false);
             registerFailed = Instantiate(registerFailedPrefab, this.gameObject.transform);
             registerFailed.SetActive(false);
@@ -219,8 +245,8 @@ namespace TCGSim
             passwordInputInLogin.onEndEdit.AddListener(UpdatePassword);
             loginBtnInLogin = loginPanel.transform.Find("LoginBtn").GetComponent<Button>();
             loginBtnInLogin.onClick.AddListener(Login);
-            backBtn = loginPanel.transform.Find("BackBtn").GetComponent<Button>();
-            backBtn.onClick.AddListener(BackButtonClickRegisterOrLogin);
+            backBtnInLoginRegister = loginPanel.transform.Find("BackBtn").GetComponent<Button>();
+            backBtnInLoginRegister.onClick.AddListener(BackButtonClickRegisterOrLogin);
             loginPanel.SetActive(false);
             loginFailed = Instantiate(loginFailedPrefab, this.gameObject.transform);
             loginFailed.SetActive(false);
@@ -228,14 +254,14 @@ namespace TCGSim
             failedBack.onClick.AddListener(FailedBackButton);
         }
 
-        public async void CreateGame()
+        public void CreateGame()
         {
-            GameOptions.decksJson = await LoginManager.Instance.GetUserDecks(userName);
             defaultPaneObject.SetActive(false);
             createGamePanelObject.SetActive(true);
             startGameBtnObject.gameObject.SetActive(true);
             connectToGameBtnObject.gameObject.SetActive(false);
             backBtn.gameObject.SetActive(true);
+            UpdateDeckSelector();
         }
 
         public void ConnectToGame()
@@ -245,6 +271,7 @@ namespace TCGSim
             startGameBtnObject.gameObject.SetActive(false);
             connectToGameBtnObject.gameObject.SetActive(true);
             backBtn.gameObject.SetActive(true);
+            UpdateDeckSelector();
         }
 
         public void BackButtonClick()
@@ -254,12 +281,19 @@ namespace TCGSim
             backBtn.gameObject.SetActive(false);
         }
 
+        public void OpenDeckBuilder()
+        {
+            defaultPaneObject.SetActive(false);
+            deckBuilder.gameObject.SetActive(true);
+            DeckBuilder.InvokeSetActive();
+        }
+
         public void BackButtonClickRegisterOrLogin()
         {
             loginRegisterPanel.SetActive(true);
             loginPanel.SetActive(false);
             registerPanel.SetActive(false);
-            backBtn.gameObject.SetActive(false);
+            backBtnInLoginRegister.gameObject.SetActive(false);
         }
 
         public void SetActiveRegisterPanel()
@@ -267,7 +301,7 @@ namespace TCGSim
             loginRegisterPanel.SetActive(false);
             loginPanel.SetActive(false);
             registerPanel.SetActive(true);
-            backBtn.gameObject.SetActive(true);
+            backBtnInLoginRegister.gameObject.SetActive(true);
         }
 
         public void SetActiveLoginPanel()
@@ -275,7 +309,7 @@ namespace TCGSim
             loginRegisterPanel.SetActive(false);
             loginPanel.SetActive(true);
             registerPanel.SetActive(false);
-            backBtn.gameObject.SetActive(true);
+            backBtnInLoginRegister.gameObject.SetActive(true);
         }
 
         public void QuitGame()
@@ -297,8 +331,11 @@ namespace TCGSim
 
         public void StartGame()
         {
-            GameOptions.playerName = playerName;
+            GameOptions.playerName = userName;
             GameOptions.gameID = gameID;
+            int selectedIndex = deckSelectorDropDown.value;
+            string currentlySelectedDeck = deckSelectorDropDown.options[selectedIndex].text;
+            GameOptions.selectedDeckForGame = GameOptions.decksJson.FirstOrDefault(x => x.Split(',')[0] == currentlySelectedDeck);
             Debug.Log("Start Game");
             GameManager.Instance.ChangeGameState(GameState.WAITINGFOROPPONENT);
             SceneManager.LoadScene("GameBoard");
@@ -306,16 +343,14 @@ namespace TCGSim
 
         public void Connect()
         {
-            GameOptions.playerName = playerName;
+            GameOptions.playerName = userName;
             GameOptions.gameID = gameID;
+            int selectedIndex = deckSelectorDropDown.value;
+            string currentlySelectedDeck = deckSelectorDropDown.options[selectedIndex].text;
+            GameOptions.selectedDeckForGame = GameOptions.decksJson.FirstOrDefault(x => x.Split(',')[0] == currentlySelectedDeck);
             Debug.Log("Connect to game");
             GameManager.Instance.ChangeGameState(GameState.CONNECTING);
             SceneManager.LoadScene("GameBoard");
-        }
-
-        public void UpdatePlayerNameFromInputField(string s)
-        {
-            playerName = s;
         }
         public void UpdateGameIDFromInputField(string s)
         {
@@ -336,22 +371,34 @@ namespace TCGSim
             loginFailed.SetActive(false);
             registerFailed.SetActive(false);
         }
-        private void Menu_succesFullyRegistered()
+        private void Menu_backToMenuFromDeckBuilder()
+        {
+            defaultPaneObject.gameObject.SetActive(true);
+        }
+        private async void Menu_succesFullyRegistered()
         {
             registerPanel.SetActive(false);
             backBtn.gameObject.SetActive(false);
             defaultPaneObject.SetActive(true);
             GameOptions.userName = userName;
+            GameOptions.decksJson = await LoginManager.Instance.GetUserDecks(userName);
+            playerNameText.text = GameOptions.userName;
             loggedInAsText.text = "Logged in as: " + userName;
+            deckBuilder = Instantiate(deckBuilderPrefab, this.gameObject.transform).GetComponent<DeckBuilder>();
+            deckBuilder.gameObject.SetActive(false);
         }
 
-        private void Menu_succesFullyLoggedIn()
+        private async void Menu_succesFullyLoggedIn()
         {
             loginPanel.SetActive(false);
             backBtn.gameObject.SetActive(false);
             defaultPaneObject.SetActive(true);
             GameOptions.userName = userName;
+            GameOptions.decksJson = await LoginManager.Instance.GetUserDecks(userName);
+            playerNameText.text = GameOptions.userName;
             loggedInAsText.text = "Logged in as: " + userName;
+            deckBuilder = Instantiate(deckBuilderPrefab, this.gameObject.transform).GetComponent<DeckBuilder>();
+            deckBuilder.gameObject.SetActive(false);
         }
 
         private void Menu_logInFail()
@@ -382,6 +429,42 @@ namespace TCGSim
         public static void InvokeRegisterFail()
         {
             registerFail?.Invoke();
+        }
+
+        public static void InvokeBackToMenuFromDeckBuilder()
+        {
+            backToMenuFromDeckBuilder?.Invoke();
+        }
+
+        public void UpdateDeckSelector()
+        {
+            List<string> deckNames = new List<string>();
+            foreach (string deck in GameOptions.decksJson)
+            {
+                deckNames.Add(deck.Split(',')[0]);
+            }
+            deckSelectorDropDown.ClearOptions();
+            deckSelectorDropDown.AddOptions(deckNames);
+
+            int defaultIndex = deckSelectorDropDown.options.FindIndex(x => x.text == "ST01-DefaultDeck");
+            if (defaultIndex != -1)
+            {
+                deckSelectorDropDown.value = defaultIndex;
+                deckSelectorDropDown.RefreshShownValue();
+            }
+        }
+        private void LoginAsGuest()
+        {
+            loginRegisterPanel.SetActive(false);
+            backBtn.gameObject.SetActive(false);
+            defaultPaneObject.SetActive(true);
+            System.Random random = new System.Random();
+            GameOptions.userName = "Guest"+random.Next(10000, 100000);
+            GameOptions.decksJson.Add("ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017");
+            playerNameText.text = GameOptions.userName;
+            loggedInAsText.text = "Logged in as: " + GameOptions.userName;
+            deckBuilder = Instantiate(deckBuilderPrefab, this.gameObject.transform).GetComponent<DeckBuilder>();
+            deckBuilder.gameObject.SetActive(false);
         }
 
     }

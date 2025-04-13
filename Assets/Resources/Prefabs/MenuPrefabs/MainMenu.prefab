@@ -121,7 +121,6 @@ MonoBehaviour:
   connectGameBtnPrefab: {fileID: 3045345414194547782, guid: e369d88dc5bb25945b05fe4b11933d66, type: 3}
   namePanelPrefab: {fileID: 9122594219360105287, guid: eb353fed1010d444f900ea5926f20a6f, type: 3}
   gameIDPanelPrefab: {fileID: 6972639056669081352, guid: 34f5a0906c1f73c4e8d11818abad684e, type: 3}
-  nameInputPrefab: {fileID: 537997689036183180, guid: c6c3e4e57ddfa5046b39f942225bf170, type: 3}
   gameIDInputPrefab: {fileID: 3889108782865021788, guid: 0f8a045156b1fa742bc577a9405834a7, type: 3}
   startGameBtnPrefab: {fileID: 6449795144490536490, guid: 8208b06415dbe5a4487eece1e17b35c7, type: 3}
   connectToGameBtnPrefab: {fileID: 3760271903897634264, guid: 05ab32766047edd409692695cdc48c92, type: 3}
@@ -131,3 +130,6 @@ MonoBehaviour:
   registerPanelPrefab: {fileID: 2214805168975750596, guid: 764b2bfd58612d84c878d1e735269fcb, type: 3}
   loginFailedPrefab: {fileID: 6572098197905557082, guid: dbd053e7eaaa7e94898d53bb833e3f38, type: 3}
   registerFailedPrefab: {fileID: 6572098197905557082, guid: 07e3448f53e02bd4b9fe6c86a52612b6, type: 3}
+  deckBuilderPrefab: {fileID: 1442725824243123094, guid: a45a914ea6d1fe148807f01008c69025, type: 3}
+  deckBuilderBtnPrefab: {fileID: 5217919920908187074, guid: 42526eaae333c2146b30a8fb09449160, type: 3}
+  playerNameTextPrefab: {fileID: 3194460460083728486, guid: 85f3a42414e2a4d47bb3dd6baf6b1b60, type: 3}

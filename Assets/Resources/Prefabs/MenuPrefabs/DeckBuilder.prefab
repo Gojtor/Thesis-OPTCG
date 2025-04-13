@@ -99,3 +99,5 @@ MonoBehaviour:
   createDeckBtnPrefab: {fileID: 919951239632502, guid: ef6f33f7c667ef24988e76183e4953d5, type: 3}
   saveDeckBtnPrefab: {fileID: 1591060721478131626, guid: 6d6c3e6351ff55c4db1c699add3221c4, type: 3}
   deckNameInputPrefab: {fileID: 4919203166457140331, guid: 1a6964bee7f00e0448331c9c87200d4c, type: 3}
+  deleteDeckBtnPrefab: {fileID: 4004300722032172694, guid: 782fc712a5afeb34cb65e1171202c9a3, type: 3}
+  backToMenuBtnPrefab: {fileID: 8376543440936633337, guid: 16bc3f1ec5941144bb405a524d8be734, type: 3}

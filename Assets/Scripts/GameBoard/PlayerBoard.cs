@@ -59,7 +59,7 @@ namespace TCGSim
                 Destroy(this.gameObject);
                 return;
             }
-            deckString = GameOptions.decksJson[0];
+            deckString = GameOptions.selectedDeckForGame;
         }
         private void OnDestroy()
         {

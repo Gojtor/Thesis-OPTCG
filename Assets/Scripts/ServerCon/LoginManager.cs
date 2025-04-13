@@ -140,8 +140,72 @@ namespace Assets.Scripts.ServerCon
                 }
                 return null;
             }
+        }
 
+        public async Task AddToUserDecks(string userName, string newDeckItem)
+        {
+            string url = serverUrl + "/api/Account/AddToDeckJson";
 
+            var messageJson = new
+            {
+                UserName = userName,
+                NewDeckItem = newDeckItem
+            };
+
+            string json = JsonConvert.SerializeObject(messageJson);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+            {
+                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                {
+                    await Task.Yield(); 
+                }
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error: " + request.error);
+                }
+            }
+        }
+
+        public async Task RemoveFromUserDeck(string userName, string deckName)
+        {
+            string url = serverUrl + "/api/Account/RemoveDeck";
+
+            var messageJson = new
+            {
+                UserName = userName,
+                DeckItemName = deckName
+            };
+
+            string json = JsonConvert.SerializeObject(messageJson);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+
+            using (UnityWebRequest request = new UnityWebRequest(url, "POST"))
+            {
+                request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                var operation = request.SendWebRequest();
+
+                while (!operation.isDone)
+                {
+                    await Task.Yield();
+                }
+
+                if (request.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error: " + request.error);
+                }
+            }
         }
     }
 }
