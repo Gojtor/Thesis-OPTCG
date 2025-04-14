@@ -8,7 +8,7 @@ namespace TCGSim
 {
     public class GameManager : MonoBehaviour
     {
-        public static GameManager Instance { get; private set; }
+        public static GameManager Instance { get; set; }
         public GameState currentState { get; private set; } = GameState.MAINMENU;
         public PlayerTurnPhases currentPlayerTurnPhase { get; private set; }
         public BattlePhases currentBattlePhase { get; private set; } = BattlePhases.NOBATTLE;

@@ -234,7 +234,7 @@ namespace TCGSim
             {
                 menuBtn = Instantiate(menuBtnPrefab, this.gameObject.transform).GetComponent<Button>();
                 menuBtn.onClick.AddListener(MenuBtnClick);
-                menuBtn.AddComponent<GraphicRaycaster>();
+                menuBtn.gameObject.AddComponent<GraphicRaycaster>();
                 Canvas menuBtnCanvas = menuBtn.GetComponent<Canvas>();
                 menuBtnCanvas.overrideSorting = true;
                 menuBtnCanvas.sortingOrder = 6;
