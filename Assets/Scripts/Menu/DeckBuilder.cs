@@ -16,7 +16,7 @@ using UnityEngine.UI;
 
 public class DeckBuilder : MonoBehaviour
 {
-    public string serverUrl { get; } = Environment.GetEnvironmentVariable("SERVER_ADDRESS") ?? "http://localhost:5000";
+    public string serverUrl { get; private set; }
 
     [SerializeField]
     public GameObject availableCardsViewPrefab;
@@ -68,7 +68,20 @@ public class DeckBuilder : MonoBehaviour
     public static event Action DeckBuilderSetActive;
 
 
-     void Start()
+    private void Awake()
+    {
+        TextAsset configText = Resources.Load<TextAsset>("server_config");
+        if (configText != null)
+        {
+            ServerSettings config = JsonUtility.FromJson<ServerSettings>(configText.text);
+            serverUrl = config.serverUrl;
+        }
+        else
+        {
+            serverUrl = "http://localhost:5000";
+        }
+    }
+    void Start()
     {
         DeckBuilderSetActive += DeckBuilder_DeckBuilderSetActive;
         cardMagnifier = Instantiate(cardMagnifierPrefab, this.gameObject.transform);
