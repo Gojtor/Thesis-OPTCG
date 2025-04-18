@@ -148,8 +148,8 @@ namespace TCGSim
         void Start()
         {
             LoadLoginRegisterPanel();
-            succesFullyLoggedIn += Menu_succesFullyLoggedIn;
-            succesFullyRegistered += Menu_succesFullyRegistered;
+            succesFullyLoggedIn += Menu_succesFullyLoggedInWrapper;
+            succesFullyRegistered += Menu_succesFullyRegisteredWrapper;
             registerFail += Menu_registerFail;
             logInFail += Menu_logInFail;
             backToMenuFromDeckBuilder += Menu_backToMenuFromDeckBuilder;
@@ -174,8 +174,8 @@ namespace TCGSim
 
         private void OnDestroy()
         {
-            succesFullyLoggedIn -= Menu_succesFullyLoggedIn;
-            succesFullyRegistered -= Menu_succesFullyRegistered;
+            succesFullyLoggedIn -= Menu_succesFullyLoggedInWrapper;
+            succesFullyRegistered -= Menu_succesFullyRegisteredWrapper;
             registerFail -= Menu_registerFail;
             logInFail -= Menu_logInFail;
             backToMenuFromDeckBuilder -= Menu_backToMenuFromDeckBuilder;
@@ -243,7 +243,7 @@ namespace TCGSim
             lineRenderer.sortingOrder = 100;
 
             friendsBtn = Instantiate(friendsBtnPrefab, defaultPaneObject.transform).GetComponent<Button>();
-            friendsBtn.onClick.AddListener(FriendsButtonClicked);
+            friendsBtn.onClick.AddListener(FriendsButtonClickedWrapper);
 
             friendsPanelObject = Instantiate(friendsPanelPrefab, this.gameObject.transform);
             friendsPanelObject.gameObject.SetActive(false);
@@ -261,7 +261,7 @@ namespace TCGSim
             sendFriendReqToInput = sendReqPanel.transform.Find("SendNameInput").gameObject.GetComponent<TMP_InputField>();
             sendFriendReqBtn = sendReqPanel.transform.Find("Send").gameObject.GetComponent<Button>();
             sendFriendReqToInput.onValueChanged.AddListener(OnSendRequestInputChange);
-            sendFriendReqBtn.onClick.AddListener(SendFriendRequest);
+            sendFriendReqBtn.onClick.AddListener(SendFriendRequestWrapper);
 
             defaultPaneObject.SetActive(false);
         }
@@ -421,7 +421,12 @@ namespace TCGSim
         {
             defaultPaneObject.gameObject.SetActive(true);
         }
-        private async void Menu_succesFullyRegistered()
+
+        public async void Menu_succesFullyRegisteredWrapper()
+        {
+            await Menu_succesFullyRegistered();
+        }
+        public async Task Menu_succesFullyRegistered()
         {
             registerPanel.SetActive(false);
             backBtn.gameObject.SetActive(false);
@@ -434,7 +439,12 @@ namespace TCGSim
             deckBuilder.gameObject.SetActive(false);
         }
 
-        private async void Menu_succesFullyLoggedIn()
+        public async void Menu_succesFullyLoggedInWrapper()
+        {
+            await Menu_succesFullyLoggedIn();
+        }
+
+        public async Task Menu_succesFullyLoggedIn()
         {
             loginPanel.SetActive(false);
             backBtn.gameObject.SetActive(false);
@@ -530,7 +540,12 @@ namespace TCGSim
             deckBuilder.gameObject.SetActive(false);
         }
 
-        private async void FriendsButtonClicked()
+        public async void FriendsButtonClickedWrapper()
+        {
+            await FriendsButtonClicked();
+        }
+
+        public async Task FriendsButtonClicked()
         {
             if (friendsPanelObject.activeInHierarchy)
             {
@@ -569,26 +584,35 @@ namespace TCGSim
                         reqNameText.text = req;
                         Button accept = requestWindow.transform.Find("Accept").GetComponent<Button>();
                         Button decline = requestWindow.transform.Find("Decline").GetComponent<Button>();
-                        accept.onClick.AddListener(() => AcceptFriendRequest(req, requestWindow));
-                        decline.onClick.AddListener(() => DeclineFriendRequest(req, requestWindow));
+                        accept.onClick.AddListener(() => AcceptFriendRequestWrapper(req, requestWindow));
+                        decline.onClick.AddListener(() => DeclineFriendRequestWrapper(req, requestWindow));
                     }
                 }
-
             }
-
         }
 
-        private async void AcceptFriendRequest(string fromUser, GameObject reqWindow)
+        public async void AcceptFriendRequestWrapper(string fromUser, GameObject reqWindow)
+        {
+            await AcceptFriendRequest(fromUser,reqWindow);
+        }
+        public async void DeclineFriendRequestWrapper(string fromUser, GameObject reqWindow)
+        {
+            await DeclineFriendRequest(fromUser, reqWindow);
+        }
+        public async void SendFriendRequestWrapper()
+        {
+            await SendFriendRequest();
+        }
+        public async Task AcceptFriendRequest(string fromUser, GameObject reqWindow)
         {
             if (GameOptions.userName != null && fromUser != null)
             {
                 Destroy(reqWindow);
                 await LoginManager.Instance.AcceptFriendRequest(fromUser,GameOptions.userName);
-
             }
         }
 
-        private async void DeclineFriendRequest(string fromUser, GameObject reqWindow)
+        public async Task DeclineFriendRequest(string fromUser, GameObject reqWindow)
         {
             if (GameOptions.userName != null && fromUser != null)
             {
@@ -597,7 +621,7 @@ namespace TCGSim
             }
         }
 
-        private async void SendFriendRequest()
+        public async Task SendFriendRequest()
         {
             if (sendRequestName != null)
             {

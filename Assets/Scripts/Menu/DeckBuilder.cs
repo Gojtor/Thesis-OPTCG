@@ -81,7 +81,7 @@ public class DeckBuilder : MonoBehaviour
             serverUrl = "http://localhost:5000";
         }
     }
-    void Start()
+    async void Start()
     {
         DeckBuilderSetActive += DeckBuilder_DeckBuilderSetActive;
         cardMagnifier = Instantiate(cardMagnifierPrefab, this.gameObject.transform);
@@ -115,9 +115,6 @@ public class DeckBuilder : MonoBehaviour
         backToMenuBtn = Instantiate(backToMenuBtnPrefab, this.gameObject.transform).GetComponent<Button>();
         backToMenuBtn.onClick.AddListener(BackToMenu);
 
-        userDecksDropDown = Instantiate(userDeckDropDownPrefab, this.gameObject.transform).GetComponent<TMP_Dropdown>();
-        HandleUserDecks();
-
         HorizontalLayoutGroup layoutGroupAvailable = availableCardsContent.AddComponent<HorizontalLayoutGroup>();
         layoutGroupAvailable.childForceExpandHeight = false;
         layoutGroupAvailable.childForceExpandWidth = false;
@@ -146,9 +143,9 @@ public class DeckBuilder : MonoBehaviour
 
         leaderSprites = Resources.LoadAll<Sprite>("Cards/Leaders");
         cardSprites = Resources.LoadAll<Sprite>("Cards/Cards");
-        PopulateScrollViewWithLeaders();
-
-        
+        userDecksDropDown = Instantiate(userDeckDropDownPrefab, this.gameObject.transform).GetComponent<TMP_Dropdown>();
+        await HandleUserDecks();
+        await PopulateScrollViewWithLeaders();
     }
 
     private void OnDestroy()
@@ -181,7 +178,7 @@ public class DeckBuilder : MonoBehaviour
     {
         int selectedIndex = userDecksDropDown.value;
         string currentlySelectedDeck = userDecksDropDown.options[selectedIndex].text;
-        if (currentlySelectedDeck != "Default-NoCards" && currentlySelectedDeck!="ST01-DefaultDeck")
+        if (currentlySelectedDeck != "Default-NoCards" && currentlySelectedDeck != "ST01-DefaultDeck")
         {
             var optionToRemove = userDecksDropDown.options.FirstOrDefault(x => x.text == currentlySelectedDeck);
 
@@ -225,16 +222,25 @@ public class DeckBuilder : MonoBehaviour
                 }
                 else
                 {
-                    cardDataDecks.Add(newDeckName, selectedCards);
-                    TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
-                    userDecksDropDown.options.Insert(0, newOption);
-                    userDecksDropDown.value = 0;
-                    userDecksDropDown.RefreshShownValue();
+                    if (currentlySelectedDeck == "Default-NoCards")
+                    {
+                        cardDataDecks.Add(newDeckName, selectedCards);
+                        TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
+                        userDecksDropDown.options.Insert(0, newOption);
+                        userDecksDropDown.value = 0;
+                        userDecksDropDown.RefreshShownValue();
+                    }
+                    else
+                    {
+                        cardDataDecks.Add(newDeckName, selectedCards);
+                        userDecksDropDown.options[selectedIndex].text = newDeckName;
+                        userDecksDropDown.RefreshShownValue();
+                    }
                 }
                 string newDeck = newDeckName + CardDataDeckToStringDeck(selectedCards);
                 GameOptions.decksJson.Add(newDeck);
                 if (!GameOptions.userName.Contains("Guest"))
-                { 
+                {
                     await LoginManager.Instance.AddToUserDecks(GameOptions.userName, newDeck);
                 }
             }
@@ -266,16 +272,15 @@ public class DeckBuilder : MonoBehaviour
                 }
             }
         }
-        newDeckName = "";
     }
 
-    private void NewDeckCreation()
+    private async void NewDeckCreation()
     {
         selectLeaderText.gameObject.SetActive(true);
         selectCardsText.gameObject.SetActive(false);
         UnloadCardsFromAvailableArea();
         UnloadCardsFromSelectedArea();
-        PopulateScrollViewWithLeaders();
+        await PopulateScrollViewWithLeaders();
         TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData("New deck");
         userDecksDropDown.options.Insert(0, newOption);
         userDecksDropDown.RefreshShownValue();
@@ -292,7 +297,7 @@ public class DeckBuilder : MonoBehaviour
         }
         userDecksDropDown.ClearOptions();
         userDecksDropDown.AddOptions(deckNames);
-        userDecksDropDown.onValueChanged.AddListener(OnDropdownChanged);
+        userDecksDropDown.onValueChanged.AddListener(OnDropdownChangedWrapper);
     }
 
     private void UpdateDeckName(string s)
@@ -300,29 +305,39 @@ public class DeckBuilder : MonoBehaviour
         newDeckName = s;
     }
 
-    public async void HandleUserDecks()
+    public async Task HandleUserDecks()
     {
         cardDataDecks = await StringDeckToCardDataDeck();
         PopulateUserDecksDropDown();
     }
 
-    private void OnDropdownChanged(int index)
+    public async void OnDropdownChangedWrapper(int index)
+    {
+        await OnDropdownChanged(index);
+    }
+    public async Task OnDropdownChanged(int index)
     {
         string selectedValue = userDecksDropDown.options[index].text;
         selectedCards = new List<CardData>();
         UnloadCardsFromSelectedArea();
         UnloadCardsFromAvailableArea();
-        if (cardDataDecks.ContainsKey(selectedValue) && cardDataDecks[selectedValue].Count==51)
+        if (cardDataDecks.ContainsKey(selectedValue) && cardDataDecks[selectedValue].Count == 51)
         {
-            LoadDeckToSelectedCards(cardDataDecks[selectedValue]);
-            selectCardsText.gameObject.SetActive(true);
-            selectLeaderText.gameObject.SetActive(false);
+            await LoadDeckToSelectedCards(cardDataDecks[selectedValue]);
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                selectCardsText.gameObject.SetActive(true);
+                selectLeaderText.gameObject.SetActive(false);
+            });
         }
         else if (!cardDataDecks.ContainsKey(selectedValue) || cardDataDecks[selectedValue].Count == 0)
         {
-            PopulateScrollViewWithLeaders();
-            selectCardsText.gameObject.SetActive(false);
-            selectLeaderText.gameObject.SetActive(true);
+            await PopulateScrollViewWithLeaders();
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                selectCardsText.gameObject.SetActive(false);
+                selectLeaderText.gameObject.SetActive(true);
+            });
         }
     }
 
@@ -374,7 +389,7 @@ public class DeckBuilder : MonoBehaviour
         return deckInString;
     }
 
-    private void LoadDeckToSelectedCards(List<CardData> cardDataDeck)
+    private async Task LoadDeckToSelectedCards(List<CardData> cardDataDeck)
     {
         selectedCards = new List<CardData>();
         List<CardData> givenDeck = cardDataDeck.OrderBy(x => x.cardID).Reverse().ToList();
@@ -407,7 +422,7 @@ public class DeckBuilder : MonoBehaviour
         UnloadCardsFromAvailableArea();
 
         CardData leaderCard = selectedCards.Where(x => x.cardType == CardType.LEADER).Single();
-        PopulateScrollViewWithCardsWithSameColor(leaderCard);
+        await PopulateScrollViewWithCardsWithSameColor(leaderCard);
     }
 
     private void UnloadCardsFromSelectedArea()
@@ -428,8 +443,9 @@ public class DeckBuilder : MonoBehaviour
         }
     }
 
-    private void PopulateScrollViewWithLeaders()
+    public async Task PopulateScrollViewWithLeaders()
     {
+        UnloadCardsFromAvailableArea();
         foreach (Sprite sprite in leaderSprites)
         {
             GameObject newButton = Instantiate(imageButtonPrefab, availableCardsContent.transform);
@@ -440,11 +456,17 @@ public class DeckBuilder : MonoBehaviour
             }
             Button btn = newButton.GetComponent<Button>();
             btn.gameObject.name = sprite.name;
-            btn.onClick.AddListener(() => OnLeaderClicked(btn));
+            btn.onClick.AddListener(() => OnLeaderClickedWrapper(btn));
         }
+        await Task.CompletedTask;
     }
 
-    private async void OnLeaderClicked(Button btn)
+    public async void OnLeaderClickedWrapper(Button btn)
+    {
+        await OnLeaderClicked(btn);
+    }
+
+    public async Task OnLeaderClicked(Button btn)
     {
         Debug.Log("Kép kattintva: " + btn.name);
         GameObject newButton = Instantiate(imageButtonPrefab, selectedCardsContent.transform);
@@ -456,11 +478,11 @@ public class DeckBuilder : MonoBehaviour
         btn.onClick.RemoveAllListeners();
         selectLeaderText.gameObject.SetActive(false);
         UnloadCardsFromAvailableArea();
-        PopulateScrollViewWithCardsWithSameColor(selectedCards[0]);
+        await PopulateScrollViewWithCardsWithSameColor(selectedCards[0]);
         cardsInSelectedAreaText.text = selectedCards.Count + "/51";
     }
 
-    private async void PopulateScrollViewWithCardsWithSameColor(CardData leaderData)
+    private async Task PopulateScrollViewWithCardsWithSameColor(CardData leaderData)
     {
         selectCardsText.gameObject.SetActive(true);
         foreach (Sprite sprite in cardSprites)
