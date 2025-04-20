@@ -78,7 +78,7 @@ public class DeckBuilder : MonoBehaviour
         }
         else
         {
-            serverUrl = "http://localhost:5000";
+            serverUrl = "https://gabcsika.picidolgok.hu";
         }
     }
     async void Start()
@@ -105,9 +105,9 @@ public class DeckBuilder : MonoBehaviour
         cardsInSelectedAreaText.text = selectedCards.Count + "/51";
 
         createDeckBtn = Instantiate(createDeckBtnPrefab, this.gameObject.transform).GetComponent<Button>();
-        createDeckBtn.onClick.AddListener(NewDeckCreation);
+        createDeckBtn.onClick.AddListener(NewDeckCreationWrapper);
         saveDeckBtn = Instantiate(saveDeckBtnPrefab, this.gameObject.transform).GetComponent<Button>();
-        saveDeckBtn.onClick.AddListener(SaveDeck);
+        saveDeckBtn.onClick.AddListener(SaveDeckWrapper);
         deckNameInput = Instantiate(deckNameInputPrefab, this.gameObject.transform).GetComponent<TMP_InputField>();
         deckNameInput.onEndEdit.AddListener(UpdateDeckName);
         deleteDeckBtn = Instantiate(deleteDeckBtnPrefab, this.gameObject.transform).GetComponent<Button>();
@@ -203,7 +203,12 @@ public class DeckBuilder : MonoBehaviour
         }
     }
 
-    private async void SaveDeck()
+    public async void SaveDeckWrapper()
+    {
+        await SaveDeck();
+    }
+
+    public async Task SaveDeck()
     {
         if (newDeckName != null)
         {
@@ -213,29 +218,31 @@ public class DeckBuilder : MonoBehaviour
                 string currentlySelectedDeck = userDecksDropDown.options[selectedIndex].text;
                 if (cardDataDecks.ContainsKey(newDeckName))
                 {
-                    newDeckName = currentlySelectedDeck + cardDataDecks.Count(x => x.Key.Contains(currentlySelectedDeck));
-                    cardDataDecks.Add(newDeckName, selectedCards);
-                    TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
-                    userDecksDropDown.options.Insert(0, newOption);
-                    userDecksDropDown.value = 0;
-                    userDecksDropDown.RefreshShownValue();
-                }
-                else
-                {
-                    if (currentlySelectedDeck == "Default-NoCards")
+                    if(currentlySelectedDeck=="New deck")
                     {
+                        newDeckName = newDeckName + cardDataDecks.Count(x => x.Key.Contains(newDeckName));
+                        cardDataDecks.Add(newDeckName, selectedCards);
+                        TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
+                        userDecksDropDown.options[selectedIndex].text = newDeckName;
+                        userDecksDropDown.RefreshShownValue();
+                    }
+                    else
+                    {
+                        newDeckName = newDeckName + cardDataDecks.Count(x => x.Key.Contains(newDeckName));
                         cardDataDecks.Add(newDeckName, selectedCards);
                         TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
                         userDecksDropDown.options.Insert(0, newOption);
                         userDecksDropDown.value = 0;
                         userDecksDropDown.RefreshShownValue();
-                    }
-                    else
-                    {
-                        cardDataDecks.Add(newDeckName, selectedCards);
-                        userDecksDropDown.options[selectedIndex].text = newDeckName;
-                        userDecksDropDown.RefreshShownValue();
-                    }
+                    }  
+                }
+                else
+                {
+                    cardDataDecks.Add(newDeckName, selectedCards);
+                    TMP_Dropdown.OptionData newOption = new TMP_Dropdown.OptionData(newDeckName);
+                    userDecksDropDown.options.Insert(0, newOption);
+                    userDecksDropDown.value = 0;
+                    userDecksDropDown.RefreshShownValue();
                 }
                 string newDeck = newDeckName + CardDataDeckToStringDeck(selectedCards);
                 GameOptions.decksJson.Add(newDeck);
@@ -263,18 +270,24 @@ public class DeckBuilder : MonoBehaviour
                     userDecksDropDown.options.Insert(0, newOption);
                     userDecksDropDown.value = 0;
                     userDecksDropDown.RefreshShownValue();
-                }
-                string newDeck = newDeckName + CardDataDeckToStringDeck(selectedCards);
-                GameOptions.decksJson.Add(newDeck);
-                if (!GameOptions.userName.Contains("Guest"))
-                {
-                    await LoginManager.Instance.AddToUserDecks(GameOptions.userName, newDeck);
+                    string newDeck = newDeckName + CardDataDeckToStringDeck(selectedCards);
+                    GameOptions.decksJson.Add(newDeck);
+                    if (!GameOptions.userName.Contains("Guest"))
+                    {
+                        await LoginManager.Instance.AddToUserDecks(GameOptions.userName, newDeck);
+                    }
                 }
             }
         }
+        newDeckName = null;
     }
 
-    private async void NewDeckCreation()
+    public async void NewDeckCreationWrapper()
+    {
+        await NewDeckCreation();
+    }
+
+    public async Task NewDeckCreation()
     {
         selectLeaderText.gameObject.SetActive(true);
         selectCardsText.gameObject.SetActive(false);
@@ -323,21 +336,15 @@ public class DeckBuilder : MonoBehaviour
         UnloadCardsFromAvailableArea();
         if (cardDataDecks.ContainsKey(selectedValue) && cardDataDecks[selectedValue].Count == 51)
         {
+            selectCardsText.gameObject.SetActive(true);
+            selectLeaderText.gameObject.SetActive(false);
             await LoadDeckToSelectedCards(cardDataDecks[selectedValue]);
-            await UnityMainThreadDispatcher.RunOnMainThread(() =>
-            {
-                selectCardsText.gameObject.SetActive(true);
-                selectLeaderText.gameObject.SetActive(false);
-            });
         }
         else if (!cardDataDecks.ContainsKey(selectedValue) || cardDataDecks[selectedValue].Count == 0)
         {
+            selectCardsText.gameObject.SetActive(false);
+            selectLeaderText.gameObject.SetActive(true);
             await PopulateScrollViewWithLeaders();
-            await UnityMainThreadDispatcher.RunOnMainThread(() =>
-            {
-                selectCardsText.gameObject.SetActive(false);
-                selectLeaderText.gameObject.SetActive(true);
-            });
         }
     }
 
@@ -482,9 +489,10 @@ public class DeckBuilder : MonoBehaviour
         cardsInSelectedAreaText.text = selectedCards.Count + "/51";
     }
 
-    private async Task PopulateScrollViewWithCardsWithSameColor(CardData leaderData)
+    public async Task PopulateScrollViewWithCardsWithSameColor(CardData leaderData)
     {
         selectCardsText.gameObject.SetActive(true);
+        UnloadCardsFromAvailableArea();
         foreach (Sprite sprite in cardSprites)
         {
             CardData cardData = await GetCardByCardID(sprite.name);
@@ -507,8 +515,7 @@ public class DeckBuilder : MonoBehaviour
             });
         }
     }
-
-    private void OnCardsClicked(Button btn, CardData cardData)
+    public void OnCardsClicked(Button btn, CardData cardData)
     {
         if (selectedCards.Count > 50)
         {
@@ -533,7 +540,7 @@ public class DeckBuilder : MonoBehaviour
         newBtn.onClick.AddListener(() => OnSelectedCardsClicked(newBtn, cardData));
     }
 
-    private void OnSelectedCardsClicked(Button btn, CardData cardData)
+    public void OnSelectedCardsClicked(Button btn, CardData cardData)
     {
         Debug.Log("Removing from selected");
         selectedCards.Remove(cardData);
@@ -572,4 +579,8 @@ public class DeckBuilder : MonoBehaviour
 
     }
 
+    public CardData GetSelectedCardsCardDataByID(string id)
+    {
+        return selectedCards.Where(x => x.cardID == id).First();
+    }
 }

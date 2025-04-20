@@ -36,7 +36,7 @@ namespace Assets.Scripts.ServerCon
             }
             else
             {
-                serverUrl = "http://localhost:5000";
+                serverUrl = "https://gabcsika.picidolgok.hu";
             }
         }
 

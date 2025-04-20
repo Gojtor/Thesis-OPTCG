@@ -11,7 +11,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameBoard.unity
     guid: 41b0d87889bd9d24a99c54c618e775c5
-  - enabled: 1
-    path: Assets/Scenes/Menu_CopyForTesting.unity
-    guid: eeb27c4ee5bf05643ab4b8811ed041ee
   m_configObjects: {}

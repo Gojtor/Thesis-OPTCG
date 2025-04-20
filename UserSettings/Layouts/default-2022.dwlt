@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Test Runner
   m_RootView: {fileID: 8}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -362,7 +362,7 @@ MonoBehaviour:
     m_SaveData: []
     m_OverlaysVisible: 1
   m_Spl:
-    ID: 127
+    ID: 132
     splitterInitialOffset: 161
     currentActiveSplitter: -1
     realSizes:
@@ -393,8 +393,8 @@ MonoBehaviour:
       uniqueId: '[Thesis-OPTCG][suite]'
       name: Thesis-OPTCG
       fullName: Thesis-OPTCG
-      resultStatus: 1
-      duration: 6.518373
+      resultStatus: 0
+      duration: 51.833244
       messages: 
       output: 
       stacktrace: 
@@ -409,8 +409,8 @@ MonoBehaviour:
       uniqueId: '[PlayModeTests][F:/Thesis/Thesis-OPTCG/Library/ScriptAssemblies/PlayModeTests.dll][suite]'
       name: PlayModeTests.dll
       fullName: F:/Thesis/Thesis-OPTCG/Library/ScriptAssemblies/PlayModeTests.dll
-      resultStatus: 1
-      duration: 6.5015087
+      resultStatus: 0
+      duration: 51.813168
       messages: 
       output: 
       stacktrace: 
@@ -425,8 +425,8 @@ MonoBehaviour:
       uniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
       name: MenuTests
       fullName: MenuTests
-      resultStatus: 1
-      duration: 6.4977555
+      resultStatus: 0
+      duration: 51.807533
       messages: 
       output: 
       stacktrace: 
@@ -437,18 +437,86 @@ MonoBehaviour:
       categories: []
       parentId: 1009
       parentUniqueId: '[PlayModeTests][F:/Thesis/Thesis-OPTCG/Library/ScriptAssemblies/PlayModeTests.dll][suite]'
-    - id: 1015
-      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.DeckBuilderTest]
-      name: DeckBuilderTest
-      fullName: MenuTests.DeckBuilderTest
-      resultStatus: 1
-      duration: 6.449018
+    - id: 1006
+      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.ConnectGamePanelTest]
+      name: ConnectGamePanelTest
+      fullName: MenuTests.ConnectGamePanelTest
+      resultStatus: 0
+      duration: 6.114956
       messages: 
       output: 'Register
 
-        {"UserName":"Test46793","Password":"Test-46793","ConfirmPassword":"Test-46793"}
+        {"UserName":"Test50786","Password":"Test-50786","ConfirmPassword":"Test-50786"}
 
-        http://localhost:5000/api/Account/register
+        https://gabcsika.picidolgok.hu/api/Account/register
+
+        Registration
+        successful: {"message":"Registration successful!"}
+
+        Received: ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+        Received:
+        ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+        Received:
+        ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
+    - id: 1007
+      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.CreateGamePanelTest]
+      name: CreateGamePanelTest
+      fullName: MenuTests.CreateGamePanelTest
+      resultStatus: 0
+      duration: 0.5062985
+      messages: 
+      output: 'Register
+
+        {"UserName":"Test59282","Password":"Test-59282","ConfirmPassword":"Test-59282"}
+
+        https://gabcsika.picidolgok.hu/api/Account/register
+
+        Registration
+        successful: {"message":"Registration successful!"}
+
+        Received: ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+        Received:
+        ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+        Received:
+        ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
+    - id: 1006
+      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.DeckBuilderDefaultTest]
+      name: DeckBuilderDefaultTest
+      fullName: MenuTests.DeckBuilderDefaultTest
+      resultStatus: 0
+      duration: 1.1895645
+      messages: 
+      output: 'Register
+
+        {"UserName":"Test63798","Password":"Test-63798","ConfirmPassword":"Test-63798"}
+
+        https://gabcsika.picidolgok.hu/api/Account/register
 
         Registration
         successful: {"message":"Registration successful!"}
@@ -466,34 +534,190 @@ MonoBehaviour:
       isSuite: 0
       categories:
       - Uncategorized
-      parentId: 1010
+      parentId: 1001
+      parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
+    - id: 1007
+      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.DeckBuilderDropDownTest]
+      name: DeckBuilderDropDownTest
+      fullName: MenuTests.DeckBuilderDropDownTest
+      resultStatus: 0
+      duration: 5.0209284
+      messages: 
+      output: 'Register
+
+        {"UserName":"Test80576","Password":"Test-80576","ConfirmPassword":"Test-80576"}
+
+        https://gabcsika.picidolgok.hu/api/Account/register
+
+        Registration
+        successful: {"message":"Registration successful!"}
+
+        Received: ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+        Received:
+        ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
+    - id: 1007
+      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.DeckBuilderLeaderSelectTest]
+      name: DeckBuilderLeaderSelectTest
+      fullName: MenuTests.DeckBuilderLeaderSelectTest
+      resultStatus: 0
+      duration: 3.667416
+      messages: 
+      output: "Register\r\n{\"UserName\":\"Test68703\",\"Password\":\"Test-68703\",\"ConfirmPassword\":\"Test-68703\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
+        successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
+        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nK\xE9p
+        kattintva: OP01-001\r\n"
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
+    - id: 1008
+      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.DeckBuilderNewDeckTest]
+      name: DeckBuilderNewDeckTest
+      fullName: MenuTests.DeckBuilderNewDeckTest
+      resultStatus: 0
+      duration: 4.917593
+      messages: 
+      output: 'Register
+
+        {"UserName":"Test86102","Password":"Test-86102","ConfirmPassword":"Test-86102"}
+
+        https://gabcsika.picidolgok.hu/api/Account/register
+
+        Registration
+        successful: {"message":"Registration successful!"}
+
+        Received: ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+        Received:
+        ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
+
+'
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
+    - id: 1009
+      uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.DeckBuilderSaveDeckTest]
+      name: DeckBuilderSaveDeckTest
+      fullName: MenuTests.DeckBuilderSaveDeckTest
+      resultStatus: 0
+      duration: 22.037079
+      messages: 
+      output: "Register\r\n{\"UserName\":\"Test42760\",\"Password\":\"Test-42760\",\"ConfirmPassword\":\"Test-42760\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
+        successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
+        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nRemoving
+        from selected\r\nK\xE9p kattintva: OP01-004\r\nK\xE9p kattintva: OP01-001\r\nK\xE9p
+        kattintva: OP01-005\r\nK\xE9p kattintva: OP01-005\r\nK\xE9p kattintva: OP01-005\r\nK\xE9p
+        kattintva: OP01-005\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-006\r\nK\xE9p kattintva: OP01-006\r\nK\xE9p kattintva: OP01-006\r\nK\xE9p
+        kattintva: OP01-006\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-007\r\nK\xE9p kattintva: OP01-007\r\nK\xE9p kattintva: OP01-007\r\nK\xE9p
+        kattintva: OP01-007\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-008\r\nK\xE9p kattintva: OP01-008\r\nK\xE9p kattintva: OP01-008\r\nK\xE9p
+        kattintva: OP01-008\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-009\r\nK\xE9p kattintva: OP01-009\r\nK\xE9p kattintva: OP01-009\r\nK\xE9p
+        kattintva: OP01-009\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-010\r\nK\xE9p kattintva: OP01-010\r\nK\xE9p kattintva: OP01-010\r\nK\xE9p
+        kattintva: OP01-010\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-011\r\nK\xE9p kattintva: OP01-011\r\nK\xE9p kattintva: OP01-011\r\nK\xE9p
+        kattintva: OP01-011\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-012\r\nK\xE9p kattintva: OP01-012\r\nK\xE9p kattintva: OP01-012\r\nK\xE9p
+        kattintva: OP01-012\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-013\r\nK\xE9p kattintva: OP01-013\r\nK\xE9p kattintva: OP01-013\r\nK\xE9p
+        kattintva: OP01-013\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-014\r\nK\xE9p kattintva: OP01-014\r\nK\xE9p kattintva: OP01-014\r\nK\xE9p
+        kattintva: OP01-014\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-015\r\nK\xE9p kattintva: OP01-015\r\nK\xE9p kattintva: OP01-015\r\nK\xE9p
+        kattintva: OP01-015\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-016\r\nK\xE9p kattintva: OP01-016\r\nK\xE9p kattintva: OP01-016\r\nK\xE9p
+        kattintva: OP01-016\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-004\r\nK\xE9p kattintva: OP01-004\r\nK\xE9p kattintva: OP01-001\r\nK\xE9p
+        kattintva: OP01-005\r\nK\xE9p kattintva: OP01-005\r\nK\xE9p kattintva: OP01-005\r\nK\xE9p
+        kattintva: OP01-005\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-006\r\nK\xE9p kattintva: OP01-006\r\nK\xE9p kattintva: OP01-006\r\nK\xE9p
+        kattintva: OP01-006\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-007\r\nK\xE9p kattintva: OP01-007\r\nK\xE9p kattintva: OP01-007\r\nK\xE9p
+        kattintva: OP01-007\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-008\r\nK\xE9p kattintva: OP01-008\r\nK\xE9p kattintva: OP01-008\r\nK\xE9p
+        kattintva: OP01-008\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-009\r\nK\xE9p kattintva: OP01-009\r\nK\xE9p kattintva: OP01-009\r\nK\xE9p
+        kattintva: OP01-009\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-010\r\nK\xE9p kattintva: OP01-010\r\nK\xE9p kattintva: OP01-010\r\nK\xE9p
+        kattintva: OP01-010\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-011\r\nK\xE9p kattintva: OP01-011\r\nK\xE9p kattintva: OP01-011\r\nK\xE9p
+        kattintva: OP01-011\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-012\r\nK\xE9p kattintva: OP01-012\r\nK\xE9p kattintva: OP01-012\r\nK\xE9p
+        kattintva: OP01-012\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-013\r\nK\xE9p kattintva: OP01-013\r\nK\xE9p kattintva: OP01-013\r\nK\xE9p
+        kattintva: OP01-013\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-014\r\nK\xE9p kattintva: OP01-014\r\nK\xE9p kattintva: OP01-014\r\nK\xE9p
+        kattintva: OP01-014\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-015\r\nK\xE9p kattintva: OP01-015\r\nK\xE9p kattintva: OP01-015\r\nK\xE9p
+        kattintva: OP01-015\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-016\r\nK\xE9p kattintva: OP01-016\r\nK\xE9p kattintva: OP01-016\r\nK\xE9p
+        kattintva: OP01-016\r\nYou already have 4 of these card\r\nK\xE9p kattintva:
+        OP01-004\r\nK\xE9p kattintva: OP01-004\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
+        successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\",\"ST01-DefaultDeck1,1xOP01-004,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,1xST01-017\",\"TestDeck,1xOP01-001,2xOP01-004,4xOP01-005,4xOP01-006,4xOP01-007,4xOP01-008,4xOP01-009,4xOP01-010,4xOP01-011,4xOP01-012,4xOP01-013,4xOP01-014,4xOP01-015,4xOP01-016\",\"TestDeck1,1xOP01-001,2xOP01-004,4xOP01-005,4xOP01-006,4xOP01-007,4xOP01-008,4xOP01-009,4xOP01-010,4xOP01-011,4xOP01-012,4xOP01-013,4xOP01-014,4xOP01-015,4xOP01-016\"]\r\nReceived:
+        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\",\"ST01-DefaultDeck1,1xOP01-004,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,1xST01-017\",\"TestDeck,1xOP01-001,2xOP01-004,4xOP01-005,4xOP01-006,4xOP01-007,4xOP01-008,4xOP01-009,4xOP01-010,4xOP01-011,4xOP01-012,4xOP01-013,4xOP01-014,4xOP01-015,4xOP01-016\",\"TestDeck1,1xOP01-001,2xOP01-004,4xOP01-005,4xOP01-006,4xOP01-007,4xOP01-008,4xOP01-009,4xOP01-010,4xOP01-011,4xOP01-012,4xOP01-013,4xOP01-014,4xOP01-015,4xOP01-016\"]\r\n"
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
       parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
     - id: 1005
       uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.FriendRequestTests]
       name: FriendRequestTests
       fullName: MenuTests.FriendRequestTests
-      resultStatus: 1
-      duration: 4.3884206
+      resultStatus: 0
+      duration: 3.300296
       messages: 
-      output: "Register\r\n{\"UserName\":\"Test71839\",\"Password\":\"Test-71839\",\"ConfirmPassword\":\"Test-71839\"}\r\nhttp://localhost:5000/api/Account/register\r\nRegistration
-        successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nRegister\r\n{\"UserName\":\"Test59953\",\"Password\":\"Test-59953\",\"ConfirmPassword\":\"Test-59953\"}\r\nhttp://localhost:5000/api/Account/register\r\nRegistration
+      output: "Register\r\n{\"UserName\":\"Test99274\",\"Password\":\"Test-99274\",\"ConfirmPassword\":\"Test-99274\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
         successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        []\r\nReceived: []\r\nReceived: []\r\nReceived: []\r\nLogin\r\nhttp://localhost:5000/api/Account//login\r\nLogin
+        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nRegister\r\n{\"UserName\":\"Test96631\",\"Password\":\"Test-96631\",\"ConfirmPassword\":\"Test-96631\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
+        successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
+        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
+        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
+        []\r\nReceived: []\r\nReceived: []\r\nReceived: []\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        []\r\nReceived: [\"Test59953\"]\r\nLogin\r\nhttp://localhost:5000/api/Account//login\r\nLogin
+        []\r\nReceived: [\"Test96631\"]\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        []\r\nReceived: []\r\nLogin\r\nhttp://localhost:5000/api/Account//login\r\nLogin
+        []\r\nReceived: []\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        []\r\nReceived: [\"Test59953\"]\r\nReceived: [\"Test59953\"]\r\nReceived:
-        []\r\nLogin\r\nhttp://localhost:5000/api/Account//login\r\nLogin successful:
-        \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
+        []\r\nReceived: [\"Test96631\"]\r\nReceived: [\"Test96631\"]\r\nReceived:
+        []\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
+        successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        [\"Test71839\"]\r\nReceived: []\r\n"
+        [\"Test99274\"]\r\nReceived: []\r\n"
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -507,8 +731,8 @@ MonoBehaviour:
       uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.LoginAsGuestTest]
       name: LoginAsGuestTest
       fullName: MenuTests.LoginAsGuestTest
-      resultStatus: 1
-      duration: 0.2819445
+      resultStatus: 0
+      duration: 0.3812627
       messages: 
       output: 
       stacktrace: 
@@ -524,12 +748,12 @@ MonoBehaviour:
       uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.LoginTest]
       name: LoginTest
       fullName: MenuTests.LoginTest
-      resultStatus: 1
-      duration: 0.4538432
+      resultStatus: 0
+      duration: 0.5079451
       messages: 
-      output: "Login\r\nhttp://localhost:5000/api/Account//login\r\nLogin failed:
-        HTTP/1.1 401 Unauthorized\r\nLogin\r\nhttp://localhost:5000/api/Account//login\r\nLogin
-        failed: HTTP/1.1 401 Unauthorized\r\nLogin\r\nhttp://localhost:5000/api/Account//login\r\nLogin
+      output: "Login\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
+        failed: HTTP/1.1 401 Unauthorized\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
+        failed: HTTP/1.1 401 Unauthorized\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\n"
       stacktrace: 
@@ -545,14 +769,14 @@ MonoBehaviour:
       uniqueId: PlayModeTests.dll/MenuTests/[PlayModeTests][MenuTests.RegisterTest]
       name: RegisterTest
       fullName: MenuTests.RegisterTest
-      resultStatus: 1
-      duration: 3.5291905
+      resultStatus: 0
+      duration: 3.532522
       messages: 
       output: 'Register
 
         {"UserName":"Default","Password":"Default","ConfirmPassword":"Default"}
 
-        http://localhost:5000/api/Account/register
+        https://gabcsika.picidolgok.hu/api/Account/register
 
         Registration
         failed: HTTP/1.1 400 Bad Request
@@ -561,16 +785,16 @@ MonoBehaviour:
 
         {"UserName":"Test","Password":"Test","ConfirmPassword":"Test"}
 
-        http://localhost:5000/api/Account/register
+        https://gabcsika.picidolgok.hu/api/Account/register
 
         Registration
         failed: HTTP/1.1 400 Bad Request
 
         Register
 
-        {"UserName":"Test19688","Password":"Test-19688","ConfirmPassword":"Test-19688"}
+        {"UserName":"Test96994","Password":"Test-96994","ConfirmPassword":"Test-96994"}
 
-        http://localhost:5000/api/Account/register
+        https://gabcsika.picidolgok.hu/api/Account/register
 
         Registration
         successful: {"message":"Registration successful!"}
@@ -590,28 +814,12 @@ MonoBehaviour:
       - Uncategorized
       parentId: 1006
       parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
-    m_ResultText: 'DeckBuilderTest (6,449s)
-
-      ---
-
-      Register
-
-      {"UserName":"Test46793","Password":"Test-46793","ConfirmPassword":"Test-46793"}
-
-      http://localhost:5000/api/Account/register
-
-      Registration
-      successful: {"message":"Registration successful!"}
-
-      Received: ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]
-
-      Received:
-      ["ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017"]'
+    m_ResultText: 
     m_ResultStacktrace: 
     m_TestListState:
-      scrollPos: {x: 0, y: 42}
-      m_SelectedIDs: 5af58264
-      m_LastClickedID: 1686304090
+      scrollPos: {x: 0, y: 0}
+      m_SelectedIDs: 01e931dc
+      m_LastClickedID: -600708863
       m_ExpandedIDs: 924e18e653b17b4577c23471ffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -922,7 +1130,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 0c39fbffb239fbfff644fbff0647fbffac47fbfff052fbff0055fbffa655fbffea60fbfff862fbff9e63fbff526cfbff646efbff086ffbff4a77fbffce7afbff227ffbff287ffbffce7ffbff4ab4fbff60b6fbff04b7fbffeab7fbffe0b8fbff86b9fbffd6ddfbff36e1fbffdce1fbffb400fcff6e01fcff1402fcfff220fcff0023fcffa623fcff8442fcff9644fcff3c45fcffca63fcff2a67fcffd067fcff5e86fcff6a88fcff1089fcff9ea7fcffaca9fcff52aafcff14befcff24c0fcffcac0fcff8cd4fcff98d6fcff3ed7fcff00ebfcff10edfcffb6edfcff7801fdffd003fdff7604fdff3818fdff441afdffea1afdff141dfdff261dfdff2e1dfdffea1dfdfff61dfdff001efdff101efdff701efdff7822fdff9422fdff7c2ffdff9431fdff3a32fdff0a34fdffc634fdffd234fdffdc34fdffec34fdff4c35fdff5439fdff7039fdff5846fdff6c48fdff1249fdffe24bfdffec4bfdfffc4bfdff044cfdff0c50fdff2850fdff105dfdff645ffdff0a60fdffcc73fdffd875fdff7e76fdff408afdff4e8cfdfff48cfdffb0a0fdff6aa1fdff10a2fdffd2b5fdffe0b7fdff86b8fdff02ccfdff0ecefdffb4cefdff76e2fdff82e4fdff28e5fdffa4f8fdffb8fafdff5efbfdff7609feff760bfeff1c0cfeff621afeff601cfeff061dfeff462bfeffb82cfeff5e2dfeff9e3bfeffae3dfeff543efeff664cfeff744efeff1a4ffeff325dfeff325ffeffd85ffeff186efeff2870feffce70feffe07efeffe080feff8681feffc68ffeffe091feff8692feff02a6feff12a8feffb8a8feffd6b6feff96b7feff3cb8feff5ac6feff72c8feff18c9feff30d7feff4ad9fefff0d9fefff8e7feff80ebfeff26ecfeff3efafeff4afcfefff0fcfeff080bffff1a0dffffc00dffffd81bffffe41dffff8a1effff9c2cffff5c2dffff022effff1a3cffff283effffce3effffe64cffffe64effff8a4fffff8c55ffff5a59ffff6c59ffff125affff2468ffff326affffd86afffff478ffff047bffffaa7bffffc289ffffcc8bffff728cffff849affff8e9cffff349dffff40abfffff8abffff9eacffff82b4ffff9eb4ffff1cbcffff2ebeffffd4beffff08cdffff1ccfffffc2cfffffd8ddffff10e0ffffb6e0ffffc8eeffff90efffff36f0ffff04f9ffff1afbffff
+      m_ExpandedIDs: 208fddffc68fddffe091deffa898deff4e99deff5e9bdfff169cdfffbc9cdfff2422e0ff1e23e0ffc423e0ffd425e1ff8c26e1ff3227e1fff42fe1ffae32e1ff5433e1ff183ce1ffd23ce1ff763de1ffae44e1ff0849e1ff0a49e1ffb049e1ff7452e1fff054e1ff9655e1ff585ee1ffe461e1ff8a62e1ff4c6be1ff0672e1ffac72e1ff707be1fffe7ee1ffa47fe1ff6288e1ff1a89e1ffbe89e1ff44a2e1ff56a2e1ff8aa2e1ffa0a2e1ffb6a2e1ffcca2e1ff26a3e1ff3ca3e1ff0cb1e1ff24b1e1ffcab1e1fff8a8e2ffc2a9e2ff68aae2ff90a1e3ff4aa2e3fff0a2e3ffb00ae4ffee0ce4ff940de4ff5875e4ffe678e4ff8c79e4ff6ce2e4fface4e4ff52e5e4ff164de5ff524fe5fff84fe5ffdcb6e5ff44c5e5ffeac5e5ff24b5e6ffdcb5e6ff82b6e6ff326be7ffec6be7ff926ce7ff68cce7ff24d0e7ffcad0e7ff9a30e8ff5231e8fff831e8ff444ee8ff8250e8ff2851e8ff1ab2e8ffe8b2e8ff8eb3e8ff5e13e9ff1814e9ffbe14e9ff843ae9ff143ee9ffba3ee9ff8c9ee9ffe6a0e9ff8ca1e9ff6201eaff9e06eaff4407eaff3868eaff766aeaff1c6beafff2caeaffb6cbeaff5ccceaff2c2cebffe82cebff8e2debff5e8debff188eebffbe8eebff94eeebff06f0ebffacf0ebffb850ecff9051ecff3652ecff02b2ecffbab2ecff60b3ecff8c14edff4615edffec15edffa88dedff608eedff048fedff02b8edffa6b8edff0ce6edffb2e6edffdc39eeff943aeeff3a3beeff3693eefff093eeff9694eeffe2b0eeffe0b2eeff84b3eeff4cedeefff2edeeff1e42efffda4befff7e4cefff9075efff3676efff3eb9effff8b9efff9ebaefff8cfdefffcc02f0ff7203f0ff5a46f0ff1447f0ffba47f0ff0e8df0ff5a8ff0ff0090f0ff62cff0ff1ad0f0ffc0d0f0ff2c11f1ff6a13f1ff1014f1ffde52f1ff1c55f1ffc255f1ffa694f1ff6695f1ff0c96f1ff52b2f1ff0ab3f1ffb0b3f1fff0f3f1ff6af9f1ff10faf1ff4435f2ff8237f2ff2838f2ff6e54f2ff2655f2ffcc55f2fff890f2ffb291f2ff5892f2ffa4aef2ff5caff2ff00b0f2ff280bf3ffce0bf3fff846f3ffb047f3ff5648f3ff3a84f3fff284f3ff9885f3ffcac0f3ffbad9f3ff60daf3ffc807f4ff8208f4ff2809f4ff543ff4ff9041f4ff3642f4ffce6ff4ff5a73f4ff0074f4ff7690f4ff3299f4ff949af4ff9ca2f4ffa4a2f4ff4aa3f4ff48d3f4ffd4d9f4ff7adaf4ff300cf5fff012f5ff9613f5ffdc41f5ff1847f5ffbe47f5ff3672f5ff4072f5ff5072f5ff8674f5ffd675f5ff2e7bf5ff307bf5ff447df5ff007ef5ffa67ef5fffcb4f5ff76bdf5ff1cbef5ffc203f6ff7e07f6ff2408f6ffa23df6ff6041f6ff0642f6ff8477f6ff407bf6ffe67bf6ff8cc1f6ffd4c3f6ff7ac4f6fff8f9f6ff06fff6ffacfff6ffec2df7ffa62ef7ff4c2ff7ff925df7ff5061f7fff661f7ff4098f7ff7c9af7ff229bf7ff68c9f7ffb200f8ff5801f8ff9426f8ff5027f8fff627f8ff1845f8ffd445f8ff7a46f8ffb46bf8ff6e6cf8ff146df8ff5492f8ff9294f8ff3895f8ff78baf8ff7acff8ff20d0f8ff60f5f8ffeef8f8ff94f9f8ffd41ef9ff1021f9ffb621f9fff646f9ffb447f9ff5a48f9ff9a6df9ff6071f9ff0672f9ff4097f9fffa97f9ffa098f9ffc8b5f9ff08b8f9ffaeb8f9ffe8ddf9ffa4def9ff4adff9ff8a04faff8e06faff3407faff742cfaff982efaff3e2ffaff1257faff2059faffc659faff9a81faffa683faff4c84faffceacfaffdaaefaff80affaff54d7faff5ed9faff04dafaffd601fbff9202fbff3803fbff5e20fbff1a21fbffc021fbffe63efbffa23ffbff4840fbff2068fbff2c6afbffd26afbffb6fdfbffd4fffbff7a00fcff8278fcff4c79fcfff279fcfffaf1fcffb0f2fcff56f3fcff646bfdff7a6dfdff206efdff70c3fdff38c4fdffdec4fdffec3cfefffa3efeffa03ffeff48a1feff54a3fefffaa3feffb615ffff7016ffff1617ffffc278ffff8c79ffff327affff02ecffff24eeffffcaeeffff98f7ffff1afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1328,9 +1536,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 1523.0375, y: 509.28827, z: -1.4791237}
+    m_Target: {x: 1061.623, y: 406.25537, z: -1.0909091}
     speed: 2
-    m_Value: {x: 1523.0375, y: 509.28827, z: -1.4791237}
+    m_Value: {x: 1061.623, y: 406.25537, z: -1.0909091}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1380,9 +1588,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 436.34326
+    m_Target: 917.1748
     speed: 2
-    m_Value: 436.34326
+    m_Value: 917.1748
   m_Ortho:
     m_Target: 1
     speed: 2
