@@ -265,6 +265,7 @@ namespace TCGSim.CardScripts
 
         public async void SendCardToServer()
         {
+            if (GameManager.Instance.currentState == GameState.TESTING) { return; }
             await UnityMainThreadDispatcher.RunOnMainThread(async () =>
             {
                 await ServerCon.Instance.UpdateCardAtInGameStateDB(this);
@@ -320,7 +321,7 @@ namespace TCGSim.CardScripts
                         cardImage.sprite = Resources.Load<Sprite>("Cards/Cards/" + cardData.cardID);
                         isImgLoaded = !isImgLoaded;
                     }
-                    
+
                 }
             }
             else

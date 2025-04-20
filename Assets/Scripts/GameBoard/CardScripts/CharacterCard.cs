@@ -10,7 +10,7 @@ using UnityEngine.EventSystems;
 
 public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    private LineRenderer lineRenderer;
+    public LineRenderer lineRenderer { get; private set; }
     private Vector2 mousePos;
     private Vector2 startMousePos;
     private bool drawing = false;
@@ -100,6 +100,7 @@ public class CharacterCard : Card, IPointerClickHandler, IPointerDownHandler, IP
             else
             {
                 lineRenderer.SetPosition(1, card.transform.position);
+                lineRenderer.SetPosition(0, this.transform.position);
                 CardAttacks?.Invoke(card);
             }
             drawing = false;

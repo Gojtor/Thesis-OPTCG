@@ -86,7 +86,7 @@ namespace TCGSim
             }
         }
 
-        public void AddCounterPower(string toCardID, string counterCardID,int counterValue)
+        public void AddCounterPower(string toCardID, string counterCardID, int counterValue)
         {
             UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
@@ -102,10 +102,10 @@ namespace TCGSim
                     characterCard.AddToPlusPower(counterValue);
                     characterCard.MakeOrUpdatePlusPowerSeenOnCard();
                 }
-            });  
+            });
         }
 
-        public void AddPlusPowerToCard(string fromCardID,string toCardID,int plusPower)
+        public void AddPlusPowerToCard(string fromCardID, string toCardID, int plusPower)
         {
             UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
@@ -130,7 +130,7 @@ namespace TCGSim
             List<Card> cardsUnderGivenPower = new List<Card>();
             foreach (Card card in cards)
             {
-                if(card.transform.parent==EnemyBoard.Instance.characterAreaObject.transform && card.cardData.power <= underThisPower)
+                if (card.transform.parent == EnemyBoard.Instance.characterAreaObject.transform && card.cardData.power <= underThisPower)
                 {
                     cardsUnderGivenPower.Add(card);
                 }
@@ -178,7 +178,7 @@ namespace TCGSim
                 card.LoadDataFromCardData(newCardData);
                 card.UpdateEnemyCardAfterDataLoad();
             });
-            
+
             await Task.CompletedTask;
         }
 
@@ -236,15 +236,39 @@ namespace TCGSim
                         card = null;
                         break;
                 }
-                if(card != null)
+                if (card != null)
                 {
                     card.LoadDataFromCardData(cardData);
                     card.Init();
                     this.SetCardParentByNameString(cardData.currentParent, card);
                     deck.Add(card);
-                }  
+                }
             }
             return deck;
         }
+
+        public void CreateMockCard()
+        {
+            GameObject cardObj = Instantiate(cardPrefab, characterAreaObject.transform);
+            cardObj.AddComponent<CharacterCard>();
+            CharacterCard card = cardObj.GetComponent<CharacterCard>();
+
+            CardData fakeData = new CardData
+            {
+
+                cardID = "ST01-002",
+                cardName = "Test Card " + 2,
+                cardType = CardType.CHARACTER,
+                power = 1000,
+                cost = 1
+            };
+            card.Init(handObject, fakeData.cardID);
+            card.LoadDataFromCardData(fakeData);
+            card.cardData.playerName = this.playerName;
+            card.SetCardActive();
+            card.FlipCard();
+            cards.Add(card);
+        }
     }
 }
+

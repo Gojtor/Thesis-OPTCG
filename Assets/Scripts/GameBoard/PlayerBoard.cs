@@ -135,7 +135,7 @@ namespace TCGSim
                 for (int i = 0; i < count; i++)
                 {
                     CardData cardData = await ServerCon.Instance.GetCardByCardID(cardNumber);
-                    UnityMainThreadDispatcher.Enqueue(() =>
+                    await UnityMainThreadDispatcher.RunOnMainThread(() =>
                     {
                         GameObject cardObj = null;
                         Card card = null;
@@ -188,6 +188,51 @@ namespace TCGSim
             return deck;
         }
 
+        public List<Card> CreateTestCards()
+        {
+            List<Card> deck = new List<Card>();
+
+            for (int i = 2; i < 18; i++)
+            {
+                GameObject cardObj = Instantiate(cardPrefab, deckObject.transform);
+                cardObj.AddComponent<CharacterCard>();
+                CharacterCard card = cardObj.GetComponent<CharacterCard>();
+
+                CardData fakeData;
+
+                if (i < 10)
+                {
+                    fakeData= new CardData
+                    {
+
+                        cardID = "ST01-00" + (i),
+                        cardName = "Test Card " + (i),
+                        cardType = CardType.CHARACTER,
+                        power = 1000,
+                        cost = 1
+                    };
+                }
+                else
+                {
+                    fakeData = new CardData
+                    {
+
+                        cardID = "ST01-0" + (i),
+                        cardName = "Test Card " + (i),
+                        cardType = CardType.CHARACTER,
+                        power = 1000,
+                        cost = 1
+                    };
+                }
+                card.LoadDataFromCardData(fakeData);
+                card.Init(handObject, fakeData.cardID);
+                card.SetCardActive();
+
+                deck.Add(card);
+            }
+
+            return deck;
+        }
         public void enableDraggingOnTopDeckCard()
         {
             if (deckObject.transform.childCount > 0)
@@ -706,12 +751,10 @@ namespace TCGSim
         }
         private void HandleMainPhase()
         {
-
             endOfTurnBtn.gameObject.SetActive(true);
             MakeLeaderAttackActive();
             MakeHandCardsDraggable();
             ActivateCharacterAreaCards();
-
         }
         private async void HandleEndPhase()
         {
@@ -1361,6 +1404,11 @@ namespace TCGSim
         public void SetEnemyFinishedStartingHand(bool finished)
         {
             this.enemyFinishedStartingHand = finished;
+        }
+
+        public void LoadDeckCardsForTesting(List<Card> cards)
+        {
+            deckCards = cards;
         }
     }
 }

@@ -53,8 +53,11 @@ public class ChatManager : MonoBehaviour
     {
         UnityMainThreadDispatcher.Enqueue(() =>
         {
-            ChatMessage chatMessage = Instantiate(chatMessagePrefab, chatContent.gameObject.transform);
-            chatMessage.SetText(message);
+            if(ChatManager.Instance != null)
+            {
+                ChatMessage chatMessage = Instantiate(chatMessagePrefab, chatContent.gameObject.transform);
+                chatMessage.SetText(message);
+            }
         }); 
     }
 }

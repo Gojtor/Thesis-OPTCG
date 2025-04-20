@@ -533,6 +533,7 @@ namespace TCGSim
             friendsBtn.gameObject.SetActive(false);
             System.Random random = new System.Random();
             GameOptions.userName = "Guest"+random.Next(10000, 100000);
+            userName = GameOptions.userName;
             GameOptions.decksJson.Add("ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017");
             playerNameText.text = GameOptions.userName;
             loggedInAsText.text = "Logged in as: " + GameOptions.userName;

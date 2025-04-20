@@ -218,7 +218,7 @@ public class DeckBuilder : MonoBehaviour
                 string currentlySelectedDeck = userDecksDropDown.options[selectedIndex].text;
                 if (cardDataDecks.ContainsKey(newDeckName))
                 {
-                    if(currentlySelectedDeck=="New deck")
+                    if (currentlySelectedDeck == "New deck")
                     {
                         newDeckName = newDeckName + cardDataDecks.Count(x => x.Key.Contains(newDeckName));
                         cardDataDecks.Add(newDeckName, selectedCards);
@@ -234,7 +234,7 @@ public class DeckBuilder : MonoBehaviour
                         userDecksDropDown.options.Insert(0, newOption);
                         userDecksDropDown.value = 0;
                         userDecksDropDown.RefreshShownValue();
-                    }  
+                    }
                 }
                 else
                 {
@@ -444,9 +444,12 @@ public class DeckBuilder : MonoBehaviour
 
     private void UnloadCardsFromAvailableArea()
     {
-        foreach (Transform child in availableCardsContent.transform)
+        if (availableCardsContent.gameObject != null || this.gameObject != null)
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in availableCardsContent.transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
 

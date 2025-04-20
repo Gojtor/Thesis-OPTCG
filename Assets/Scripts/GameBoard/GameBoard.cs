@@ -154,6 +154,11 @@ namespace TCGSim
         // Start is called before the first frame update
         async void Start()
         {
+            if (GameManager.Instance.currentState==GameState.TESTING) 
+            {
+                CreateBoardsForTesting();
+                return; 
+            }
             playerName = GameOptions.playerName;
             gameCustomID = GameOptions.gameID;
             Debug.Log(playerName + " " + gameCustomID);
@@ -223,6 +228,29 @@ namespace TCGSim
                 cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
             playerBoard.Init("PLAYERBOARD", gameCustomID, playerName);
             enemyBoard.Init("ENEMYBOARD", gameCustomID, enemyName);
+            playerBoard.gameObject.transform.Translate(0, -255, 0);
+            enemyBoard.gameObject.transform.Translate(0, 255, 0);
+            enemyBoard.gameObject.transform.Rotate(0, 0, 180);
+        }
+        private void CreateBoardsForTesting()
+        {
+            GameObject chatView = Instantiate(chatViewPrefab, this.gameObject.transform);
+            ChatManager chatManager = Instantiate(chatManagerPrefab, this.gameObject.transform).GetComponent<ChatManager>();
+            chatManager.SetChatContent(chatView.transform.GetChild(0).GetChild(0).gameObject.GetComponent<CanvasGroup>());
+            cardMagnifier = Instantiate(cardMagnifierPrefab, this.gameObject.transform).GetComponent<Image>();
+            cardMagnifier.gameObject.SetActive(false);
+            GameObject enemyBoardObj = Instantiate(boardPrefab, this.gameObject.transform);
+            enemyBoardObj.AddComponent<EnemyBoard>();
+            GameObject playerBoardObj = Instantiate(boardPrefab, this.gameObject.transform);
+            playerBoardObj.AddComponent<PlayerBoard>();
+            EnemyBoard enemyBoard = enemyBoardObj.GetComponent<EnemyBoard>();
+            enemyBoard.gameObject.name = "EnemyBoard";
+            PlayerBoard playerBoard = playerBoardObj.GetComponent<PlayerBoard>();
+            playerBoard.gameObject.name = "PlayerBoard";
+            playerBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
+                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
+            enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
+                cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
             playerBoard.gameObject.transform.Translate(0, -255, 0);
             enemyBoard.gameObject.transform.Translate(0, 255, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);

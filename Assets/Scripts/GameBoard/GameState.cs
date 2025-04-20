@@ -8,6 +8,7 @@ namespace TCGSim
 {
     public enum GameState
     {
+       TESTING,
        MAINMENU,
        INGAMEMENU,
        CONNECTING,

@@ -41,6 +41,7 @@ public class MenuTests
 
     public IEnumerator LoadMenuScene()
     {
+
         SceneManager.LoadScene("Menu", LoadSceneMode.Single);
 
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Menu");
@@ -736,6 +737,7 @@ public class MenuTests
         yield return AwaitTask(deckBuilder.OnDropdownChanged(1));
         yield return null;
         yield return new WaitUntil(() => userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text == "ST01-DefaultDeck");
+        yield return new WaitUntil(() => availableContent.transform.childCount>1);
         Assert.AreEqual("ST01-DefaultDeck", userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text);
         Assert.True(!selectLeaderText.activeInHierarchy);
         Assert.True(selectCardsText.activeInHierarchy);
@@ -749,6 +751,7 @@ public class MenuTests
         yield return AwaitTask(deckBuilder.OnDropdownChanged(0));
         yield return null;
         yield return new WaitUntil(() => userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text == "Default-NoCards");
+        yield return new WaitUntil(() => availableContent.transform.childCount > 1);
         Assert.AreEqual("Default-NoCards", userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text);
         Assert.True(selectLeaderText.activeInHierarchy);
         Assert.True(!selectCardsText.activeInHierarchy);
