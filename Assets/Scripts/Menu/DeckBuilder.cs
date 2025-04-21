@@ -444,6 +444,7 @@ public class DeckBuilder : MonoBehaviour
 
     private void UnloadCardsFromAvailableArea()
     {
+        if(availableCardsContent.gameObject==null || this == null) { return; }
         if (availableCardsContent.gameObject != null || this.gameObject != null)
         {
             foreach (Transform child in availableCardsContent.transform)

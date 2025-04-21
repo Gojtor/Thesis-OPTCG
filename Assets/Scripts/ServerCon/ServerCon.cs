@@ -30,7 +30,7 @@ namespace TCGSim
         public bool enemyFinishedWithStartingHand { get; protected set; } = false;
         private bool enemyReceivedAttackDeclaration = false;
 
-        private HubConnection connection;
+        public HubConnection connection { get; private set; }
         private TaskCompletionSource<bool> ConnectionTask;
         private TaskCompletionSource<bool> EnemyConnectionTask;
         private TaskCompletionSource<bool> AddingToGroupTask;

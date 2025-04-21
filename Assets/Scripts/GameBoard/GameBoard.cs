@@ -154,10 +154,12 @@ namespace TCGSim
         // Start is called before the first frame update
         async void Start()
         {
-            if (GameManager.Instance.currentState==GameState.TESTING) 
+            if (GameManager.Instance.currentState == GameState.TESTING)
             {
                 CreateBoardsForTesting();
-                return; 
+                ServerCon.Instance.Init(gameCustomID, playerName);
+                await ServerCon.Instance.ConnectToServer();
+                return;
             }
             playerName = GameOptions.playerName;
             gameCustomID = GameOptions.gameID;
@@ -317,9 +319,9 @@ namespace TCGSim
             });
         }
 
-        public void GameWon()
+        public async void GameWon()
         {
-            UnityMainThreadDispatcher.Enqueue(() =>
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
                 GameObject gameWonPanel = Instantiate(matchWonPrefab, this.gameObject.transform);
                 Button backToMainMenu = Instantiate(backToMainBtnPrefab, gameWonPanel.transform).GetComponent<Button>();
@@ -330,9 +332,9 @@ namespace TCGSim
             });
         }
 
-        public void GameLost()
+        public async void GameLost()
         {
-            UnityMainThreadDispatcher.Enqueue(() =>
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
                 GameObject gameLostPanel = Instantiate(matchLostPrefab, this.gameObject.transform);
                 Button backToMainMenu = Instantiate(backToMainBtnPrefab, gameLostPanel.transform).GetComponent<Button>();

@@ -12,7 +12,7 @@ namespace TCGSim
 {
     public class LeaderCard : Card, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
-        private LineRenderer lineRenderer;
+        public LineRenderer lineRenderer { get; private set; }
         private Vector2 mousePos;
         private Vector2 startMousePos;
         private bool drawing = false;
@@ -90,6 +90,7 @@ namespace TCGSim
                 }
                 else
                 {
+                    lineRenderer.SetPosition(0, this.gameObject.transform.position);
                     lineRenderer.SetPosition(1, card.transform.position);
                     CardAttacks?.Invoke(card);
                 }
@@ -134,6 +135,11 @@ namespace TCGSim
         public void ReduceLife(int amount)
         {
             life = life - amount;
+        }
+
+        public void SetLife(int amount)
+        {
+            life = amount;
         }
         private async void GameManager_OnBattlePhaseChange(BattlePhases battlePhase, Card attacker, Card attacked)
         {

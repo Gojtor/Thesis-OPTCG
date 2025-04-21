@@ -9,7 +9,22 @@ namespace TCGSim
     public class UnityMainThreadDispatcher : MonoBehaviour
     {
         private static readonly Queue<Action> executionQueue = new Queue<Action>();
+        public static bool isProcessing = false;
 
+        public static UnityMainThreadDispatcher Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(this.gameObject);
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+        }
         public static void Enqueue(Action action)
         {
             lock (executionQueue)
@@ -20,6 +35,7 @@ namespace TCGSim
 
         private void Update()
         {
+            isProcessing = true;
             while (executionQueue.Count > 0)
             {
                 Action action;
@@ -29,6 +45,7 @@ namespace TCGSim
                 }
                 action?.Invoke();
             }
+            isProcessing = false;
         }
         public static Task RunOnMainThread(Action action)
         {

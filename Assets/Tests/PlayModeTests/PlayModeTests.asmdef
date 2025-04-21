@@ -12,7 +12,9 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Microsoft.AspNetCore.SignalR.Client.Core.dll",
+        "Microsoft.AspNetCore.SignalR.Client.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

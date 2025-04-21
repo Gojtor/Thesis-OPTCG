@@ -562,6 +562,7 @@ namespace TCGSim.CardScripts
             }
             await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
+                if (this == null) { return; }
                 switch (borderType)
                 {
                     case "attack":
@@ -782,6 +783,18 @@ namespace TCGSim.CardScripts
             });
         }
 
+        public bool IsPlusPowerTextActive()
+        {
+            if (powerText != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        public string GetPowerText()
+        {
+            return powerText.transform.Find("PowerText").GetComponent<TextMeshProUGUI>().text;
+        }
         public void AddToPlusPower(int power)
         {
             plusPower = plusPower + power;
@@ -865,5 +878,13 @@ namespace TCGSim.CardScripts
             }
         }
 
+        public bool HasBorder()
+        {
+            if (border != null)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

@@ -39,9 +39,23 @@ public class MenuTests
         }
     }
 
+    private IEnumerator CreateGameManager()
+    {
+        if (GameManager.Instance != null)
+        {
+            UnityEngine.Object.Destroy(GameManager.Instance.gameObject);
+            yield return null;
+        }
+
+        GameObject gameManagerObject = new GameObject("GameManager");
+        GameManager gameManager = gameManagerObject.AddComponent<GameManager>();
+        GameManager.Instance = gameManager;
+        yield return null;
+    }
+
     public IEnumerator LoadMenuScene()
     {
-
+        yield return new WaitUntil(() =>!UnityMainThreadDispatcher.isProcessing);
         SceneManager.LoadScene("Menu", LoadSceneMode.Single);
 
         yield return new WaitUntil(() => SceneManager.GetActiveScene().name == "Menu");
@@ -52,6 +66,11 @@ public class MenuTests
         Assert.NotNull(menu, "Menu script component can be found in MainMenu object!");
 
         GameObject gameManagerObj = GameObject.Find("GameManager");
+        if (gameManagerObj == null)
+        {
+            yield return CreateGameManager();
+        }
+        gameManagerObj = GameObject.Find("GameManager");
         Assert.NotNull(gameManagerObj, "GameManager object is loaded after the scene is loaded");
         gameManager = gameManagerObj.GetComponent<GameManager>();
         Assert.NotNull(gameManager, "GameManager script component can be found in GameManager object!");

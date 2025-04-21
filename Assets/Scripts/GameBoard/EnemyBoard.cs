@@ -257,6 +257,7 @@ namespace TCGSim
             {
 
                 cardID = "ST01-002",
+                customCardID = "ST01-002-MOCKED",
                 cardName = "Test Card " + 2,
                 cardType = CardType.CHARACTER,
                 power = 1000,
@@ -269,6 +270,28 @@ namespace TCGSim
             card.FlipCard();
             cards.Add(card);
         }
+
+        public void CreateMockLeaderForTesting()
+        {
+            GameObject cardObj = Instantiate(cardPrefab, leaderObject.transform);
+            cardObj.AddComponent<LeaderCard>();
+            LeaderCard leaderCard = cardObj.GetComponent<LeaderCard>();
+
+            CardData fakeData = new CardData
+            {
+
+                cardID = "ST01-001",
+                customCardID = "ST01-001-MOCKEDLEADER",
+                cardName = "ST01-001-MOCKEDLEADER",
+                cardType = CardType.LEADER,
+                power = 1000,
+                cost = 0
+            };
+            leaderCard.Init(handObject, fakeData.cardID);
+            leaderCard.LoadDataFromCardData(fakeData);
+            leaderCard.cardData.playerName = this.playerName;
+            leaderCard.SetCardActive();
+            leaderCard.FlipCard();
+        }
     }
 }
-

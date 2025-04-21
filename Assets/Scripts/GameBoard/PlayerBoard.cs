@@ -1,3 +1,4 @@
+using Codice.Client.BaseCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -202,14 +203,15 @@ namespace TCGSim
 
                 if (i < 10)
                 {
-                    fakeData= new CardData
+                    fakeData = new CardData
                     {
 
                         cardID = "ST01-00" + (i),
                         cardName = "Test Card " + (i),
                         cardType = CardType.CHARACTER,
                         power = 1000,
-                        cost = 1
+                        cost = 1,
+                        counter = 1000
                     };
                 }
                 else
@@ -221,14 +223,59 @@ namespace TCGSim
                         cardName = "Test Card " + (i),
                         cardType = CardType.CHARACTER,
                         power = 1000,
-                        cost = 1
+                        cost = 1,
+                        counter = 1000
                     };
                 }
-                card.LoadDataFromCardData(fakeData);
-                card.Init(handObject, fakeData.cardID);
-                card.SetCardActive();
+                if (i == 17)
+                {
+                    cardObj = Instantiate(cardPrefab, deckObject.transform);
+                    cardObj.AddComponent<StageCard>();
+                    StageCard stageCard = cardObj.GetComponent<StageCard>();
+                    fakeData = new CardData
+                    {
 
-                deck.Add(card);
+                        cardID = "ST01-0" + (i),
+                        cardName = "ST01-0" + (i),
+                        cardType = CardType.STAGE,
+                        power = 0,
+                        cost = 1
+                    };
+                    stageCard.LoadDataFromCardData(fakeData);
+                    stageCard.Init(handObject, fakeData.cardID);
+                    stageCard.SetCardActive();
+
+                    deck.Add(stageCard);
+                }
+                else if (i == 14 || i == 15 || i == 16)
+                {
+                    cardObj = Instantiate(cardPrefab, deckObject.transform);
+                    cardObj.AddComponent<EventCard>();
+                    EventCard eventCard = cardObj.GetComponent<EventCard>();
+                    fakeData = new CardData
+                    {
+
+                        cardID = "ST01-0" + (i),
+                        cardName = "ST01-0" + (i),
+                        cardType = CardType.EVENT,
+                        power = 0,
+                        cost = 1
+                    };
+                    eventCard.LoadDataFromCardData(fakeData);
+                    eventCard.Init(handObject, fakeData.cardID);
+                    eventCard.SetCardActive();
+
+                    deck.Add(eventCard);
+                }
+                else
+                {
+                    card.LoadDataFromCardData(fakeData);
+                    card.Init(handObject, fakeData.cardID);
+                    card.SetCardActive();
+
+                    deck.Add(card);
+                }
+
             }
 
             return deck;
@@ -720,11 +767,11 @@ namespace TCGSim
         }
         private async void HandleDONPhase()
         {
+            if (this == null || donDeckObject == null) { return; }
             if (deckCards.Count == 0)
             {
-                await ServerCon.Instance.EnemyWon();
                 ChatManager.Instance.AddMessage("Your deck count has reached zero! You lost!");
-                GameBoard.Instance.GameLost();
+                GameManager.Instance.ChangeGameState(GameState.MATCHLOST);
             }
             if (this.activeDon == 10)
             {
@@ -802,6 +849,7 @@ namespace TCGSim
         {
             await UnityMainThreadDispatcher.RunOnMainThread(async () =>
             {
+                if (attacker == null || attacked == null || this == null) { return; }
                 string attackerID = attacker.cardData.customCardID;
                 string attackedID = attacked.cardData.customCardID;
                 bool thereIsWhenAttacking = false;
@@ -822,12 +870,14 @@ namespace TCGSim
                         }
                     }
                 }
+
                 await ServerCon.Instance.AttackedEnemyCard(attackerID, attackedID, attacker.cardData.power + attacker.plusPower, thereIsWhenAttacking);
             });
         }
 
         public void RemoveOtherCardsBorderForBattle()
         {
+            if (leaderCard == null || characterAreaCards == null) { return; }
             leaderCard.RemoveBorderForThisCard();
             foreach (Card card in characterAreaCards)
             {
@@ -903,7 +953,7 @@ namespace TCGSim
             {
                 card.SetAttacker(attacker);
                 card.CardClickedWithLeftMouseForBlocking += BlockerCard_CardClickedWithLeftMouse;
-                card.MakeBorderForThisCard(Color.yellow,"block");
+                card.MakeBorderForThisCard(Color.yellow, "block");
             }
         }
 
@@ -942,15 +992,15 @@ namespace TCGSim
         {
             this.blockPowerReq = -1;
             this.havingBlockReq = false;
-            foreach(Card cardInHand in handObject.hand)
+            foreach (Card cardInHand in handObject.hand)
             {
                 if (cardInHand.effects != null)
                 {
                     foreach (Effects effect in cardInHand.effects)
                     {
-                        if (effect.triggerType==EffectTriggerTypes.Counter)
+                        if (effect.triggerType == EffectTriggerTypes.Counter)
                         {
-                                effect.cardEffect?.Activate(cardInHand);
+                            effect.cardEffect?.Activate(cardInHand);
                         }
                     }
                 }
@@ -987,7 +1037,7 @@ namespace TCGSim
             {
                 card.SetAttacked(attacked);
                 card.CardClickedWithLeftMouseForCountering += Card_CardClickedWithLeftMouseForCountering;
-                card.MakeBorderForThisCard(Color.green,"counter");
+                card.MakeBorderForThisCard(Color.green, "counter");
             }
         }
 
@@ -1078,7 +1128,7 @@ namespace TCGSim
         {
             if (leaderCard.canAttack)
             {
-                leaderCard.MakeBorderForThisCard(Color.green,"attack");
+                leaderCard.MakeBorderForThisCard(Color.green, "attack");
             }
             foreach (Card card in characterAreaCards)
             {
@@ -1381,11 +1431,11 @@ namespace TCGSim
 
         public async void GiveCounterToCurrentlyAttackedCard(Card counterGiverCard, int counterPower)
         {
-            if (currentlyAttackedCard != null && GameManager.Instance.currentBattlePhase==BattlePhases.COUNTERSTEP)
+            if (currentlyAttackedCard != null && GameManager.Instance.currentBattlePhase == BattlePhases.COUNTERSTEP)
             {
                 currentlyAttackedCard.AddToPlusPower(counterPower);
                 currentlyAttackedCard.MakeOrUpdatePlusPowerSeenOnCard();
-                await ServerCon.Instance.AddPlusPowerFromCounterToEnemy(currentlyAttackedCard.cardData.customCardID, counterGiverCard.cardData.customCardID,counterPower);
+                await ServerCon.Instance.AddPlusPowerFromCounterToEnemy(currentlyAttackedCard.cardData.customCardID, counterGiverCard.cardData.customCardID, counterPower);
             }
         }
 
@@ -1409,6 +1459,30 @@ namespace TCGSim
         public void LoadDeckCardsForTesting(List<Card> cards)
         {
             deckCards = cards;
+        }
+
+        public void CreateMockLeaderForTesting()
+        {
+            GameObject cardObj = Instantiate(cardPrefab, leaderObject.transform);
+            cardObj.AddComponent<LeaderCard>();
+            LeaderCard leaderCard = cardObj.GetComponent<LeaderCard>();
+
+            CardData fakeData = new CardData
+            {
+
+                cardID = "ST01-001",
+                customCardID = "ST01-001-MOCKEDLEADER",
+                cardName = "ST01-001-MOCKEDLEADER",
+                cardType = CardType.LEADER,
+                power = 1000,
+                cost = 0
+            };
+            leaderCard.Init(handObject, fakeData.cardID);
+            leaderCard.LoadDataFromCardData(fakeData);
+            leaderCard.cardData.playerName = this.playerName;
+            leaderCard.SetCardActive();
+            leaderCard.FlipCard();
+            this.leaderCard = leaderCard;
         }
     }
 }

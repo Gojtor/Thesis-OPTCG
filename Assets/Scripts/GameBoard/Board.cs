@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Threading.Tasks;
+using TCGSim.CardResources;
 
 public abstract class Board : MonoBehaviour
 {
@@ -325,6 +326,7 @@ public abstract class Board : MonoBehaviour
 
     public void enableDraggingOnTopTwoDonCard()
     {
+        if(this == null || donDeckObject == null) { return; }
         if (donDeckObject.transform.childCount > 1)
         {
             donDeckObject.transform.GetChild(donDeckObject.transform.childCount - 1).GetComponent<Card>().ChangeDraggable(true);
