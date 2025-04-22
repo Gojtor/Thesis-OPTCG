@@ -456,6 +456,7 @@ public class DeckBuilder : MonoBehaviour
 
     public async Task PopulateScrollViewWithLeaders()
     {
+        if (this == null || availableCardsContent == null) { return; }
         UnloadCardsFromAvailableArea();
         foreach (Sprite sprite in leaderSprites)
         {

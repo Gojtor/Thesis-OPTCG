@@ -765,7 +765,7 @@ namespace TCGSim
                 GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.DONPHASE);
             }
         }
-        private async void HandleDONPhase()
+        private void HandleDONPhase()
         {
             if (this == null || donDeckObject == null) { return; }
             if (deckCards.Count == 0)
@@ -810,12 +810,12 @@ namespace TCGSim
             DeactivateAttackOnLeader();
             DeactivateAttackOnCharacterAreaCards();
             TurnOffDraggableOnAllDon();
-            await ServerCon.Instance.ChangeEnemyGameStateToPlayerPhase(gameCustomID);
-            UnityMainThreadDispatcher.Enqueue(() =>
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
                 GameManager.Instance.ChangeGameState(GameState.ENEMYPHASE);
                 endOfTurnBtn.gameObject.SetActive(false);
             });
+            await ServerCon.Instance.ChangeEnemyGameStateToPlayerPhase(gameCustomID);
         }
 
         public override void GameManagerOnBattlePhaseChange(BattlePhases battlePhase, Card attacker, Card attacked)

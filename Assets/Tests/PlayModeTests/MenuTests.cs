@@ -752,9 +752,8 @@ public class MenuTests
 
         userDeckDrop.GetComponent<TMP_Dropdown>().value = 1;
         userDeckDrop.GetComponent<TMP_Dropdown>().RefreshShownValue();
-        yield return null;
         yield return AwaitTask(deckBuilder.OnDropdownChanged(1));
-        yield return null;
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
         yield return new WaitUntil(() => userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text == "ST01-DefaultDeck");
         yield return new WaitUntil(() => availableContent.transform.childCount>1);
         Assert.AreEqual("ST01-DefaultDeck", userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text);
@@ -894,9 +893,8 @@ public class MenuTests
         yield return new WaitUntil(() => userDeckDrop.GetComponent<TMP_Dropdown>().options.Count == 2);
         userDeckDrop.GetComponent<TMP_Dropdown>().value = 1;
         userDeckDrop.GetComponent<TMP_Dropdown>().RefreshShownValue();
-        yield return null;
         yield return AwaitTask(deckBuilder.OnDropdownChanged(1));
-        yield return null;
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
         yield return new WaitUntil(() => userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text == "ST01-DefaultDeck");
         Assert.AreEqual("ST01-DefaultDeck", userDeckDrop.transform.Find("Label").GetComponent<TextMeshProUGUI>().text);
         Assert.True(!selectLeaderText.activeInHierarchy);

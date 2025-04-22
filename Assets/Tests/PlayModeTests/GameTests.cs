@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using TCGSim;
 using TCGSim.CardResources;
 using TCGSim.CardScripts;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -1682,5 +1684,363 @@ public class GameTests : MonoBehaviour
             }
         }
 
+    }
+
+    [UnityTest]
+    public IEnumerator CardEffectsTest()
+    {
+        yield return LoadSceneAndInitBoards();
+        Assert.IsTrue(PlayerBoard.Instance.deckCards.Count > 0, "There is no cards in deck");
+
+        Assert.AreEqual(0, EnemyBoard.Instance.cards.Count);
+        EnemyBoard.Instance.CreateMockCard();
+        Assert.AreEqual(1, EnemyBoard.Instance.cards.Count);
+
+        Card enemyMockCard = EnemyBoard.Instance.cards[0];
+        Assert.NotNull(enemyMockCard);
+        enemyMockCard.Rest();
+
+        DonCard topDon;
+        for (int i = 0; i < 10; i++)
+        {
+            topDon = PlayerBoard.Instance.donCardsInDeck.First().GetComponent<DonCard>();
+            PlayerBoard.Instance.MoveDonFromDeckToCostArea(topDon);
+            topDon.SetCardActive();
+            topDon.ChangeDraggable(true);
+            Assert.AreEqual(PlayerBoard.Instance.costAreaObject.transform, topDon.transform.parent, "Moved don card parent is not correct");
+        }
+
+        yield return AwaitTaskWithReturn(PlayerBoard.Instance.CreateCardsFromDeck(), result => PlayerBoard.Instance.LoadDeckCardsForTesting(result));
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+
+        CharacterCard usopp = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-002").First().GetComponent<CharacterCard>();
+        CharacterCard sanji = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-004").First().GetComponent<CharacterCard>();
+        CharacterCard jinbe = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-005").First().GetComponent<CharacterCard>();
+        CharacterCard nami = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-007").First().GetComponent<CharacterCard>();
+        CharacterCard brook = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-011").First().GetComponent<CharacterCard>();
+        CharacterCard luffy = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-012").First().GetComponent<CharacterCard>();
+        CharacterCard zoro = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-013").First().GetComponent<CharacterCard>();
+        EventCard guardPoint = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-014").First().GetComponent<EventCard>();
+        EventCard jetPistol = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-015").First().GetComponent<EventCard>();
+        EventCard diableJambe = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-016").First().GetComponent<EventCard>();
+        StageCard sunny = PlayerBoard.Instance.deckCards.Where(x => x.cardData.cardID == "ST01-017").First().GetComponent<StageCard>();
+
+        //Testing Usopp effect activation
+        PlayerBoard.Instance.AddCardToHandFromDeck(usopp, true, false);
+        PlayerBoard.Instance.MoveCardFromHandToCharacterArea(usopp);
+        usopp.SetCardActive();
+        usopp.CardCanAttack();
+        yield return new WaitUntil(() => usopp.lineRenderer != null);
+        Assert.True(usopp.HasBorder());
+        Assert.True(usopp.canAttack);
+
+
+        yield return new WaitUntil(() => usopp.lineRenderer != null);
+        var pointer = new PointerEventData(EventSystem.current);
+        Vector2 start = Camera.main.WorldToScreenPoint(usopp.transform.position);
+        Vector2 end = Camera.main.WorldToScreenPoint(enemyMockCard.transform.position);
+        pointer.position = start;
+        ExecuteEvents.Execute(usopp.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+        pointer.position = end;
+        pointer.pointerEnter = enemyMockCard.gameObject;
+        ExecuteEvents.Execute(usopp.gameObject, pointer, ExecuteEvents.pointerUpHandler);
+
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        foreach (Effects effect in usopp.effects)
+        {
+            if (effect.triggerType == EffectTriggerTypes.WhenAttacking)
+            {
+                Assert.False(WhenAttackingEnemyCantBlockOver.activated);
+            }
+        }
+        usopp.Restand(true, true);
+        usopp.lineRenderer.enabled = false;
+
+        //Attaching don to Usopp
+        Vector2 startPos;
+        Vector2 endPos;
+        GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+
+        for (int i = 0; i < 2; i++)
+        {
+            DonCard don = PlayerBoard.Instance.donInCostArea[i].GetComponent<DonCard>();
+            startPos = Camera.main.WorldToScreenPoint(don.gameObject.transform.position);
+            endPos = Camera.main.WorldToScreenPoint(usopp.transform.position);
+            pointer = new PointerEventData(EventSystem.current)
+            {
+                position = startPos
+            };
+            ExecuteEvents.Execute(don.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+            ExecuteEvents.Execute(don.gameObject, pointer, ExecuteEvents.beginDragHandler);
+            pointer.position = endPos;
+            pointer.pointerEnter = usopp.gameObject;
+            ExecuteEvents.Execute(don.gameObject, pointer, ExecuteEvents.dragHandler);
+            ExecuteEvents.Execute(don.gameObject, pointer, ExecuteEvents.endDragHandler);
+            yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        }
+        Assert.AreEqual(2000, usopp.plusPower);
+        Assert.True(usopp.IsPlusPowerTextActive());
+        usopp.SetCardActive();
+        usopp.CardCanAttack();
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        Assert.True(usopp.HasBorder());
+
+        start = Camera.main.WorldToScreenPoint(usopp.transform.position);
+        end = Camera.main.WorldToScreenPoint(enemyMockCard.transform.position);
+        pointer.position = start;
+        ExecuteEvents.Execute(usopp.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+        pointer.position = end;
+        pointer.pointerEnter = enemyMockCard.gameObject;
+        ExecuteEvents.Execute(usopp.gameObject, pointer, ExecuteEvents.pointerUpHandler);
+
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        foreach (Effects effect in usopp.effects)
+        {
+            if (effect.triggerType == EffectTriggerTypes.WhenAttacking)
+            {
+                Assert.True(WhenAttackingEnemyCantBlockOver.activated);
+            }
+        }
+        usopp.Restand(true, true);
+        usopp.lineRenderer.enabled = false;
+        GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.REFRESHPHASE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        yield return new WaitUntil(() => !usopp.IsPlusPowerTextActive());
+        Assert.False(usopp.HasBorder());
+        Assert.False(usopp.IsPlusPowerTextActive());
+        Assert.AreEqual(0, usopp.plusPower);
+
+        PlayerBoard.Instance.MoveCardToTrash(usopp);
+        Assert.AreEqual(PlayerBoard.Instance.trashObject.transform, usopp.transform.parent);
+
+        GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.MAINPHASE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+
+        //Testing Sanji effect activation
+        PlayerBoard.Instance.AddCardToHandFromDeck(sanji, true, false);
+        PlayerBoard.Instance.MoveCardFromHandToCharacterArea(sanji);
+        yield return new WaitUntil(() => sanji.lineRenderer != null);
+        Assert.False(sanji.HasBorder());
+        Assert.False(sanji.canAttack);
+
+        DonCard donCard = PlayerBoard.Instance.donInCostArea[0].GetComponent<DonCard>();
+        startPos = Camera.main.WorldToScreenPoint(donCard.gameObject.transform.position);
+        endPos = Camera.main.WorldToScreenPoint(sanji.transform.position);
+        pointer = new PointerEventData(EventSystem.current)
+        {
+            position = startPos
+        };
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.beginDragHandler);
+        pointer.position = endPos;
+        pointer.pointerEnter = sanji.gameObject;
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.dragHandler);
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.endDragHandler);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        yield return new WaitUntil(() => sanji.IsPlusPowerTextActive());
+        Assert.False(sanji.HasBorder());
+        Assert.False(sanji.canAttack);
+        Assert.True(sanji.IsPlusPowerTextActive());
+        Assert.AreEqual(1000, sanji.plusPower);
+
+        donCard = PlayerBoard.Instance.donInCostArea[1].GetComponent<DonCard>();
+        startPos = Camera.main.WorldToScreenPoint(donCard.gameObject.transform.position);
+        endPos = Camera.main.WorldToScreenPoint(sanji.transform.position);
+        pointer = new PointerEventData(EventSystem.current)
+        {
+            position = startPos
+        };
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.beginDragHandler);
+        pointer.position = endPos;
+        pointer.pointerEnter = sanji.gameObject;
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.dragHandler);
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.endDragHandler);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        yield return new WaitUntil(() => sanji.HasBorder());
+        Assert.True(sanji.HasBorder());
+        Assert.True(sanji.canAttack);
+        Assert.True(sanji.IsPlusPowerTextActive());
+        Assert.AreEqual(2000, sanji.plusPower);
+
+        GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.REFRESHPHASE);
+        sanji.CardCannotAttack();
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        yield return new WaitUntil(() => !sanji.IsPlusPowerTextActive());
+        yield return new WaitUntil(() => !sanji.HasBorder());
+        Assert.False(sanji.HasBorder());
+        Assert.False(sanji.IsPlusPowerTextActive());
+        Assert.AreEqual(0, sanji.plusPower);
+
+        GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.MAINPHASE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+
+        //Testing for Jinbe
+        PlayerBoard.Instance.AddCardToHandFromDeck(jinbe, true, false);
+        PlayerBoard.Instance.MoveCardFromHandToCharacterArea(jinbe);
+        jinbe.SetCardActive();
+        jinbe.CardCanAttack();
+        yield return new WaitUntil(() => jinbe.lineRenderer != null);
+        Assert.True(jinbe.HasBorder());
+        Assert.True(jinbe.canAttack);
+
+        yield return new WaitUntil(() => jinbe.lineRenderer != null);
+        pointer = new PointerEventData(EventSystem.current);
+        start = Camera.main.WorldToScreenPoint(jinbe.transform.position);
+        end = Camera.main.WorldToScreenPoint(enemyMockCard.transform.position);
+        pointer.position = start;
+        ExecuteEvents.Execute(jinbe.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+        pointer.position = end;
+        pointer.pointerEnter = enemyMockCard.gameObject;
+        ExecuteEvents.Execute(jinbe.gameObject, pointer, ExecuteEvents.pointerUpHandler);
+
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        Assert.False(PlayerBoard.Instance.effectInProgress);
+        Assert.False(jinbe.targetForEffect);
+        Assert.False(usopp.targetForEffect);
+        Assert.False(sanji.targetForEffect);
+        Assert.False(PlayerBoard.Instance.leaderCard.targetForEffect);
+        Assert.False(PlayerBoard.Instance.cancelBtn.gameObject.activeInHierarchy);
+
+        jinbe.Restand(true, true);
+        jinbe.lineRenderer.enabled = false;
+
+        //Attaching don to jinbe
+        GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+
+        donCard = PlayerBoard.Instance.donInCostArea[0].GetComponent<DonCard>();
+        startPos = Camera.main.WorldToScreenPoint(donCard.gameObject.transform.position);
+        endPos = Camera.main.WorldToScreenPoint(jinbe.transform.position);
+        pointer = new PointerEventData(EventSystem.current)
+        {
+            position = startPos
+        };
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.beginDragHandler);
+        pointer.position = endPos;
+        pointer.pointerEnter = jinbe.gameObject;
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.dragHandler);
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.endDragHandler);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        Assert.AreEqual(1000, jinbe.plusPower);
+        Assert.True(jinbe.IsPlusPowerTextActive());
+        jinbe.SetCardActive();
+        jinbe.CardCanAttack();
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        Assert.True(jinbe.HasBorder());
+
+        start = Camera.main.WorldToScreenPoint(jinbe.transform.position);
+        end = Camera.main.WorldToScreenPoint(enemyMockCard.transform.position);
+        pointer.position = start;
+        ExecuteEvents.Execute(jinbe.gameObject, pointer, ExecuteEvents.pointerDownHandler);
+        pointer.position = end;
+        pointer.pointerEnter = enemyMockCard.gameObject;
+        ExecuteEvents.Execute(jinbe.gameObject, pointer, ExecuteEvents.pointerUpHandler);
+
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        Assert.True(PlayerBoard.Instance.effectInProgress);
+        Assert.False(jinbe.targetForEffect);
+        Assert.False(usopp.targetForEffect);
+        Assert.True(sanji.targetForEffect);
+        Assert.True(PlayerBoard.Instance.leaderCard.targetForEffect);
+        Assert.True(PlayerBoard.Instance.cancelBtn.gameObject.activeInHierarchy);
+
+        pointer = new PointerEventData(EventSystem.current)
+        {
+            position = sanji.transform.position
+        };
+        ExecuteEvents.Execute(sanji.gameObject, pointer, ExecuteEvents.pointerClickHandler);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        yield return new WaitUntil(() => !PlayerBoard.Instance.effectInProgress);
+        Assert.False(PlayerBoard.Instance.effectInProgress);
+        Assert.False(jinbe.targetForEffect);
+        Assert.False(usopp.targetForEffect);
+        Assert.False(sanji.targetForEffect);
+        Assert.False(PlayerBoard.Instance.leaderCard.targetForEffect);
+        Assert.True(sanji.IsPlusPowerTextActive());
+        Assert.AreEqual(1000, sanji.plusPower);
+        Assert.False(PlayerBoard.Instance.cancelBtn.gameObject.activeInHierarchy);
+
+        jinbe.Restand(true, true);
+        jinbe.lineRenderer.enabled = false;
+        GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.ENDPHASE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing); 
+        GameManager.Instance.ChangeGameState(GameState.TESTING);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.REFRESHPHASE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        yield return new WaitUntil(() => !jinbe.IsPlusPowerTextActive());
+        Assert.False(jinbe.HasBorder());
+        Assert.False(jinbe.IsPlusPowerTextActive());
+        Assert.AreEqual(0, jinbe.plusPower);
+        Assert.False(sanji.IsPlusPowerTextActive());
+        Assert.AreEqual(0, sanji.plusPower);
+
+        //Testing for Nami
+        GameManager.Instance.ChangeGameState(GameState.TESTING);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        PlayerBoard.Instance.AddCardToHandFromDeck(nami, true, false);
+        PlayerBoard.Instance.MoveCardFromHandToCharacterArea(nami);
+        nami.SetCardActive();
+        donCard = PlayerBoard.Instance.donInCostArea[0].GetComponent<DonCard>();
+        donCard.RestDon();
+
+        GameManager.Instance.ChangeBattlePhase(BattlePhases.NOBATTLE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+
+        pointer = new PointerEventData(EventSystem.current)
+        {
+            position = nami.transform.position,
+            button = PointerEventData.InputButton.Right
+        };
+        ExecuteEvents.Execute(nami.gameObject, pointer, ExecuteEvents.pointerClickHandler);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        yield return new WaitUntil(() => PlayerBoard.Instance.effectInProgress);
+        Assert.True(PlayerBoard.Instance.effectInProgress);
+        Assert.True(jinbe.targetForEffect);
+        Assert.False(usopp.targetForEffect);
+        Assert.True(nami.targetForEffect);
+        Assert.True(sanji.targetForEffect);
+        Assert.True(PlayerBoard.Instance.leaderCard.targetForEffect);
+        Assert.True(PlayerBoard.Instance.cancelBtn.gameObject.activeInHierarchy);
+
+        pointer = new PointerEventData(EventSystem.current)
+        {
+            position = sanji.transform.position,
+        };
+        ExecuteEvents.Execute(sanji.gameObject, pointer, ExecuteEvents.pointerClickHandler);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        Assert.True(PlayerBoard.Instance.effectInProgress);
+        Assert.False(jinbe.targetForEffect);
+        Assert.False(usopp.targetForEffect);
+        Assert.False(nami.targetForEffect);
+        Assert.False(sanji.targetForEffect);
+        Assert.False(PlayerBoard.Instance.leaderCard.targetForEffect);
+        Assert.True(donCard.targetForEffect);
+        Assert.True(PlayerBoard.Instance.cancelBtn.gameObject.activeInHierarchy);
+
+        pointer = new PointerEventData(EventSystem.current)
+        {
+            position = donCard.transform.position,
+        };
+        ExecuteEvents.Execute(donCard.gameObject, pointer, ExecuteEvents.pointerClickHandler);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        Assert.False(PlayerBoard.Instance.effectInProgress);
+        Assert.False(jinbe.targetForEffect);
+        Assert.False(usopp.targetForEffect);
+        Assert.False(nami.targetForEffect);
+        Assert.False(sanji.targetForEffect);
+        Assert.False(PlayerBoard.Instance.leaderCard.targetForEffect);
+        Assert.False(donCard.targetForEffect);
+        Assert.True(sanji.IsPlusPowerTextActive());
+        Assert.True(sanji.hasDonAttached);
+        Assert.AreEqual(1000, sanji.plusPower);
+        Assert.AreEqual(1, sanji.GetAttachedDonCount());
+        Assert.False(PlayerBoard.Instance.cancelBtn.gameObject.activeInHierarchy);
     }
 }

@@ -395,7 +395,7 @@ namespace TCGSim.CardScripts
 
         public void CheckCardForDonEffect()
         {
-            if (this.effects != null)
+            if (this.effects != null && this.GetAttachedDonCount()!=0)
             {
                 foreach (Effects effect in this.effects)
                 {

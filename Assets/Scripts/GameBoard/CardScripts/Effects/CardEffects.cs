@@ -10,6 +10,7 @@ using TCGSim.CardScripts;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.WSA;
 
 namespace TCGSim
 {
@@ -59,6 +60,7 @@ namespace TCGSim
         int whenAttackingDonReq = 0;
         int enemyBlockerMinPower = 0;
         private bool passiveEffect = true;
+        public static bool activated = false;
 
         public WhenAttackingEnemyCantBlockOver(int whenAttackingDonReq, int enemyBlockerMinPower, bool passiveEffect)
         {
@@ -69,12 +71,14 @@ namespace TCGSim
 
         public async void Activate(Card card)
         {
+            activated = false;
             if (passiveEffect) { return; }
             if (card.GetAttachedDonCount() >= whenAttackingDonReq)
             {
+                activated = true;
                 await ServerCon.Instance.EnemyCantActivateBlockerOver(card.cardData.customCardID, enemyBlockerMinPower);
+                ChatManager.Instance.AddMessage("Card: " + card.cardData.cardID + " activated its When Attacking effect!");
             }
-            ChatManager.Instance.AddMessage("Card: " + card.cardData.cardID + " activated its When Attacking effect!");
             await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
         }
     }
@@ -212,23 +216,29 @@ namespace TCGSim
     {
         int upTo = 0;
         int powerPlus = 0;
+        int donReq = 0;
         private bool passiveEffect = true;
         private List<Card> possibleTargets = new List<Card>();
         private List<Card> selectedTargets = new List<Card>();
         private List<Card> cardsThatCouldAttackBeforeEffect = new List<Card>();
         private Card effectCallerCard;
 
-        public WhenAttackingPlusPower(int upTo, int powerPlus, bool passiveEffect)
+        public WhenAttackingPlusPower(int upTo, int powerPlus,int donReq, bool passiveEffect)
         {
             this.upTo = upTo;
             this.powerPlus = powerPlus;
             this.passiveEffect = passiveEffect;
+            this.donReq = donReq;
         }
 
         public void Activate(Card card)
         {
             PlayerBoard.Instance.SetEffectInProgress(true);
-            if (passiveEffect) { return; }
+            if (passiveEffect || card.GetAttachedDonCount()<donReq) 
+            {
+                PlayerBoard.Instance.SetEffectInProgress(false);
+                return; 
+            }
             effectCallerCard = card;
             cardsThatCouldAttackBeforeEffect = PlayerBoard.Instance.GetCardsThatCouldAttack();
             possibleTargets = PlayerBoard.Instance.GetCharacterAreaCards();
@@ -329,9 +339,9 @@ namespace TCGSim
                         break;
                 }
             }
-            await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
             HideCancelButton();
             PlayerBoard.Instance.SetEffectInProgress(false);
+            await ServerCon.Instance.ImDoneWithWhenAttackingEffect();
         }
         private void ShowCancelButton()
         {
@@ -758,6 +768,7 @@ namespace TCGSim
             possibleTargets.Add(PlayerBoard.Instance.leaderCard);
             if (restedDons.Count == 0 || possibleTargets.Count == 0)
             {
+                PlayerBoard.Instance.SetEffectInProgress(false);
                 return;
             }
             foreach (Card cardCanAttack in cardsThatCouldAttackBeforeOnPlay)

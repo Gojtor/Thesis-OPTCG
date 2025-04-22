@@ -241,7 +241,7 @@ namespace TCGSim
                         new Effects
                         {
                             triggerType = effectType,
-                            cardEffect = new WhenAttackingPlusPower(upTo, plusPower, false)
+                            cardEffect = new WhenAttackingPlusPower(upTo, plusPower, donRequirement, false)
                         }
                      );
                     }
