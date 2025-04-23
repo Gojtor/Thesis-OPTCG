@@ -438,7 +438,7 @@ namespace TCGSim
     {
         int upTo;
         int powerOrLess;
-        bool activated = false;
+        public static bool activated { get; private set; } = false;
 
         private List<Card> possibleTargets = new List<Card>();
         private List<Card> cardsThatCouldAttackBeforeOnPlay = new List<Card>();
@@ -568,7 +568,7 @@ namespace TCGSim
     {
         int upTo;
         int counterPower;
-        bool activated = false;
+        public static bool activated { get; private set; } = false;
         public EventGiveCounter(int upTo, int counterPower)
         {
             this.upTo = upTo;

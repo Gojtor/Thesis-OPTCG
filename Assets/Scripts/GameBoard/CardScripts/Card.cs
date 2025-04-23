@@ -265,7 +265,7 @@ namespace TCGSim.CardScripts
 
         public async void SendCardToServer()
         {
-            if (GameManager.Instance.currentState == GameState.TESTING) { return; }
+            if (GameManager.Instance.currentState == GameState.TESTING || this == null || this.cardData.customCardID==null) { return; }
             await UnityMainThreadDispatcher.RunOnMainThread(async () =>
             {
                 await ServerCon.Instance.UpdateCardAtInGameStateDB(this);
