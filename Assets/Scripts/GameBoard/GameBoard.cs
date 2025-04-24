@@ -191,16 +191,9 @@ namespace TCGSim
             }
 
         }
-
-        // Update is called once per frame
-        void Update()
+        public async void BuildUpBoards()
         {
-
-        }
-
-        public void BuildUpBoards()
-        {
-            UnityMainThreadDispatcher.Enqueue(() =>
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
                 menuBtn.interactable = false;
                 concedeBtn.interactable = false;
@@ -228,8 +221,8 @@ namespace TCGSim
                 cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
             enemyBoard.InitPrefabs(handPrefab, characterAreaPrefab, costAreaPrefab, stageAreaPrefab, deckPrefab, leaderPrefab, trashPrefab,
                 cardPrefab, lifePrefab, keepBtnPrefab, mulliganBtnPrefab, donDeckPrefab, donPrefab, endOfTurnBtnPrefab, noBlockBtnPrefab, cancelBtnPrefab, noMoreCounterBtnPrefab);
-            playerBoard.Init("PLAYERBOARD", gameCustomID, playerName);
-            enemyBoard.Init("ENEMYBOARD", gameCustomID, enemyName);
+            playerBoard.Init("PLAYERBOARD", GameOptions.gameID, playerName);
+            enemyBoard.Init("ENEMYBOARD", GameOptions.gameID, enemyName);
             playerBoard.gameObject.transform.Translate(0, -255, 0);
             enemyBoard.gameObject.transform.Translate(0, 255, 0);
             enemyBoard.gameObject.transform.Rotate(0, 0, 180);
@@ -347,8 +340,9 @@ namespace TCGSim
 
         public async void BackToMainMenu()
         {
-            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            await UnityMainThreadDispatcher.RunOnMainThread(async () =>
             {
+                await ServerCon.Instance.EnemyWon();
                 SceneManager.LoadScene("Menu");
             });
         }

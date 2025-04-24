@@ -81,6 +81,7 @@ namespace TCGSim.CardScripts
         public void OnBeginDrag(PointerEventData pointerEventData)
         {
             if (!draggable || GameManager.Instance.currentBattlePhase != BattlePhases.NOBATTLE || PlayerBoard.Instance.effectInProgress || !PlayerBoard.Instance.enemyFinishedStartingHand) { return; }
+            this.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 150);
             if (needToWatchHowManyDrawn && this.gameObject.transform.parent == fromWhereTheCardNeedsToBeDrawn)
             {
                 onBeginDragCounter++;
@@ -624,7 +625,9 @@ namespace TCGSim.CardScripts
                         {
                             border.transform.rotation = Quaternion.Euler(0, 0, 0);
                         }
-                        rectTransform.sizeDelta = new Vector2(110, 150);
+                        float width = this.GetComponent<RectTransform>().sizeDelta.x;
+                        float height = this.GetComponent<RectTransform>().sizeDelta.y;
+                        rectTransform.sizeDelta = new Vector2(width+10f, height);
                         borderIMG.color = colorOfBorder;
                         Outline borderOutline = border.AddComponent<Outline>();
                         borderOutline.enabled = true;

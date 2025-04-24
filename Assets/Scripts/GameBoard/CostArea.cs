@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TCGSim.CardScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 namespace TCGSim
 {
     public class CostArea : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
@@ -17,8 +19,21 @@ namespace TCGSim
         // Update is called once per frame
         void Update()
         {
-
+            CheckForResize();
         }
+
+        private void CheckForResize()
+        {
+            if (this.transform.childCount > 6)
+            {
+                this.GetComponent<HorizontalLayoutGroup>().childControlWidth = true;
+            }
+            else
+            {
+                this.GetComponent<HorizontalLayoutGroup>().childControlWidth = false;
+            }
+        }
+
         public void OnDrop(PointerEventData eventData)
         {
             Card card = eventData.pointerDrag.GetComponent<Card>();

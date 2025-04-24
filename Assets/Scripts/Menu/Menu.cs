@@ -377,6 +377,7 @@ namespace TCGSim
 
         public void StartGame()
         {
+            if (gameID == null || gameID == string.Empty) { return; }
             GameOptions.playerName = userName;
             GameOptions.gameID = gameID;
             int selectedIndex = deckSelectorDropDown.value;

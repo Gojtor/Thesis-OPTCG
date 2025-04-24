@@ -1,4 +1,3 @@
-using Codice.Client.BaseCommands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -798,11 +797,40 @@ namespace TCGSim
         }
         private void HandleMainPhase()
         {
+            MakeActivateMainEffectsActive();
             endOfTurnBtn.gameObject.SetActive(true);
             MakeLeaderAttackActive();
             MakeHandCardsDraggable();
             ActivateCharacterAreaCards();
         }
+
+        private void MakeActivateMainEffectsActive()
+        {
+            foreach (Card card in characterAreaCards)
+            {
+                foreach (Effects effect in card.effects)
+                {
+                    if (effect.triggerType == EffectTriggerTypes.ActivateMain)
+                    {
+                        if (effect.cardEffect is GiveUpToRestedDonToLeaderOrCharacter specificEffect)
+                        {
+                            specificEffect.MakeEffectActive();
+                        }
+                    }
+                }
+            }
+            foreach (Effects effect in leaderCard.effects)
+            {
+                if (effect.triggerType == EffectTriggerTypes.ActivateMain)
+                {
+                    if (effect.cardEffect is GiveUpToRestedDonToLeaderOrCharacter specificEffect)
+                    {
+                        specificEffect.MakeEffectActive();
+                    }
+                }
+            }
+        }
+
         private async void HandleEndPhase()
         {
             firstRound = false;
@@ -1309,7 +1337,7 @@ namespace TCGSim
             List<Card> restedDons = new List<Card>();
             foreach (Card donCard in donInCostArea)
             {
-                if (donCard.rested && !donCard.cardData.active)
+                if (donCard.rested && !donCard.cardData.active && donCard.transform.parent==PlayerBoard.Instance.costAreaObject.transform)
                 {
                     restedDons.Add(donCard);
                 }

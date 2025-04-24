@@ -16,6 +16,7 @@ using System.Net.Http;
 using System.Threading;
 using static System.Net.WebRequestMethods;
 using Assets.Scripts.ServerCon;
+using System.IO;
 
 namespace TCGSim
 {
@@ -67,10 +68,11 @@ namespace TCGSim
                 Instance = this;
             }
 
-            TextAsset configText = Resources.Load<TextAsset>("server_config");
+            string path = Path.Combine(Application.streamingAssetsPath, "server_config.json");
+            string configText = System.IO.File.ReadAllText(path);
             if (configText != null)
             {
-                ServerSettings config = JsonUtility.FromJson<ServerSettings>(configText.text);
+                ServerSettings config = JsonUtility.FromJson<ServerSettings>(configText);
                 serverUrl = config.serverUrl;
             }
             else
@@ -121,6 +123,16 @@ namespace TCGSim
             connection.On<string>("AddedToGroup", (message) =>
             {
                 Debug.Log(message);
+                if (AddingToGroupTask != null)
+                {
+                    AddingToGroupTask.TrySetResult(true);
+                }
+            });
+            connection.On<string,string>("AddedToRandomGroup", (message,gameID) =>
+            {
+                Debug.Log(message);
+                this.gameID = gameID;
+                GameOptions.gameID = gameID;
                 if (AddingToGroupTask != null)
                 {
                     AddingToGroupTask.TrySetResult(true);
@@ -340,10 +352,20 @@ namespace TCGSim
 
         public async Task AddPlayerToGroupInSocket(string gameID, string playerName)
         {
-            Debug.Log("Adding player to the following group in socket: " + gameID);
-            AddingToGroupTask = new TaskCompletionSource<bool>();
-            await connection.InvokeAsync<string>("AddClientToGroupByGameID", gameID, playerName);
-            await AddingToGroupTask.Task;
+            if (gameID == string.Empty || gameID=="Default")
+            {
+                Debug.Log("Adding player to a random group in socket");
+                AddingToGroupTask = new TaskCompletionSource<bool>();
+                await connection.InvokeAsync<string>("AddClientToRandomGameGroup", playerName);
+                await AddingToGroupTask.Task;
+            }
+            else
+            {
+                Debug.Log("Adding player to the following group in socket: " + gameID);
+                AddingToGroupTask = new TaskCompletionSource<bool>();
+                await connection.InvokeAsync<string>("AddClientToGroupByGameID", gameID, playerName);
+                await AddingToGroupTask.Task;
+            }  
         }
 
         public async Task CreateGroupInSocket(string gameID, string playerName)
@@ -438,11 +460,13 @@ namespace TCGSim
         public async Task EnemyWon()
         {
             await connection.InvokeAsync<string>("EnemyWon", gameID);
+            await connection.InvokeAsync<string>("RemoveFromGroup", gameID);
         }
 
         public async Task EnemyLost()
         {
             await connection.InvokeAsync<string>("EnemyLost", gameID);
+            await connection.InvokeAsync<string>("RemoveFromGroup", gameID);
         }
 
         public async Task KoThisCard(string koThisID, string effectCallerID)

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 989
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Game
   m_RootView: {fileID: 8}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -40,11 +40,11 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 517
-    width: 602
-    height: 422
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
+    y: 772
+    width: 394
+    height: 167
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -67,14 +67,14 @@ MonoBehaviour:
   - {fileID: 2}
   m_Position:
     serializedVersion: 2
-    x: 1318
+    x: 1526
     y: 0
-    width: 602
+    width: 394
     height: 939
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 89
+  controlID: 95
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 88
+  controlID: 17
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -117,8 +117,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 602
-    height: 517
+    width: 394
+    height: 772
   m_MinSize: {x: 276, y: 71}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 16}
@@ -143,8 +143,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 323
-    height: 630
+    width: 364
+    height: 621
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 17}
@@ -168,11 +168,11 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 630
-    width: 1318
-    height: 309
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+    y: 621
+    width: 1526
+    height: 318
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 15}
@@ -269,12 +269,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1318
+    width: 1526
     height: 939
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 52
+  controlID: 18
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -294,12 +294,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1318
-    height: 630
+    width: 1526
+    height: 621
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 42
+  controlID: 19
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -315,10 +315,10 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 323
+    x: 364
     y: 0
-    width: 995
-    height: 630
+    width: 1162
+    height: 621
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 18}
@@ -347,10 +347,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1318
-    y: 590
-    width: 601
-    height: 401
+    x: 1526
+    y: 845
+    width: 393
+    height: 146
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -362,12 +362,12 @@ MonoBehaviour:
     m_SaveData: []
     m_OverlaysVisible: 1
   m_Spl:
-    ID: 126
+    ID: 127
     splitterInitialOffset: 286
     currentActiveSplitter: -1
     realSizes:
-    - 218
-    - 113
+    - 44
+    - 32
     relativeSizes:
     - 0.6586103
     - 0.34138972
@@ -377,7 +377,7 @@ MonoBehaviour:
     maxSizes:
     - 0
     - 0
-    lastTotalSize: 331
+    lastTotalSize: 76
     splitSize: 6
     xOffset: 0
     m_Version: 1
@@ -394,7 +394,7 @@ MonoBehaviour:
       name: Thesis-OPTCG
       fullName: Thesis-OPTCG
       resultStatus: 1
-      duration: 11.267368
+      duration: 65.070816
       messages: 
       output: 
       stacktrace: 
@@ -410,7 +410,7 @@ MonoBehaviour:
       name: PlayModeTests.dll
       fullName: F:/Thesis/Thesis-OPTCG/Library/ScriptAssemblies/PlayModeTests.dll
       resultStatus: 1
-      duration: 11.245208
+      duration: 65.05281
       messages: 
       output: 
       stacktrace: 
@@ -426,7 +426,7 @@ MonoBehaviour:
       name: GameTests
       fullName: GameTests
       resultStatus: 1
-      duration: 11.239726
+      duration: 15.200956
       messages: 
       output: 'You are trying to create a MonoBehaviour using the ''new'' keyword. 
         This is not allowed.  MonoBehaviours can only be added using AddComponent().
@@ -447,7 +447,7 @@ MonoBehaviour:
       name: BlockingTest
       fullName: GameTests.BlockingTest
       resultStatus: 1
-      duration: 1.0938114
+      duration: 2.4213123
       messages: 
       output: 'Active dons: 0
 
@@ -467,15 +467,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -488,15 +483,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -509,15 +499,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -530,15 +515,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -551,15 +531,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -572,15 +547,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -593,15 +563,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -614,15 +579,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -635,260 +595,8 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
 
@@ -925,6 +633,9 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons:
+        0
+
 '
       stacktrace: 
       notRunnable: 0
@@ -940,7 +651,7 @@ MonoBehaviour:
       name: BoardCreationTest
       fullName: GameTests.BoardCreationTest
       resultStatus: 1
-      duration: 0.4583052
+      duration: 0.5092273
       messages: 
       output: 'Active dons: 0
 
@@ -969,15 +680,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -990,15 +696,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1011,15 +712,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1032,15 +728,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1053,15 +744,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1074,15 +760,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1095,15 +776,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1116,78 +792,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1205,8 +813,7 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active dons:
-        0
+        Active dons: 0
 
 '
       stacktrace: 
@@ -1223,7 +830,7 @@ MonoBehaviour:
       name: CardAttackTest
       fullName: GameTests.CardAttackTest
       resultStatus: 1
-      duration: 0.4778999
+      duration: 1.5061136
       messages: 
       output: 'Active dons: 0
 
@@ -1252,15 +859,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1273,15 +875,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1294,15 +891,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1315,15 +907,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1336,15 +923,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1357,15 +939,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1378,15 +955,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1399,15 +971,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1420,15 +987,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1441,15 +1003,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1462,15 +1019,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1483,6 +1035,15 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
         Active
         dons: 0
 
@@ -1490,8 +1051,698 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
         Active
         dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
 
         Active dons: 0
 
@@ -1536,9 +1787,18 @@ MonoBehaviour:
       name: CardEffectsTest
       fullName: GameTests.CardEffectsTest
       resultStatus: 1
-      duration: 10.998419
+      duration: 3.0942314
       messages: 
       output: 'Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
 
         PLAYERBOARD called init TestPlayer1
 
@@ -1556,15 +1816,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1577,15 +1832,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1598,15 +1848,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1619,15 +1864,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1640,15 +1880,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -1661,6 +1896,15 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
         Active
         dons: 0
 
@@ -1668,45 +1912,33 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
         Active
         dons: 0
 
         Active dons: 0
 
-        WebSocket connection is succesfull!
+        Active dons: 0
 
-        Active
-        dons: 0
-
-        Active dons: 10
-
-        Active dons: 10
-
-        Active
-        dons: 10
-
-        Active dons: 10
-
-        Active dons: 10
-
-        Active
-        dons: 10
-
-        Active dons: 10
-
-        Active dons: 10
-
-        Active
-        dons: 10
+        Active dons:
+        0
 
-        Active dons: 10
+        Active dons: 0
 
-        Active dons: 10
+        Active dons: 0
 
-        Active
-        dons: 10
+        WebSocket connection
+        is succesfull!
 
-        Active dons: 10
+        Active dons: 0
 
         Active dons: 10
 
@@ -2531,20 +2763,15 @@ MonoBehaviour:
 
         Active
         dons: 10
-
-        Active dons: 10
 
         Active dons: 10
-
-        Active
-        dons: 10
 
         Active dons: 10
 
-        Destroyed border on this card:
-        ST01-002-0
+        Destroyed
+        border on this card: ST01-002-3
 
-        Destroyed border on this card: ST01-002-0
+        Destroyed border on this card: ST01-002-3
 
         Active
         dons: 10
@@ -2558,36 +2785,40 @@ MonoBehaviour:
 
         Active dons: 8
 
-        Destroyed border on this card:
-        ST01-002-0
+        Destroyed border on this card: ST01-002-3
 
-        Destroyed border on this card: ST01-002-0
+        Destroyed
+        border on this card: ST01-002-3
+
+        Active dons: 8
+
+        Active dons:
+        8
+
+        Active dons: 10
+
+        Active dons: 10
+
+        Active dons:
+        10
+
+        Active dons: 10
+
+        Active dons: 9
+
+        Active dons:
+        9
+
+        Active dons: 8
+
+        Destroyed border on this card: ST01-004-0
 
         Active
         dons: 8
 
-        Active dons: 8
-
-        Active dons: 10
-
-        Active
-        dons: 10
-
         Active dons: 10
 
         Active dons: 10
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 8
-
-        Destroyed
-        border on this card: ST01-004-1
-
-        Active dons: 8
 
         Active
         dons: 10
@@ -2599,15 +2830,216 @@ MonoBehaviour:
         Active
         dons: 10
 
-        Active dons: 10
-
-        Active dons: 10
+        Destroyed border on this card: ST01-005-2
 
         Destroyed
         border on this card: ST01-005-2
 
-        Destroyed border on this card:
-        ST01-005-2
+        Active dons: 10
+
+        Active
+        dons: 10
+
+        Active dons: 10
+
+        Active dons: 9
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-005-2
+
+        Active
+        dons: 9
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-004-0
+
+        Destroyed border on this card: ST01-001-0
+
+        Active
+        dons: 9
+
+        Active dons: 9
+
+        Active dons: 9
+
+        Active dons:
+        9
+
+        Active dons: 9
+
+        Active dons: 10
+
+        Active dons:
+        10
+
+        Active dons: 10
+
+        Active dons: 9
+
+        Active dons:
+        9
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed border
+        on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Active dons: 9
+
+        Active dons:
+        9
+
+        Destroyed border on this card: DONCARD0
+
+        Active dons:
+        9
+
+        Active dons: 9
+
+        Active dons: 9
+
+        Active dons: 9
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-001-0
+
+        Active
+        dons: 8
+
+        Active dons: 6
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Active dons: 6
+
+        Destroyed
+        border on this card: DONCARD0
+
+        Destroyed border on this card: DONCARD1
+
+        Destroyed
+        border on this card: DONCARD2
+
+        Destroyed border on this card: DONCARD3
+
+        Active
+        dons: 6
+
+        Active dons: 6
+
+        Destroyed border on this card: ST01-001-0
+
+        Destroyed
+        border on this card: ST01-004-0
+
+        Destroyed border on this card: ST01-005-2
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-007-0
+
+        Active
+        dons: 10
+
+        Active dons: 10
+
+        Active dons: 10
+
+        Active
+        dons: 5
+
+        Active dons: 5
+
+        Destroyed border on this card: ST01-012-1
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Destroyed
+        border on this card: ST01-012-1
+
+        Active dons: 5
+
+        Active dons:
+        5
+
+        Active dons: 5
+
+        Active dons: 4
+
+        Active dons: 3
+
+        Destroyed
+        border on this card: ST01-012-1
+
+        Destroyed border on this card: ST01-012-1
+
+        Active
+        dons: 3
+
+        Active dons: 3
+
+        Active dons: 10
+
+        Active
+        dons: 10
 
         Active dons: 10
 
@@ -2619,1757 +3051,374 @@ MonoBehaviour:
         Active dons: 9
 
         Destroyed border on this card:
-        ST01-005-2
+        ST01-001-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Active
+        dons: 9
+
+        Active dons: 9
+
+        Active dons: 9
+
+        Active dons:
+        9
+
+        Active dons: 9
+
+        Active dons: 10
+
+        Active dons:
+        10
+
+        Active dons: 10
+
+        Active dons: 10
+
+        Active dons:
+        10
+
+        Active dons: 10
+
+        Destroyed border on this card: ST01-001-0
+
+        Destroyed
+        border on this card: ST01-004-0
 
         Destroyed border on this card: ST01-005-2
 
-        Active
-        dons: 9
+        Destroyed
+        border on this card: ST01-007-0
 
-        Destroyed border on this card: ST01-004-1
+        Destroyed border on this card: ST01-007-0
 
         Destroyed
-        border on this card: ST01-004-1
+        border on this card: ST01-011-0
 
-        Destroyed border on this card:
-        ST01-001-0
+        Destroyed border on this card: ST01-013-0
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-004-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-005-2
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-011-0
+
+        Destroyed border on this card: ST01-013-0
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Active dons: 10
 
         Active
-        dons: 9
+        dons: 10
 
-        Active dons: 9
+        Destroyed border on this card: ST01-004-0
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-004-0
+
+        Destroyed border on this card: ST01-005-2
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-011-0
+
+        Destroyed border on this card: ST01-013-0
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Destroyed border on this card: ST01-001-0
+
+        Destroyed
+        border on this card: ST01-004-0
+
+        Destroyed border on this card: ST01-005-2
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-011-0
+
+        Destroyed border on this card: ST01-013-0
 
         Active
         dons: 10
 
         Active dons: 10
 
+        Destroyed border on this card:
+        ST01-001-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Destroyed
+        border on this card: ST01-013-0
+
         Active dons: 10
 
         Active
-        dons: 9
+        dons: 10
+
+        OnEndDrag called on: EventCard | Object Name: ST01-016-1
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Destroyed
+        border on this card: ST01-013-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Destroyed
+        border on this card: ST01-013-0
+
+        Destroyed border on this card: ST01-001-0
+
+        Active
+        dons: 10
 
         Active dons: 9
 
         Destroyed border on this card:
-        ST01-004-1
+        ST01-011-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Destroyed
+        border on this card: ST01-013-0
+
+        Destroyed border on this card: ST01-001-0
+
+        Destroyed
+        border on this card: ST01-001-0
+
+        Destroyed border on this card: ST01-004-0
+
+        Destroyed
+        border on this card: ST01-005-2
+
+        Destroyed border on this card: ST01-007-0
+
+        Destroyed
+        border on this card: ST01-007-0
+
+        Destroyed border on this card: ST01-011-0
+
+        Destroyed
+        border on this card: ST01-013-0
+
+        Active dons: 9
+
+        Destroyed
+        border on this card: ST01-011-0
+
+        Active dons: 9
+
+        Destroyed
+        border on this card: ST01-011-0
+
+        Destroyed border on this card: ST01-001-0
+
+        Destroyed
+        border on this card: ST01-004-0
 
         Destroyed border on this card: ST01-005-2
 
         Destroyed
-        border on this card: ST01-007-2
+        border on this card: ST01-007-0
 
-        Destroyed border on this card:
-        ST01-001-0
+        Destroyed border on this card: ST01-007-0
 
-        Active dons: 9
-
-        Destroyed border on this card:
-        DONCARD0
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-011-0
 
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
+        Destroyed border on this card: ST01-013-0
 
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
-        Active
-        dons: 9
-
-        Active dons: 9
-
-        Active dons: 9
-
         Active
         dons: 9
 
         Active dons: 9
 
         Active dons: 9
-
-        Active
-        dons: 9
 
-        Active dons: 9
+        Active dons:
+        9
 
         Active dons: 9
-
-        Active
-        dons: 9
 
-        Active dons: 9
+        OnEndDrag called on: EventCard | Object
+        Name: ST01-015-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-001-0
 
-        Active
-        dons: 9
+        Destroyed
+        border on this card: ST01-004-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-005-2
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-007-0
 
-        Active
-        dons: 9
+        Destroyed border on this card: ST01-007-0
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-011-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-013-0
 
         Active
         dons: 9
 
-        Active dons: 9
+        Active dons: 5
 
-        Active dons: 9
+        Destroyed border on this card: ST01-002-MOCKED
 
-        Active
-        dons: 9
+        Destroyed
+        border on this card: ST01-002-MOCKED
 
-        Active dons: 9
+        Active dons: 5
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-001-0
 
-        Active
-        dons: 9
+        Destroyed border on this card: ST01-004-0
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-005-2
 
-        Active dons: 9
+        Destroyed border on this card: ST01-007-0
 
-        Active
-        dons: 9
+        Destroyed
+        border on this card: ST01-007-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-011-0
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-013-0
 
-        Active
-        dons: 9
+        Active dons: 5
 
-        Active dons: 9
+        Active dons:
+        5
 
-        Active dons: 9
+        Destroyed border on this card: ST01-001-0
 
-        Active
-        dons: 9
+        Active dons:
+        5
 
-        Active dons: 9
+        Active dons: 5
 
-        Active dons: 9
+        Active dons: 5
 
-        Active
-        dons: 9
+        Active dons: 5
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-014-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-014-0
 
         Active
-        dons: 9
+        dons: 5
 
-        Active dons: 9
+        Active dons: 5
 
-        Active dons: 9
+        Destroyed border on this card: ST01-001-0
 
-        Active
-        dons: 9
+        Destroyed
+        border on this card: ST01-004-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-005-2
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-007-0
 
-        Active
-        dons: 9
+        Destroyed border on this card: ST01-007-0
 
-        Active dons: 9
+        Destroyed
+        border on this card: ST01-011-0
 
-        Active dons: 9
+        Destroyed border on this card: ST01-013-0
 
         Active
-        dons: 9
-
-        Active dons: 9
+        dons: 5
 
-        Active dons: 9
+        Active dons: 5
 
-        Active
-        dons: 9
+        Active dons: 5
 
-        Active dons: 9
+        Active dons:
+        5
 
-        Active dons: 9
+        Active dons: 5
 
 '
       stacktrace: 
@@ -4386,16 +3435,16 @@ MonoBehaviour:
       name: CharacterAreaLimitTest
       fullName: GameTests.CharacterAreaLimitTest
       resultStatus: 1
-      duration: 0.4659465
+      duration: 0.5230148
       messages: 
-      output: 'Active dons: 0
+      output: 'Active dons: 5
 
-        Active dons: 0
+        Active dons: 5
 
-        Active dons: 0
+        Active dons: 5
 
         Active
-        dons: 0
+        dons: 5
 
         Active dons: 0
 
@@ -4415,15 +3464,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4435,224 +3479,112 @@ MonoBehaviour:
         Active dons: 0
 
         Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        WebSocket connection is succesfull!
 
         Active dons:
         0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        WebSocket connection is succesfull!
+
+        Active
+        dons: 0
 
         Active dons: 7
 
@@ -4691,7 +3623,7 @@ MonoBehaviour:
       name: CharacterCardDraggingTestToCharacterArea
       fullName: GameTests.CharacterCardDraggingTestToCharacterArea
       resultStatus: 1
-      duration: 0.4600308
+      duration: 0.5013769
       messages: 
       output: 'Active dons: 2
 
@@ -4718,15 +3650,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4739,15 +3666,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4760,15 +3682,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4781,15 +3698,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4802,15 +3714,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4823,15 +3730,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4844,15 +3746,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4865,64 +3762,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -4933,18 +3776,6 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Cannot play
-        the card!
-
-        Cannot play the card!
-
-        Cannot play the card!
-
-        Cannot
-        play the card!
-
-        Cannot play the card!
-
         Cannot play the
         card!
 
@@ -4957,8 +3788,10 @@ MonoBehaviour:
 
         Cannot play the card!
 
-        Cannot play the
-        card!
+        Cannot play the card!
+
+        Cannot
+        play the card!
 
         Cannot play the card!
 
@@ -4967,12 +3800,22 @@ MonoBehaviour:
         Cannot
         play the card!
 
-        objectAtDragEnd is NULL - Dropped outside the scene!
+        Cannot play the card!
+
+        Cannot play the card!
+
+        Cannot
+        play the card!
+
+        Cannot play the card!
+
+        objectAtDragEnd is
+        NULL - Dropped outside the scene!
+
+        Active dons: 1
 
         Active
-        dons: 1
-
-        Active dons: 0
+        dons: 0
 
 '
       stacktrace: 
@@ -4989,7 +3832,7 @@ MonoBehaviour:
       name: CharacterCardMovingTest
       fullName: GameTests.CharacterCardMovingTest
       resultStatus: 1
-      duration: 0.4501107
+      duration: 0.4844168
       messages: 
       output: 'Active dons: 0
 
@@ -5018,15 +3861,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5039,15 +3877,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5060,15 +3893,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5081,15 +3909,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5102,15 +3925,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5123,15 +3941,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5144,15 +3957,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5165,36 +3973,19 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
 
         Active dons: 0
 
-        Active
-        dons: 0
-
         Active dons: 0
 
-        Active dons: 0
-
-        Active
-        dons: 0
+        WebSocket
+        connection is succesfull!
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        WebSocket connection is succesfull!
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5213,7 +4004,7 @@ MonoBehaviour:
       name: CounteringTest
       fullName: GameTests.CounteringTest
       resultStatus: 1
-      duration: 0.4980224
+      duration: 0.5288617
       messages: 
       output: 'Active dons: 0
 
@@ -5242,15 +4033,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5262,214 +4048,6 @@ MonoBehaviour:
         Active dons: 0
 
         Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        WebSocket connection is succesfull!
 
         Active dons:
         0
@@ -5478,30 +4056,144 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
         Active dons:
         0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        WebSocket
+        connection is succesfull!
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
 
         Destroyed border on this card: ST01-003
 
-        Destroyed border
-        on this card: ST01-003
+        Destroyed
+        border on this card: ST01-003
 
         Active dons: 0
 
-        Destroyed border
-        on this card: ST01-001-MOCKEDLEADER
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
+        Destroyed
+        border on this card: ST01-001-MOCKEDLEADER
 
         Active dons: 0
 
         Active
         dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
 
 '
       stacktrace: 
@@ -5518,7 +4210,7 @@ MonoBehaviour:
       name: DonAttachTest
       fullName: GameTests.DonAttachTest
       resultStatus: 1
-      duration: 0.4599476
+      duration: 0.5187528
       messages: 
       output: 'Active dons: 0
 
@@ -5547,15 +4239,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5567,219 +4254,130 @@ MonoBehaviour:
         Active dons: 0
 
         Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        WebSocket connection is succesfull!
 
         Active dons:
         0
 
         Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        WebSocket
+        connection is succesfull!
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 1
 
         Active dons: 0
 
@@ -5787,11 +4385,6 @@ MonoBehaviour:
         1
 
         Active dons: 0
-
-        Active dons: 1
-
-        Active dons:
-        0
 
         Active dons: 0
 
@@ -5810,7 +4403,7 @@ MonoBehaviour:
       name: DonDragTest
       fullName: GameTests.DonDragTest
       resultStatus: 1
-      duration: 0.4494177
+      duration: 0.5049689
       messages: 
       output: 'Active dons: 0
 
@@ -5839,15 +4432,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5860,15 +4448,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5881,15 +4464,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5902,15 +4480,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5923,15 +4496,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5944,15 +4512,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5965,15 +4528,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -5986,15 +4544,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6007,53 +4560,18 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
 
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        objectAtDragEnd is NULL - Dropped
-        outside the scene!
+        objectAtDragEnd is NULL - Dropped outside
+        the scene!
 
         WebSocket connection is succesfull!
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 1
 
@@ -6074,7 +4592,7 @@ MonoBehaviour:
       name: DonMovingTest
       fullName: GameTests.DonMovingTest
       resultStatus: 1
-      duration: 0.4487376
+      duration: 0.4891455
       messages: 
       output: 'Active dons: 1
 
@@ -6103,15 +4621,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6124,15 +4637,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6145,15 +4653,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6166,15 +4669,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6187,15 +4685,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6208,15 +4701,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6229,29 +4717,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6269,8 +4738,7 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active dons:
-        1
+        Active dons: 1
 
 '
       stacktrace: 
@@ -6287,7 +4755,7 @@ MonoBehaviour:
       name: EventCardDraggingTestToCharacterArea
       fullName: GameTests.EventCardDraggingTestToCharacterArea
       resultStatus: 1
-      duration: 0.4843521
+      duration: 0.5207002
       messages: 
       output: 'Active dons: 1
 
@@ -6316,15 +4784,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6337,15 +4800,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6358,15 +4816,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6379,15 +4832,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6400,15 +4848,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6421,15 +4864,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6442,15 +4880,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6463,15 +4896,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6479,69 +4907,11 @@ MonoBehaviour:
 
         Active
         dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
 
         WebSocket connection is succesfull!
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         OnEndDrag called on: EventCard | Object Name: ST01-014
 
@@ -6638,7 +5008,7 @@ MonoBehaviour:
       name: GettingAttackedTest
       fullName: GameTests.GettingAttackedTest
       resultStatus: 1
-      duration: 0.5121651
+      duration: 0.8214785
       messages: 
       output: 'Active dons: 0
 
@@ -6667,15 +5037,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6685,186 +5050,6 @@ MonoBehaviour:
         dons: 0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        WebSocket
-        connection is succesfull!
 
         Active dons: 0
 
@@ -6875,8 +5060,286 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        WebSocket connection is succesfull!
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Destroyed border on this card: ST01-003
+
         Destroyed border
-        on this card: ST01-003
+        on this card: ST01-001-MOCKEDLEADER
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
+        Active dons:
+        0
+
+        Destroyed border on this card: ST01-003
+
+        Destroyed border
+        on this card: ST01-002
 
         Destroyed border on this card: ST01-001-MOCKEDLEADER
 
@@ -6887,27 +5350,8 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Destroyed border on this card:
-        ST01-003
-
-        Destroyed border on this card: ST01-002
-
-        Destroyed
-        border on this card: ST01-001-MOCKEDLEADER
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
+        Active dons:
+        0
 
 '
       stacktrace: 
@@ -6924,7 +5368,7 @@ MonoBehaviour:
       name: LeaderAttackTest
       fullName: GameTests.LeaderAttackTest
       resultStatus: 1
-      duration: 0.4652371
+      duration: 0.5134227
       messages: 
       output: 'Active dons: 0
 
@@ -6953,15 +5397,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6974,15 +5413,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -6995,15 +5429,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7016,15 +5445,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7037,15 +5461,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7058,15 +5477,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7079,15 +5493,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7100,15 +5509,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7119,26 +5523,15 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active dons: 0
+        WebSocket connection is succesfull!
 
         Active
         dons: 0
 
-        Active dons: 0
+        Destroyed border on this card: ST01-001-MOCKEDLEADER
 
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
+        Destroyed
+        border on this card: ST01-001-MOCKEDLEADER
 
         Active dons: 0
 
@@ -7146,33 +5539,6 @@ MonoBehaviour:
         dons: 0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        WebSocket
-        connection is succesfull!
-
-        Active dons: 0
-
-        Destroyed border
-        on this card: ST01-001-MOCKEDLEADER
-
-        Destroyed border on this card:
-        ST01-001-MOCKEDLEADER
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
 '
       stacktrace: 
@@ -7189,7 +5555,7 @@ MonoBehaviour:
       name: StageCardDraggingTestToCharacterArea
       fullName: GameTests.StageCardDraggingTestToCharacterArea
       resultStatus: 1
-      duration: 0.4655224
+      duration: 0.5065383
       messages: 
       output: 'Active dons: 0
 
@@ -7218,15 +5584,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7239,15 +5600,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7260,15 +5616,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7281,15 +5632,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7302,15 +5648,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7323,15 +5664,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7344,15 +5680,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7365,15 +5696,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7382,143 +5708,90 @@ MonoBehaviour:
         Active
         dons: 0
 
-        Active dons: 0
+        WebSocket connection is succesfull!
 
-        Active dons: 0
+        Active dons:
+        0
 
-        Active
-        dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active dons: 0
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active
-        dons: 0
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active dons: 0
+        Cannot
+        play the card!
 
-        Active
-        dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active dons: 0
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active
-        dons: 0
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active dons: 0
+        Cannot
+        play the card!
 
-        Active
-        dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active dons: 0
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active
-        dons: 0
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active dons: 0
+        Cannot
+        play the card!
 
-        Active
-        dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        Active dons: 0
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        WebSocket
-        connection is succesfull!
+        Cannot
+        play the card!
 
-        Active dons: 0
+        OnEndDrag called on: StageCard | Object Name: ST01-017
 
-        OnEndDrag called
-        on: StageCard | Object Name: ST01-017
+        Cannot
+        play the card!
 
-        Cannot play the card!
+        OnEndDrag called on: StageCard | Object Name: ST01-017
+
+        Cannot
+        play the card!
+
+        OnEndDrag called on: StageCard | Object Name: ST01-017
+
+        Cannot
+        play the card!
+
+        objectAtDragEnd is NULL - Dropped outside the scene!
 
         OnEndDrag
         called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        OnEndDrag
-        called on: StageCard | Object Name: ST01-017
-
-        Cannot play the card!
-
-        objectAtDragEnd
-        is NULL - Dropped outside the scene!
-
-        OnEndDrag called on: StageCard
-        | Object Name: ST01-017
 
         Active dons: 1
 
-        Active dons: 0
+        Active
+        dons: 0
 
 '
       stacktrace: 
@@ -7535,7 +5808,7 @@ MonoBehaviour:
       name: StartingHandTest
       fullName: GameTests.StartingHandTest
       resultStatus: 1
-      duration: 0.4509742
+      duration: 0.5033375
       messages: 
       output: 'Active dons: 0
 
@@ -7564,15 +5837,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7585,15 +5853,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7606,15 +5869,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7627,15 +5885,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7648,15 +5901,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7669,15 +5917,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7690,113 +5933,19 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
 
         Active dons: 0
 
-        Active
-        dons: 0
-
         Active dons: 0
 
-        Active dons: 0
-
-        Active
-        dons: 0
+        WebSocket
+        connection is succesfull!
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        WebSocket connection is succesfull!
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7815,7 +5964,7 @@ MonoBehaviour:
       name: ZeroCardsInDeckLoseConditionTest
       fullName: GameTests.ZeroCardsInDeckLoseConditionTest
       resultStatus: 1
-      duration: 0.5330546
+      duration: 0.5793582
       messages: 
       output: 'Active dons: 0
 
@@ -7844,15 +5993,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7865,15 +6009,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7886,15 +6025,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7907,15 +6041,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7928,15 +6057,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7949,15 +6073,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7970,15 +6089,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -7991,108 +6105,17 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
+        Active dons:
+        0
 
         WebSocket connection is succesfull!
 
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Destroyed border on this card:
-        ST01-001-MOCKEDLEADER
-
-        Active dons: 0
-
         Active dons: 0
 
         Active
         dons: 0
 
-        Active dons: 0
-
-        Active dons: 0
+        Destroyed border on this card: ST01-001-MOCKEDLEADER
 
         Active
         dons: 0
@@ -8101,8 +6124,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
+
+        Active dons: 0
 
         Active dons: 0
 
@@ -8115,29 +6140,14 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
 
         Active dons: 0
 
-        Active
-        dons: 0
-
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
 '
       stacktrace: 
@@ -8154,7 +6164,7 @@ MonoBehaviour:
       name: ZeroLifeLoseConditionTest
       fullName: GameTests.ZeroLifeLoseConditionTest
       resultStatus: 1
-      duration: 0.5371751
+      duration: 0.5823696
       messages: 
       output: 'Active dons: 0
 
@@ -8183,15 +6193,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8204,15 +6209,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8225,15 +6225,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8246,15 +6241,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8267,15 +6257,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8288,15 +6273,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8309,15 +6289,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8330,78 +6305,10 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
+        Active dons:
+        0
 
         Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
 
         Active dons: 0
 
@@ -8419,6 +6326,32 @@ MonoBehaviour:
 
         Active dons: 0
 
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Destroyed border on this card: ST01-002
+
+        Destroyed
+        border on this card: ST01-002
+
+        Destroyed border on this card: ST01-001-MOCKEDLEADER
+
+        Destroyed
+        border on this card: ST01-001-MOCKEDLEADER
+
+        Active dons: 0
+
+        Active
+        dons: 0
+
+        Active dons: 0
+
+        Active dons: 0
+
         Active dons:
         0
 
@@ -8426,17 +6359,6 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Destroyed border
-        on this card: ST01-002
-
-        Destroyed border on this card: ST01-002
-
-        Destroyed
-        border on this card: ST01-001-MOCKEDLEADER
-
-        Destroyed border on
-        this card: ST01-001-MOCKEDLEADER
-
         Active dons: 0
 
         Active
@@ -8446,66 +6368,8 @@ MonoBehaviour:
 
         Active dons: 0
 
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
-
-        Active dons: 0
-
-        Active
-        dons: 0
-
-        Active dons: 0
+        Active dons:
+        0
 
 '
       stacktrace: 
@@ -8522,7 +6386,7 @@ MonoBehaviour:
       name: MenuTests
       fullName: MenuTests
       resultStatus: 1
-      duration: 41.21077
+      duration: 49.846764
       messages: 
       output: 'Active dons: 0
 
@@ -8540,7 +6404,7 @@ MonoBehaviour:
       name: ConnectGamePanelTest
       fullName: MenuTests.ConnectGamePanelTest
       resultStatus: 1
-      duration: 0.4911237
+      duration: 0.5229143
       messages: 
       output: 'Active dons: 0
 
@@ -8550,7 +6414,7 @@ MonoBehaviour:
 
         Register
 
-        {"UserName":"Test34488","Password":"Test-34488","ConfirmPassword":"Test-34488"}
+        {"UserName":"Test65639","Password":"Test-65639","ConfirmPassword":"Test-65639"}
 
         https://gabcsika.picidolgok.hu/api/Account/register
 
@@ -8580,11 +6444,11 @@ MonoBehaviour:
       name: CreateGamePanelTest
       fullName: MenuTests.CreateGamePanelTest
       resultStatus: 1
-      duration: 0.3668571
+      duration: 0.4287712
       messages: 
       output: 'Register
 
-        {"UserName":"Test15055","Password":"Test-15055","ConfirmPassword":"Test-15055"}
+        {"UserName":"Test74779","Password":"Test-74779","ConfirmPassword":"Test-74779"}
 
         https://gabcsika.picidolgok.hu/api/Account/register
 
@@ -8614,11 +6478,11 @@ MonoBehaviour:
       name: DeckBuilderDefaultTest
       fullName: MenuTests.DeckBuilderDefaultTest
       resultStatus: 1
-      duration: 1.0182691
+      duration: 1.3086818
       messages: 
       output: 'Register
 
-        {"UserName":"Test71307","Password":"Test-71307","ConfirmPassword":"Test-71307"}
+        {"UserName":"Test50361","Password":"Test-50361","ConfirmPassword":"Test-50361"}
 
         https://gabcsika.picidolgok.hu/api/Account/register
 
@@ -8645,11 +6509,11 @@ MonoBehaviour:
       name: DeckBuilderDropDownTest
       fullName: MenuTests.DeckBuilderDropDownTest
       resultStatus: 1
-      duration: 4.4984927
+      duration: 5.1293726
       messages: 
       output: 'Register
 
-        {"UserName":"Test28507","Password":"Test-28507","ConfirmPassword":"Test-28507"}
+        {"UserName":"Test99235","Password":"Test-99235","ConfirmPassword":"Test-99235"}
 
         https://gabcsika.picidolgok.hu/api/Account/register
 
@@ -8676,9 +6540,9 @@ MonoBehaviour:
       name: DeckBuilderLeaderSelectTest
       fullName: MenuTests.DeckBuilderLeaderSelectTest
       resultStatus: 1
-      duration: 3.415974
+      duration: 3.9254754
       messages: 
-      output: "Register\r\n{\"UserName\":\"Test95315\",\"Password\":\"Test-95315\",\"ConfirmPassword\":\"Test-95315\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
+      output: "Register\r\n{\"UserName\":\"Test56621\",\"Password\":\"Test-56621\",\"ConfirmPassword\":\"Test-56621\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
         successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nK\xE9p
         kattintva: OP01-001\r\n"
@@ -8696,11 +6560,11 @@ MonoBehaviour:
       name: DeckBuilderNewDeckTest
       fullName: MenuTests.DeckBuilderNewDeckTest
       resultStatus: 1
-      duration: 4.568568
+      duration: 5.2663765
       messages: 
       output: 'Register
 
-        {"UserName":"Test62353","Password":"Test-62353","ConfirmPassword":"Test-62353"}
+        {"UserName":"Test47291","Password":"Test-47291","ConfirmPassword":"Test-47291"}
 
         https://gabcsika.picidolgok.hu/api/Account/register
 
@@ -8727,9 +6591,9 @@ MonoBehaviour:
       name: DeckBuilderSaveDeckTest
       fullName: MenuTests.DeckBuilderSaveDeckTest
       resultStatus: 1
-      duration: 20.060856
+      duration: 26.036404
       messages: 
-      output: "Register\r\n{\"UserName\":\"Test54346\",\"Password\":\"Test-54346\",\"ConfirmPassword\":\"Test-54346\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
+      output: "Register\r\n{\"UserName\":\"Test32600\",\"Password\":\"Test-32600\",\"ConfirmPassword\":\"Test-32600\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
         successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nRemoving
         from selected\r\nK\xE9p kattintva: OP01-004\r\nK\xE9p kattintva: OP01-001\r\nK\xE9p
@@ -8799,29 +6663,29 @@ MonoBehaviour:
       name: FriendRequestTests
       fullName: MenuTests.FriendRequestTests
       resultStatus: 1
-      duration: 2.689329
+      duration: 2.9809668
       messages: 
-      output: "Register\r\n{\"UserName\":\"Test14385\",\"Password\":\"Test-14385\",\"ConfirmPassword\":\"Test-14385\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
+      output: "Register\r\n{\"UserName\":\"Test98057\",\"Password\":\"Test-98057\",\"ConfirmPassword\":\"Test-98057\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
         successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nRegister\r\n{\"UserName\":\"Test18332\",\"Password\":\"Test-18332\",\"ConfirmPassword\":\"Test-18332\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
+        [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nRegister\r\n{\"UserName\":\"Test90793\",\"Password\":\"Test-90793\",\"ConfirmPassword\":\"Test-90793\"}\r\nhttps://gabcsika.picidolgok.hu/api/Account/register\r\nRegistration
         successful: {\"message\":\"Registration successful!\"}\r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         []\r\nReceived: []\r\nReceived: []\r\nReceived: []\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        []\r\nReceived: [\"Test18332\"]\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
+        []\r\nReceived: [\"Test90793\"]\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         []\r\nReceived: []\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        []\r\nReceived: [\"Test18332\"]\r\nReceived: [\"Test18332\"]\r\nReceived:
+        []\r\nReceived: [\"Test90793\"]\r\nReceived: [\"Test90793\"]\r\nReceived:
         []\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         successful: \r\nReceived: [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
         [\"ST01-DefaultDeck,1xST01-001,4xST01-002,4xST01-003,4xST01-004,4xST01-005,4xST01-006,4xST01-007,4xST01-008,4xST01-009,4xST01-010,2xST01-011,2xST01-012,2xST01-013,2xST01-014,2xST01-015,2xST01-016,2xST01-017\"]\r\nReceived:
-        [\"Test14385\"]\r\nReceived: []\r\n"
+        [\"Test98057\"]\r\nReceived: []\r\n"
       stacktrace: 
       notRunnable: 0
       ignoredOrSkipped: 0
@@ -8836,7 +6700,7 @@ MonoBehaviour:
       name: LoginAsGuestTest
       fullName: MenuTests.LoginAsGuestTest
       resultStatus: 1
-      duration: 0.2670979
+      duration: 0.3150361
       messages: 
       output: 
       stacktrace: 
@@ -8853,7 +6717,7 @@ MonoBehaviour:
       name: LoginTest
       fullName: MenuTests.LoginTest
       resultStatus: 1
-      duration: 0.404847
+      duration: 0.4560987
       messages: 
       output: "Login\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
         failed: HTTP/1.1 401 Unauthorized\r\nLogin\r\nhttps://gabcsika.picidolgok.hu/api/Account//login\r\nLogin
@@ -8874,7 +6738,7 @@ MonoBehaviour:
       name: RegisterTest
       fullName: MenuTests.RegisterTest
       resultStatus: 1
-      duration: 3.4237838
+      duration: 3.4639268
       messages: 
       output: 'Register
 
@@ -8896,7 +6760,7 @@ MonoBehaviour:
 
         Register
 
-        {"UserName":"Test24942","Password":"Test-24942","ConfirmPassword":"Test-24942"}
+        {"UserName":"Test63700","Password":"Test-63700","ConfirmPassword":"Test-63700"}
 
         https://gabcsika.picidolgok.hu/api/Account/register
 
@@ -8918,7 +6782,7 @@ MonoBehaviour:
       - Uncategorized
       parentId: 1006
       parentUniqueId: PlayModeTests.dll/[PlayModeTests][MenuTests][suite]
-    m_ResultText: 'CardEffectsTest (10,998s)
+    m_ResultText: 'BlockingTest (2,421s)
 
       ---
 
@@ -8936,8 +6800,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -8952,8 +6818,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -8968,8 +6836,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -8984,8 +6854,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -9000,8 +6872,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -9016,8 +6890,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -9032,8 +6908,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -9048,8 +6926,10 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons:
-      0
+      Active dons: 0
+
+      Active
+      dons: 0
 
       Active dons: 0
 
@@ -9060,1890 +6940,41 @@ MonoBehaviour:
 
       Active dons: 0
 
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
+      Active dons: 0
 
       Active dons:
-      10
+      0
 
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Destroyed border on this card: ST01-002-0
-
-      Destroyed
-      border on this card: ST01-002-0
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 9
-
-      Active dons: 8
-
-      Destroyed
-      border on this card: ST01-002-0
-
-      Destroyed border on this card: ST01-002-0
-
-      Active
-      dons: 8
-
-      Active dons: 8
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 8
-
-      Destroyed border on this card: ST01-004-1
-
-      Active
-      dons: 8
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Destroyed
-      border on this card: ST01-005-2
-
-      Destroyed border on this card: ST01-005-2
-
-      Active
-      dons: 10
-
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      9
-
-      Destroyed border on this card: ST01-005-2
-
-      Destroyed border
-      on this card: ST01-005-2
-
-      Active dons: 9
+      Destroyed border on this card: ST01-006
 
       Destroyed border on
-      this card: ST01-004-1
+      this card: ST01-006
 
-      Destroyed border on this card: ST01-004-1
+      Active dons: 0
 
-      Destroyed
-      border on this card: ST01-001-0
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
+      Active dons: 0
 
       Active
-      dons: 10
+      dons: 0
 
-      Active dons: 10
-
-      Active dons: 10
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Destroyed border on this card: ST01-004-1
-
-      Destroyed
-      border on this card: ST01-005-2
-
-      Destroyed border on this card: ST01-007-2
-
-      Destroyed
-      border on this card: ST01-001-0
-
-      Active dons: 9
+      Destroyed border on this card: ST01-003
 
       Destroyed border
-      on this card: DONCARD0
+      on this card: ST01-001-MOCKEDLEADER
 
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
+      Active dons: 0
 
       Active dons:
-      9
+      0
 
-      Active dons: 9
+      Active dons: 0
 
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons:
-      9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active dons: 9
-
-      Active
-      dons: 9...
-
-
-      ---MESSAGE TRUNCATED AT 15000 CHARACTERS---'
+      Active dons: 0'
     m_ResultStacktrace: 
     m_TestListState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 728a1e4c
-      m_LastClickedID: 1277069938
+      m_SelectedIDs: 1b384d6c
+      m_LastClickedID: 1816999963
       m_ExpandedIDs: 924e18e62e2f8ef353b17b4577c23471ffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -11081,10 +7112,10 @@ MonoBehaviour:
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 144}
+    scrollPos: {x: 0, y: 180}
     m_SelectedIDs: 027a0000
     m_LastClickedID: 31234
-    m_ExpandedIDs: 000000008475000086750000887500008a7500008c7500008e75000090750000927500009475000096750000
+    m_ExpandedIDs: 00000000227a0000247a0000267a0000287a00002a7a00002c7a00002e7a0000307a0000327a0000347a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -11112,7 +7143,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000008475000086750000887500008a7500008c7500008e75000090750000927500009475000096750000
+    m_ExpandedIDs: 00000000227a0000247a0000267a0000287a00002a7a00002c7a00002e7a0000307a0000327a0000347a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -11164,7 +7195,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 208}
+    m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 78
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 207
@@ -11188,10 +7219,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1318
+    x: 1526
     y: 73
-    width: 601
-    height: 496
+    width: 393
+    height: 751
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -11237,8 +7268,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 73
-    width: 322
-    height: 609
+    width: 363
+    height: 600
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -11254,7 +7285,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: c283f8ff6884f8ffe691f8ff2897f8ffce97f8ff4ca5f8ff6aadf8ff10aef8ff76bbf8ff50c2f8fff6c2f8ff4ed0f8ff8cd2f8ff32d3f8ff8ae0f8ffc6e2f8ff6ce3f8ff86f0f8ff40f1f8ffe6f1f8ff3efff8ffca02f9ff7003f9ff9010f9ff4c11f9fff211f9ff121ff9ff5021f9fff621f9ff162ff9ff5431f9fffa31f9ff1a3ff9fffa4df9ffa04ef9ffc05bf9fffe5df9ffa45ef9ffb26bf9ff6e6cf9ff146df9ffdc7af9ffec7ff9ff9280f9ffa08df9ffde8ff9ff8490f9fff89cf9ff389ff9ffde9ff9ffceacf9ff8eb0f9ff34b1f9ffa2bdf9ff58bef9fffebef9ff68cff9ff1ed0f9ffc4d0f9ff98def9ffd6e0f9ff7ce1f9ff5aedf9ff10eef9ffb6eef9ffb8fcf9ff7600faff1c01faff960dfaff4e0efafff40efaff801bfaff381cfaffde1cfaffb22afaff6a2bfaff102cfaff9038faff4639faffec39faffae47faff6448faff0a49faff7e55faffbe57faff6458faffd864faff9868faff3e69faff5876faff1477faffba77faffd484faffe086faff8687faff0496faff4298faffe898faff02a6faffc6a9faff6caafaff74b7faff36bbfaffdcbbfaffe4c8faffa4d1faff4ad2faff2edffaff6ce1faff12e2faff9eeefaff56effafffceffaff8efcfaff8cfffaff3000fbff1601fbff0a02fbffb002fbff5e0ffbff1a10fbffc010fbff6e1dfbffae1ffbff5420fbffd42cfbff7647fbff1c48fbff7e54fbffc056fbff6657fbffc863fbff0866fbffae66fbff1873fbff5875fbfffe75fbff5482fbff2283fbffc883fbffa892fbff5e93fbff0494fbff3ca0fbfff6a0fbff9ca1fbffd4adfbff8aaefbff30affbff68bbfbff20bcfbffc6bcfbff04c9fbff42cbfbffe8cbfbff14d8fbff54dafbfffadafbff26e7fbffe2e7fbff88e8fbffb4f4fbffeaf6fbff90f7fbffbc03fcffec05fcff9206fcffbe12fcff7a13fcff2014fcff4620fcfffe20fcffa421fcffd02dfcff9031fcff3632fcff743efcffbc40fcff6041fcff4c42fcffc447fcff6a48fcff9654fcff1257fcffb857fcfff663fcff906dfcff366efcff627afcffe47dfcff8a7efcffb68afcfff48ffcff9a90fcffc69cfcfff49efcff9a9ffcfff2abfcff30aefcffd6aefcff28bbfcffe2bbfcff88bcfcffb4c8fcfff2cafcff98cbfcffb2d7fcffe0dffcff86e0fcff82ecfcff98eefcff3eeffcff22fbfcff62fdfcff08fefcfff009fdff020ffdffa80ffdff8c1bfdff481cfdffee1cfdffd228fdff8e29fdff342afdff1236fdffca36fdff7037fdff5443fdff9045fdff3646fdff1452fdffce52fdff7453fdff585ffdff9661fdff3c62fdff4a6efdff8870fdff2e71fdff167dfdff7a80fdff2081fdff168dfdff248ffdffca8ffdffc09bfdffce9dfdff749efdff38aafdff1aaffdffc0affdff52b8fdff36b9fdffa8b9fdffb0b9fdffcebbfdff88bcfdff2ebdfdff82c6fdfffac6fdfffcc6fdff20c9fdff30cbfdffd6cbfdffb020ffffac22ffff5223ffff0af9ffff1afbffff
+      m_ExpandedIDs: a64fffff9a50ffffa251ffffa451ffff1afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -11298,10 +7329,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 323
+    x: 364
     y: 73
-    width: 993
-    height: 609
+    width: 1160
+    height: 600
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -11660,9 +7691,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 1174.4724, y: 328.62427, z: -0.2670835}
+    m_Target: {x: 524.8426, y: 373.97217, z: 4.8633366}
     speed: 2
-    m_Value: {x: 1174.4724, y: 328.62427, z: -0.2670835}
+    m_Value: {x: 524.8426, y: 373.97217, z: 4.8633366}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -11712,9 +7743,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 834.79254
+    m_Target: 364.45108
     speed: 2
-    m_Value: 834.79254
+    m_Value: 364.45108
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -11759,10 +7790,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 323
+    x: 364
     y: 73
-    width: 993
-    height: 609
+    width: 1160
+    height: 600
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -11815,23 +7846,23 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 993
-      height: 588
-    m_Scale: {x: 0.5171875, y: 0.5171875}
-    m_Translation: {x: 496.5, y: 294}
+      width: 1160
+      height: 579
+    m_Scale: {x: 0.5361111, y: 0.5361111}
+    m_Translation: {x: 580, y: 289.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -960.00006
-      y: -568.4592
-      width: 1920.0001
-      height: 1136.9185
+      x: -1081.8652
+      y: -540
+      width: 2163.7305
+      height: 1080
     m_MinimalGUI: 1
-  m_defaultScale: 0.5171875
-  m_LastWindowPixelSize: {x: 993, y: 609}
+  m_defaultScale: 0.5361111
+  m_LastWindowPixelSize: {x: 1160, y: 600}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000000000000000000
@@ -11858,9 +7889,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 703
-    width: 1317
-    height: 288
+    y: 694
+    width: 1525
+    height: 297
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0

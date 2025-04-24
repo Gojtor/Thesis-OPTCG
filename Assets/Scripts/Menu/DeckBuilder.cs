@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using TCGSim;
@@ -70,10 +71,11 @@ public class DeckBuilder : MonoBehaviour
 
     private void Awake()
     {
-        TextAsset configText = Resources.Load<TextAsset>("server_config");
+        string path = Path.Combine(Application.streamingAssetsPath, "server_config.json");
+        string configText = System.IO.File.ReadAllText(path);
         if (configText != null)
         {
-            ServerSettings config = JsonUtility.FromJson<ServerSettings>(configText.text);
+            ServerSettings config = JsonUtility.FromJson<ServerSettings>(configText);
             serverUrl = config.serverUrl;
         }
         else

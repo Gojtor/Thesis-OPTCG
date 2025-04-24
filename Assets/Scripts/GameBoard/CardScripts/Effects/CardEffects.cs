@@ -10,7 +10,6 @@ using TCGSim.CardScripts;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.WSA;
 
 namespace TCGSim
 {
@@ -755,7 +754,10 @@ namespace TCGSim
             this.oncePerTurn = oncePerTurn;
             this.passiveEffect = passiveEffect;
         }
-
+        public void MakeEffectActive()
+        {
+            this.activated = false;
+        }
         public void Activate(Card card)
         {
             if (passiveEffect) { return; }
