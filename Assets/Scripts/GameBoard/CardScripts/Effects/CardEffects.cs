@@ -387,7 +387,7 @@ namespace TCGSim
 
         private void GetRush(Card card)
         {
-            if (!card.rested && !card.canAttack && card.GetAttachedDonCount() >= howManyDon)
+            if (!card.rested && !card.canAttack && card.GetAttachedDonCount() >= howManyDon && GameManager.Instance.currentState != GameState.ENEMYPHASE && card.transform.parent!=EnemyBoard.Instance.characterAreaObject.transform)
             {
                 switch (card.cardData.cardType)
                 {
