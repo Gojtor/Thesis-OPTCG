@@ -645,6 +645,7 @@ namespace TCGSim
                     target.IsTargetForEffect(true);
                     target.SetClickAction(OnTargetSelected);
                 }
+                card.SendCardToServer();
             }
         }
 
@@ -837,6 +838,7 @@ namespace TCGSim
                     donCard.ClearClickAction();
                     restedDons.Remove(donCard);
                     donCard.SendCardToServer();
+                    donCard.IsTargetForEffect(false);
                 });
             }
             Cleanup();

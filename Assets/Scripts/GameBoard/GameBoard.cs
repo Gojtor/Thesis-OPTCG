@@ -327,7 +327,7 @@ namespace TCGSim
 
         public async void GameLost()
         {
-            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            await UnityMainThreadDispatcher.RunOnMainThread(async() =>
             {
                 GameObject gameLostPanel = Instantiate(matchLostPrefab, this.gameObject.transform);
                 Button backToMainMenu = Instantiate(backToMainBtnPrefab, gameLostPanel.transform).GetComponent<Button>();
@@ -335,6 +335,7 @@ namespace TCGSim
                 gameLostPanelCanvas.overrideSorting = true;
                 gameLostPanelCanvas.sortingOrder = 6;
                 backToMainMenu.onClick.AddListener(BackToMainMenu);
+                await ServerCon.Instance.EnemyWon();
             });
         }
 

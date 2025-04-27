@@ -649,7 +649,6 @@ namespace TCGSim
         private async void HandleMatchLost()
         {
             ChatManager.Instance.AddMessage("You lost the match!");
-            await ServerCon.Instance.EnemyWon();
             await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
                 GameBoard.Instance.GameLost();
