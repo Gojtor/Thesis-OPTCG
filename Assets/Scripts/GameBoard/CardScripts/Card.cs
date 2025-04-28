@@ -238,6 +238,7 @@ namespace TCGSim.CardScripts
         {
             await UnityMainThreadDispatcher.RunOnMainThread(() =>
             {
+                donCard.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 150);
                 toCard.EnableCanvasOverrideSorting();
                 Canvas thisCardCanvas = donCard.GetComponent<Canvas>();
                 thisCardCanvas.overrideSorting = true;
@@ -627,7 +628,7 @@ namespace TCGSim.CardScripts
                         }
                         float width = this.GetComponent<RectTransform>().sizeDelta.x;
                         float height = this.GetComponent<RectTransform>().sizeDelta.y;
-                        rectTransform.sizeDelta = new Vector2(width+10f, height);
+                        rectTransform.sizeDelta = new Vector2(width+width/10, height);
                         borderIMG.color = colorOfBorder;
                         Outline borderOutline = border.AddComponent<Outline>();
                         borderOutline.enabled = true;
@@ -652,6 +653,18 @@ namespace TCGSim.CardScripts
                     Debug.Log("Destroyed border on this card: " + this.cardData.customCardID);
                 }
                 ResetCanvasOverrideSorting();
+            });
+        }
+
+        public async void RemoveBorderForThisCardWithoutCanvasReset()
+        {
+            await UnityMainThreadDispatcher.RunOnMainThread(() =>
+            {
+                if (border != null)
+                {
+                    Destroy(border);
+                    Debug.Log("Destroyed border on this card: " + this.cardData.customCardID);
+                }
             });
         }
 

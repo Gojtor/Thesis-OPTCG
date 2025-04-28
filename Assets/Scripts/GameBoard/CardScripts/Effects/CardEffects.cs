@@ -837,8 +837,8 @@ namespace TCGSim
                     donCard.AttachDon(selectedTarget, donCard);
                     donCard.ClearClickAction();
                     restedDons.Remove(donCard);
+                    donCard.RemoveBorderForThisCardWithoutCanvasReset();
                     donCard.SendCardToServer();
-                    donCard.IsTargetForEffect(false);
                 });
             }
             Cleanup();
