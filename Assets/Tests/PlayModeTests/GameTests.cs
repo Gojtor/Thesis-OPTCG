@@ -2026,6 +2026,8 @@ public class GameTests : MonoBehaviour
         //Testing for Brook
         GameManager.Instance.ChangeGameState(GameState.TESTING);
         yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
+        GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.REFRESHPHASE);
+        yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
         GameManager.Instance.ChangePlayerTurnPhase(PlayerTurnPhases.MAINPHASE);
         yield return new WaitUntil(() => !UnityMainThreadDispatcher.isProcessing);
         PlayerBoard.Instance.AddCardToHandFromDeck(brook, true, false);
